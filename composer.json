@@ -1,0 +1,35 @@
+{
+  "name": "iq2i/arqui-bundle",
+  "type": "symfony-bundle",
+  "description": "Arqui bundle",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.3",
+    "symfony/config": "^6.4|^7.0",
+    "symfony/dependency-injection": "^6.4|^7.0",
+    "symfony/finder": "^6.4|^7.0",
+    "symfony/http-foundation": "^6.4|^7.0",
+    "symfony/http-kernel": "^6.4|^7.0",
+    "symfony/string": "^6.4|^7.0",
+    "twig/twig": "^2.13|^3.0.4"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.41",
+    "phpstan/phpstan": "^1.10",
+    "phpunit/phpunit": "^10.5",
+    "symfony/framework-bundle": "^6.4|^7.0"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "IQ2i\\ArquiBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "IQ2i\\ArquiBundle\\Tests\\": "tests/"
+    }
+  }
+}
