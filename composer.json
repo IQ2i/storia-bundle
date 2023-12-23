@@ -10,6 +10,7 @@
     "symfony/finder": "^6.4|^7.0",
     "symfony/http-foundation": "^6.4|^7.0",
     "symfony/http-kernel": "^6.4|^7.0",
+    "symfony/routing": "^6.4|^7.0",
     "symfony/string": "^6.4|^7.0",
     "twig/twig": "^2.13|^3.0.4"
   },
@@ -17,10 +18,15 @@
     "friendsofphp/php-cs-fixer": "^3.41",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.5",
-    "symfony/framework-bundle": "^6.4|^7.0"
+    "symfony/framework-bundle": "^6.4|^7.0",
+    "symfony/runtime": "^6.4|^7.0",
+    "symfony/web-profiler-bundle": "^6.4|^7.0"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
   },
   "autoload": {
     "psr-4": {
@@ -29,7 +35,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "IQ2i\\ArquiBundle\\Tests\\": "tests/"
+      "IQ2i\\ArquiBundle\\Tests\\TestApplication\\": "tests/TestApplication/src",
+      "IQ2i\\ArquiBundle\\Tests\\": "tests"
     }
   }
 }
