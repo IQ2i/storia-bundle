@@ -49,6 +49,8 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
             ->addTag('twig.extension')
             ->setArguments([
                 $config['default_path'],
+                new Reference('router'),
+                new Reference('request_stack'),
             ])
         ;
     }

@@ -17,6 +17,7 @@ class Menu
 {
     public function __construct(
         private ?string $label = null,
+        private bool $opened = false,
         private array $children = [],
     ) {
     }
@@ -24,6 +25,18 @@ class Menu
     public function getLabel(): ?string
     {
         return $this->label;
+    }
+
+    public function isOpened(): bool
+    {
+        return $this->opened;
+    }
+
+    public function setOpened(bool $opened): static
+    {
+        $this->opened = $opened;
+
+        return $this;
     }
 
     /**

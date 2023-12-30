@@ -17,6 +17,8 @@ use IQ2i\ArquiBundle\Dto\Menu;
 use IQ2i\ArquiBundle\Dto\MenuItem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -26,6 +28,8 @@ class MenuExtension extends AbstractExtension
 {
     public function __construct(
         private readonly string $defaultPath,
+        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
     ) {
     }
 
@@ -46,6 +50,8 @@ class MenuExtension extends AbstractExtension
 
     public function getMenuChildren(Menu $menu, string $path): void
     {
+        $opened = false;
+
         /** @var SplFileInfo $file */
         foreach ((new Finder())->in($path)->depth('== 0')->sortByName(true)->sortByType() as $file) {
             if ($file->isDir()) {
@@ -53,11 +59,20 @@ class MenuExtension extends AbstractExtension
                 $child = new Menu($label);
                 $this->getMenuChildren($child, $file->getPathname());
             } else {
-                $label = u($file->getFilenameWithoutExtension())->replace('.story', '')->title()->toString();
-                $child = new MenuItem($label, '');
+                $label = u($file->getFilenameWithoutExtension())->replace('.html', '')->title()->toString();
+                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->toString();
+                $path = $this->router->generate('iq2i_arqui_story', ['component' => $componentPath]);
+
+                $urlParts = parse_url($this->requestStack->getCurrentRequest()->getRequestUri());
+                $isActive = isset($urlParts['path']) && str_ends_with($path, $urlParts['path']);
+                $opened = $opened || $isActive;
+
+                $child = new MenuItem($label, $path, $isActive);
             }
 
             $menu->addChild($child);
         }
+
+        $menu->setOpened($opened);
     }
 }

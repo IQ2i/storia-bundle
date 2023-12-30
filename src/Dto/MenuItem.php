@@ -18,6 +18,7 @@ class MenuItem
     public function __construct(
         private string $label,
         private ?string $url = null,
+        private bool $active = false,
     ) {
     }
 
@@ -26,22 +27,13 @@ class MenuItem
         return $this->label;
     }
 
-    public function setLabel(string $label): static
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    public function setUrl(?string $url): static
+    public function isActive(): bool
     {
-        $this->url = $url;
-
-        return $this;
+        return $this->active;
     }
 }
