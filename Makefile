@@ -29,3 +29,16 @@ logs: ## Show live logs
 
 php: ## Connect to the PHP container
 	$(PHP_CONT) sh
+
+## —— CI ✨ —————————————————————————————————————————————————————————————————————
+ci: static rector test
+
+static: ## Run static analysis tools
+	$(PHP) -d memory_limit=-1 vendor/bin/phpstan analyse
+	$(PHP) -d memory_limit=-1 vendor/bin/php-cs-fixer fix
+
+rector: ## Run rector
+	$(PHP) -d memory_limit=-1 vendor/bin/rector
+
+test: ## Run tests
+	$(PHP) vendor/bin/phpunit
