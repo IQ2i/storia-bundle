@@ -16,7 +16,7 @@ namespace IQ2i\ArquiBundle\Dto;
 class Menu
 {
     public function __construct(
-        private ?string $label = null,
+        private readonly ?string $label = null,
         private bool $opened = false,
         private array $children = [],
     ) {

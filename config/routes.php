@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return function (RoutingConfigurator $routes) {
+return static function (RoutingConfigurator $routes) {
     $routes
         ->add('iq2i_arqui_story', '/stories/{component<.+>?}')
         ->controller('iq2i_arqui.controller.story')

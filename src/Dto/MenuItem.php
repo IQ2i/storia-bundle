@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Dto;
 
-class MenuItem
+readonly class MenuItem
 {
     public function __construct(
         private string $label,

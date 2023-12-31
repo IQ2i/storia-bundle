@@ -36,7 +36,7 @@ class MenuExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('arqui_menu', [$this, 'getMenu']),
+            new TwigFunction('arqui_menu', $this->getMenu(...)),
         ];
     }
 
