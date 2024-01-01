@@ -13,18 +13,22 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-final readonly class ViewController
+final readonly class IframeController
 {
     public function __construct(
         private Environment $twig,
     ) {
     }
 
-    public function __invoke(?string $component): Response
+    public function __invoke(Request $request, string $component): Response
     {
-        return new Response($this->twig->render('@IQ2iArqui/view/view.html.twig'));
+        return new Response($this->twig->render('@IQ2iArqui/iframe.html.twig', [
+            'component' => $component,
+            'variant' => $request->query->get('variant'),
+        ]));
     }
 }

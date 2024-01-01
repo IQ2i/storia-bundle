@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\DependencyInjection;
 
-use IQ2i\ArquiBundle\Controller\ViewController;
+use IQ2i\ArquiBundle\Controller\IframeController;
+use IQ2i\ArquiBundle\Controller\StoryController;
 use IQ2i\ArquiBundle\DataCollector\ArquiDataCollector;
 use IQ2i\ArquiBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -21,6 +22,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Twig\Loader\FilesystemLoader;
 
 final class IQ2iArquiExtension extends Extension implements ConfigurationInterface
 {
@@ -29,7 +31,17 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
         $config = $this->processConfiguration($this, $configs);
 
         $container
-            ->register('iq2i_arqui.controller.view', ViewController::class)
+            ->register('iq2i_arqui.controller.story', StoryController::class)
+            ->addTag('controller.service_arguments')
+            ->setArguments([
+                $config['default_path'],
+                new Reference('twig'),
+                new Reference('router'),
+            ])
+        ;
+
+        $container
+            ->register('iq2i_arqui.controller.iframe', IframeController::class)
             ->addTag('controller.service_arguments')
             ->setArguments([
                 new Reference('twig'),
@@ -51,6 +63,14 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
                 $config['default_path'],
                 new Reference('router'),
                 new Reference('request_stack'),
+            ])
+        ;
+
+        $container
+            ->register('iq2i_arqui.twig.loader', FilesystemLoader::class)
+            ->addTag('twig.loader')
+            ->setArguments([
+                $config['default_path'],
             ])
         ;
     }

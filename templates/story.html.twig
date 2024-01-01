@@ -1,0 +1,107 @@
+<!doctype html>
+<html class="h-full bg-white" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Arqui bundle</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+
+    <body class="h-full">
+        <div class="fixed inset-y-0 z-50 flex w-72 flex-col">
+            <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
+                <div class="flex h-16 shrink-0 items-center">
+                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
+                </div>
+
+                <nav class="flex flex-1 flex-col">
+                    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                        <li>
+                            <ul role="list" class="-mx-2 space-y-1">
+                                {% for menu_item in arqui_menu().children %}
+                                    {% if menu_item.children is defined %}
+                                        <li>
+                                            <div x-data="{ open: {{ menu_item.opened ? 'true' : 'false' }} }">
+                                                <button type="button" class="hover:bg-gray-50 flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700" aria-controls="sub-menu-1" @click="open = !open" aria-expanded="true" x-bind:aria-expanded="open.toString()">
+                                                    <svg class="h-5 w-5 shrink-0 rotate-90 text-gray-500" x-state:on="Expanded" x-state:off="Collapsed" :class="{ 'rotate-90 text-gray-500': open, 'text-gray-400': !(open) }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    {{ menu_item.label }}
+                                                </button>
+                                                <ul class="mt-1 px-2" id="sub-menu-1" x-show="open">
+                                                    {% for submenu_item in menu_item.children %}
+                                                        <li>
+                                                            <a href="{{ submenu_item.url }}" class="block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700 {% if submenu_item.active %}bg-gray-50{% else %}hover:bg-gray-50{% endif %}">{{ submenu_item.label }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <!-- Current: "bg-gray-50", Default: "hover:bg-gray-50" -->
+                                            <a href="{{ menu_item.url }}" class="block rounded-md py-2 pr-2 pl-10 text-sm leading-6 font-semibold text-gray-700 {% if menu_item.active %}bg-gray-50{% else %}hover:bg-gray-50{% endif %}">{{ menu_item.label }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="pl-72">
+            <header class="sticky top-0 z-40 flex h-16 shrink-0 justify-between gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+                <div class="flex px-2 lg:px-0 items-center">
+                    <h1 class="text-xl font-bold leading-7 text-gray-900 sm:truncate sm:text-2xl sm:tracking-tight">Component - Variant</h1>
+                </div>
+
+                <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
+                    <div class="w-full max-w-lg lg:max-w-xs">
+                        <label for="search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input id="search" name="search" class="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Search" type="search">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {% if tabs is not empty %}
+                <div class="border-b border-gray-200 px-4 overflow-x-auto sm:px-6 lg:px-8">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        {% for tab in tabs %}
+                            <a href="{{ tab.url }}" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium {% if tab.active %}border-indigo-500 text-indigo-600{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                                {{ tab.label }}
+                            </a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            {% endif %}
+
+            <main class="divide-y divide-gray-200">
+                {% if component is defined %}
+                    <div class="p-6">
+                        <iframe src="{{ path('iq2i_arqui_iframe', { component, variant }) }}" class="w-full min-h-48"></iframe>
+                    </div>
+
+                    <div class="flex w-full divide-x divide-gray-200">
+                        <div class="flex-1 p-6">
+                            {{ verbatim }}
+                        </div>
+                        <div class="flex-1 p-6">
+                            {% set html = block(variant, component) %}
+                            {{ html }}
+                        </div>
+                    </div>
+                {% endif %}
+            </main>
+        </div>
+    </body>
+</html>
