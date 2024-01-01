@@ -16,7 +16,6 @@ namespace IQ2i\ArquiBundle\DependencyInjection;
 use IQ2i\ArquiBundle\Controller\IframeController;
 use IQ2i\ArquiBundle\Controller\StoryController;
 use IQ2i\ArquiBundle\DataCollector\ArquiDataCollector;
-use IQ2i\ArquiBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -53,16 +52,6 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
             ->addTag('data_collector', [
                 'template' => '@IQ2iArqui/data_collector/template.html.twig',
                 'id' => 'iq2i_arqui',
-            ])
-        ;
-
-        $container
-            ->register('iq2i_arqui.twig.menu_extension', MenuExtension::class)
-            ->addTag('twig.extension')
-            ->setArguments([
-                $config['default_path'],
-                new Reference('router'),
-                new Reference('request_stack'),
             ])
         ;
 
