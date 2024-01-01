@@ -6,6 +6,10 @@
         <title>Arqui bundle</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
+        <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/default.min.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/twig.min.js"></script>
+        <script>hljs.highlightAll();</script>
     </head>
 
     <body class="h-full">
@@ -80,14 +84,13 @@
                         <iframe src="{{ path('iq2i_arqui_iframe', { component, variant }) }}" class="w-full min-h-48"></iframe>
                     </div>
 
-                    <div class="flex w-full divide-x divide-gray-200">
-                        <div class="flex-1 p-6">
-                            {{ verbatim }}
-                        </div>
-                        <div class="flex-1 p-6">
-                            {% set html = block(variant, component) %}
-                            {{ html }}
-                        </div>
+                    <div class="grid grid-cols-2 w-full divide-x divide-gray-200">
+                        <pre><code class="language-twig">
+                            {{- twig -}}
+                        </code></pre>
+                        <pre><code class="language-html">
+                            {{- html -}}
+                        </code></pre>
                     </div>
                 {% endif %}
             </main>
