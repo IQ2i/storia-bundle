@@ -1,0 +1,20 @@
+{
+  "name": "arqui",
+  "private": true,
+  "type": "module",
+  "main": "arqui.js",
+  "scripts": {
+    "watch": "rollup -c --watch",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "autoprefixer": "^10.4.16",
+    "core-js": "^3.35.0",
+    "highlight.js": "^11.9.0",
+    "rollup": "^4.9.2",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tailwindcss": "^3.4.0"
+  }
+}

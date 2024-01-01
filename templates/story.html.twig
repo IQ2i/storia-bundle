@@ -4,12 +4,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Arqui bundle</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="//unpkg.com/alpinejs" defer></script>
-        <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/default.min.css">
-        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
-        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/twig.min.js"></script>
-        <script>hljs.highlightAll();</script>
+
+        <link rel="stylesheet" href="{{ asset('/bundles/iq2iarqui/arqui.css') }}"/>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "arqui": "{{ asset('/bundles/iq2iarqui/arqui.js') }}",
+                    "@hotwired/stimulus": "{{ asset('/bundles/iq2iarqui/vendor/stimulus/stimulus.js') }}",
+                    "highlight.js/lib/core": "{{ asset('/bundles/iq2iarqui/vendor/highlight.js/lib/core.js') }}",
+                    "highlight.js/lib/languages/twig": "{{ asset('/bundles/iq2iarqui/vendor/highlight.js/lib/languages/twig.js') }}",
+                    "highlight.js/lib/languages/xml": "{{ asset('/bundles/iq2iarqui/vendor/highlight.js/lib/languages/xml.js') }}"
+                }
+            }
+        </script>
+        <script type="module">import 'arqui';</script>
     </head>
 
     <body class="h-full">
@@ -26,14 +35,14 @@
                                 {% for menu_item in menu %}
                                     {% if menu_item.children is defined %}
                                         <li>
-                                            <div x-data="{ open: {{ menu_item.opened ? 'true' : 'false' }} }">
-                                                <button type="button" class="hover:bg-gray-50 flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700" aria-controls="sub-menu-1" @click="open = !open" aria-expanded="true" x-bind:aria-expanded="open.toString()">
-                                                    <svg class="h-5 w-5 shrink-0 rotate-90 text-gray-500" x-state:on="Expanded" x-state:off="Collapsed" :class="{ 'rotate-90 text-gray-500': open, 'text-gray-400': !(open) }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <div data-controller="menu" data-menu-opened-value="{{ menu_item.opened ? 'true' : 'false' }}" data-menu-opened-class="rotate-90 text-gray-500" data-menu-closed-class="text-gray-400">
+                                                <button type="button" class="hover:bg-gray-50 flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700" aria-controls="sub-menu-1" aria-expanded="true" data-action="menu#toggle">
+                                                    <svg class="h-5 w-5 shrink-0" data-menu-target="svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
                                                     </svg>
                                                     {{ menu_item.label }}
                                                 </button>
-                                                <ul class="mt-1 px-2" id="sub-menu-1" x-show="open">
+                                                <ul class="mt-1 px-2 hidden" id="sub-menu-1" data-menu-target="submenu">
                                                     {% for submenu_item in menu_item.children %}
                                                         <li>
                                                             <a href="{{ submenu_item.url }}" class="block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700 {% if submenu_item.active %}bg-gray-50{% else %}hover:bg-gray-50{% endif %}">{{ submenu_item.label }}</a>
@@ -85,10 +94,10 @@
                     </div>
 
                     <div class="grid grid-cols-2 w-full divide-x divide-gray-200">
-                        <pre><code class="language-twig">
+                        <pre><code class="language-twig" data-controller="highlight">
                             {{- twig -}}
                         </code></pre>
-                        <pre><code class="language-html">
+                        <pre><code class="language-html" data-controller="highlight">
                             {{- html -}}
                         </code></pre>
                     </div>

@@ -118,7 +118,7 @@ final readonly class StoryController
     {
         $lines = explode("\n", $source);
         if ($unindent) {
-            $lines = array_map(static fn(string $line): string => substr($line, 4), $lines);
+            $lines = array_map(static fn (string $line): string => substr($line, 4), $lines);
         }
 
         $source = u(implode("\n", $lines));

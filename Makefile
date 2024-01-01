@@ -2,7 +2,8 @@
 DOCKER_COMP = docker compose
 
 # Docker containers
-PHP_CONT = $(DOCKER_COMP) exec -w /srv/app php
+PHP_CONT  = $(DOCKER_COMP) exec -w /srv/app php
+NODE_CONT = $(DOCKER_COMP) run --rm -w /srv/app node
 
 # Executables
 PHP      = $(PHP_CONT) php
@@ -29,6 +30,9 @@ logs: ## Show live logs
 
 php: ## Connect to the PHP container
 	$(PHP_CONT) sh
+
+node: ## Connect to the Node container
+	$(NODE_CONT) sh
 
 ## —— CI ✨ —————————————————————————————————————————————————————————————————————
 ci: static rector test

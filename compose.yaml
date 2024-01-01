@@ -21,3 +21,9 @@ services:
             - target: 443
               published: ${HTTP3_PORT:-443}
               protocol: udp
+
+    node:
+        build: $PWD/.infrastructure/node
+        restart: on-failure
+        volumes:
+            - ./:/srv/app:rw,cached
