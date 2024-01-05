@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="pl-72">
+        <div class="flex flex-col pl-72 h-full">
             {% if component is defined %}
                 <header class="sticky top-0 z-40 flex h-16 shrink-0 justify-between gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                     <div class="flex px-2 lg:px-0 items-center">
@@ -87,19 +87,42 @@
                 </div>
             {% endif %}
 
-            <main class="divide-y divide-gray-200">
+            <main class="flex flex-col flex-1 divide-y divide-gray-200">
                 {% if component is defined %}
                     <div class="p-6">
                         <iframe src="{{ path('iq2i_arqui_iframe', { component, variant }) }}" class="w-full min-h-48"></iframe>
                     </div>
 
-                    <div class="grid grid-cols-2 w-full divide-x divide-gray-200">
-                        <pre><code class="language-twig" data-controller="highlight">
-                            {{- twig -}}
-                        </code></pre>
-                        <pre><code class="language-html" data-controller="highlight">
-                            {{- html -}}
-                        </code></pre>
+                    <div class="flex-1 grid grid-cols-2 w-full divide-x divide-gray-200">
+                        <div class="relative p-4 bg-white group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ twig }}">
+                            <div class="overflow-x-auto h-full">
+                                <pre><code class="language-twig" data-controller="highlight">
+                                    {{- twig -}}
+                                </code></pre>
+                            </div>
+
+                            <button type="button" class="absolute top-4 right-4 transform translate-x-14 group-hover:translate-x-0 transition duration-200 rounded-full bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500" data-action="copy-to-clipboard#copy">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-copy-to-clipboard-target="svg">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                </svg>
+                                <span class="hidden block text-xs" data-copy-to-clipboard-target="text">Copied!</span>
+                            </button>
+                        </div>
+
+                        <div class="relative p-4 bg-white group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ html }}">
+                            <div class="overflow-x-auto h-full">
+                                <pre><code class="language-html" data-controller="highlight">
+                                    {{- html -}}
+                                </code></pre>
+                            </div>
+
+                            <button type="button" class="absolute top-4 right-4 transform translate-x-14 group-hover:translate-x-0 transition duration-200 rounded-full bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500" data-action="copy-to-clipboard#copy">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-copy-to-clipboard-target="svg">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                </svg>
+                                <span class="hidden block text-xs" data-copy-to-clipboard-target="text">Copied!</span>
+                            </button>
+                        </div>
                     </div>
                 {% endif %}
             </main>

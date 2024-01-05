@@ -3,6 +3,28 @@ import hljs from 'highlight.js/lib/core';
 import hljs_twig from 'highlight.js/lib/languages/twig';
 import hljs_xml from 'highlight.js/lib/languages/xml';
 
+class CopyToClipboardController extends Controller  {
+    static targets = ['svg', 'text'];
+    static values = {
+        content: String,
+        copied: Boolean,
+    };
+
+    copy() {
+        navigator.clipboard.writeText(this.contentValue);
+        this.copiedValue = true;
+
+        setTimeout(() => {
+            this.copiedValue = false;
+        }, 2000);
+    }
+
+    copiedValueChanged() {
+        this.svgTarget.classList.toggle('hidden', this.copiedValue);
+        this.textTarget.classList.toggle('hidden', !this.copiedValue);
+    }
+}
+
 hljs.registerLanguage('xml', hljs_xml);
 hljs.registerLanguage('twig', hljs_twig);
 
@@ -37,5 +59,6 @@ class MenuController extends Controller {
 }
 
 const app = Application.start();
+app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
 app.register('menu', MenuController);
