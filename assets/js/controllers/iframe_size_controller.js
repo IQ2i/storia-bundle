@@ -4,6 +4,16 @@ export default class extends Controller {
     static targets = ['iframe', 'size'];
 
     connect() {
-        this.sizeTarget.innerText = `${this.iframeTarget.offsetWidth} x ${this.iframeTarget.offsetHeight}`;
+        new ResizeObserver((entries) => {
+            const [entry] = entries;
+            this.sizeTarget.innerText = `${entry.contentRect.width} x ${entry.contentRect.height}`;
+        }).observe(this.iframeTarget);
+    }
+
+    disconnect() {
+        new ResizeObserver((entries) => {
+            const [entry] = entries;
+            this.sizeTarget.innerText = `${entry.contentRect.width} x ${entry.contentRect.height}`;
+        }).observe(this.iframeTarget);
     }
 }
