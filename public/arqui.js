@@ -34,6 +34,14 @@ class HighlightController extends Controller {
     }
 }
 
+class IframeSizeController extends Controller {
+    static targets = ['iframe', 'size'];
+
+    connect() {
+        this.sizeTarget.innerText = `${this.iframeTarget.offsetWidth} x ${this.iframeTarget.offsetHeight}`;
+    }
+}
+
 class MenuController extends Controller {
     static targets = ['svg', 'submenu'];
     static classes = ['opened', 'closed'];
@@ -61,4 +69,5 @@ class MenuController extends Controller {
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
+app.register('iframe-size', IframeSizeController);
 app.register('menu', MenuController);
