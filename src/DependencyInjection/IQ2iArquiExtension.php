@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\DependencyInjection;
 
-use IQ2i\ArquiBundle\Controller\StoryController;
-use IQ2i\ArquiBundle\DataCollector\ArquiDataCollector;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Twig\Loader\FilesystemLoader;
 
@@ -27,24 +26,10 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration($this, $configs);
+        $container->setParameter('arqui_bundle.default_path', $config['default_path']);
 
-        $container
-            ->register('iq2i_arqui.controller.story', StoryController::class)
-            ->addTag('controller.service_arguments')
-            ->setArguments([
-                $config['default_path'],
-                new Reference('twig'),
-                new Reference('router'),
-            ])
-        ;
-
-        $container
-            ->register('iq2i_arqui.data_collector', ArquiDataCollector::class)
-            ->addTag('data_collector', [
-                'template' => '@IQ2iArqui/data_collector/template.html.twig',
-                'id' => 'iq2i_arqui',
-            ])
-        ;
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
+        $loader->load('services.php');
 
         $container
             ->register('iq2i_arqui.twig.loader', FilesystemLoader::class)

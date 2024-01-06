@@ -76,11 +76,11 @@
         </div>
 
         <div class="flex flex-col pl-72 h-full" data-controller="iframe-size">
-            {% if component is defined %}
+            {% if component is not null %}
                 <header class="sticky top-0 z-40 flex h-16 shrink-0 justify-between gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
                     <div class="flex w-full px-2 lg:px-0 items-center justify-between">
                         <h1 class="inline-block text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            {{ component }} - {{ variant }}
+                            {{ component.name }} - {{ component.variant.name }}
                         </h1>
 
                         <span class="text-xl font-light text-gray-900 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-500" data-iframe-size-target="size"></span>
@@ -103,16 +103,16 @@
             {% endif %}
 
             <main class="flex flex-col flex-1 divide-y divide-gray-200 dark:divide-gray-600">
-                {% if component is defined %}
+                {% if component is not null %}
                     <div class="p-3" style="height: 192px;">
-                        <iframe srcdoc="{{ iframe }}" class="w-full" data-iframe-size-target="iframe"></iframe>
+                        <iframe srcdoc="{{ component.iframeContent }}" class="w-full" data-iframe-size-target="iframe"></iframe>
                     </div>
 
                     <div class="flex-1 grid grid-cols-2 w-full divide-x divide-gray-200 dark:divide-gray-600">
-                        <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ twig }}">
+                        <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}">
                             <div class="overflow-x-auto h-full">
                                 <pre><code class="language-twig" data-controller="highlight">
-                                    {{- twig -}}
+                                    {{- component.twigContent -}}
                                 </code></pre>
                             </div>
 
@@ -124,10 +124,10 @@
                             </button>
                         </div>
 
-                        <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ html }}">
+                        <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}">
                             <div class="overflow-x-auto h-full">
                                 <pre><code class="language-html" data-controller="highlight">
-                                    {{- html -}}
+                                    {{- component.htmlContent -}}
                                 </code></pre>
                             </div>
 
