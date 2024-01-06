@@ -105,7 +105,7 @@
             <main class="flex flex-col flex-1 divide-y divide-gray-200 dark:divide-gray-600">
                 {% if component is defined %}
                     <div class="p-3" style="height: 192px;">
-                        <iframe src="{{ path('iq2i_arqui_iframe', { component, variant }) }}" class="w-full" data-iframe-size-target="iframe"></iframe>
+                        <iframe srcdoc="{{ iframe }}" class="w-full" data-iframe-size-target="iframe"></iframe>
                     </div>
 
                     <div class="flex-1 grid grid-cols-2 w-full divide-x divide-gray-200 dark:divide-gray-600">

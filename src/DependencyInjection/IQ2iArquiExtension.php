@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\DependencyInjection;
 
-use IQ2i\ArquiBundle\Controller\IframeController;
 use IQ2i\ArquiBundle\Controller\StoryController;
 use IQ2i\ArquiBundle\DataCollector\ArquiDataCollector;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -36,14 +35,6 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
                 $config['default_path'],
                 new Reference('twig'),
                 new Reference('router'),
-            ])
-        ;
-
-        $container
-            ->register('iq2i_arqui.controller.iframe', IframeController::class)
-            ->addTag('controller.service_arguments')
-            ->setArguments([
-                new Reference('twig'),
             ])
         ;
 

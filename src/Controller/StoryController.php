@@ -59,6 +59,7 @@ final readonly class StoryController
             'tabs' => $this->getTabs($request, $component)->getChildren(),
             'component' => $component,
             'variant' => $selectedVariant,
+            'iframe' => $this->twig->render('@IQ2iArqui/iframe.html.twig', ['component' => $component, 'variant' => $selectedVariant]),
             'twig' => $this->cleanSource($twig, true),
             'html' => $this->cleanSource($this->twig->load($component)->renderBlock($selectedVariant)),
         ]));

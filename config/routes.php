@@ -16,8 +16,5 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 return static function (RoutingConfigurator $routes) {
     $routes
         ->add('iq2i_arqui_story', '/stories/{component<.+>?}')
-        ->controller('iq2i_arqui.controller.story')
-
-        ->add('iq2i_arqui_iframe', '/iframe/{component<.+>}')
-        ->controller('iq2i_arqui.controller.iframe');
+        ->controller('iq2i_arqui.controller.story');
 };
