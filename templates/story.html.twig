@@ -104,8 +104,10 @@
 
             <main class="flex flex-col flex-1 divide-y divide-gray-200 dark:divide-gray-600">
                 {% if component is not null %}
-                    <div class="p-3" style="height: 192px;">
-                        <iframe srcdoc="{{ component.iframeContent }}" class="w-full" data-iframe-size-target="iframe"></iframe>
+                    <div class="flex" style="height: 192px;">
+                        <div class="relative w-1/2 bg-gray-500" data-iframe-size-target="iframe">
+                            <iframe srcdoc="{{ component.iframeContent }}" class="absolute inset-0 w-full h-full"></iframe>
+                        </div>
                     </div>
 
                     <div class="flex-1 grid grid-cols-2 w-full divide-x divide-gray-200 dark:divide-gray-600">
