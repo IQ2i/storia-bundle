@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Dto;
 
-readonly class Variant
+readonly class Variant implements \Stringable
 {
     public function __construct(
         private string $path,
@@ -29,5 +29,10 @@ readonly class Variant
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->path;
     }
 }

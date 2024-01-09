@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Dto;
 
-class Component
+class Component implements \Stringable
 {
     public function __construct(
         private readonly string $path,
@@ -81,5 +81,10 @@ class Component
         $this->htmlContent = $htmlContent;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->path;
     }
 }

@@ -44,7 +44,7 @@ final readonly class StoryController
 
         if (!$component->getVariant() instanceof Variant) {
             return new RedirectResponse($this->router->generate('iq2i_arqui_story', [
-                'component' => $component->getPath(),
+                'component' => $component,
                 'variant' => $this->componentRegistry->findFirstComponentVariant($component),
             ]));
         }
