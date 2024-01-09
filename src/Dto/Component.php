@@ -19,7 +19,6 @@ class Component implements \Stringable
         private readonly string $path,
         private readonly string $name,
         private ?Variant $variant = null,
-        private ?string $iframeContent = null,
         private ?string $twigContent = null,
         private ?string $htmlContent = null,
     ) {
@@ -43,18 +42,6 @@ class Component implements \Stringable
     public function setVariant(?Variant $variant): static
     {
         $this->variant = $variant;
-
-        return $this;
-    }
-
-    public function getIframeContent(): ?string
-    {
-        return $this->iframeContent;
-    }
-
-    public function setIframeContent(?string $iframeContent): static
-    {
-        $this->iframeContent = $iframeContent;
 
         return $this;
     }

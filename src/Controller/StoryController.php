@@ -36,7 +36,7 @@ final readonly class StoryController
     public function __invoke(Request $request, Component $component = null): Response
     {
         if (!$component instanceof Component) {
-            return new Response($this->twig->render('@IQ2iArqui/story.html.twig', [
+            return new Response($this->twig->render('@IQ2iArqui/view/story.html.twig', [
                 'menu' => $this->menuFactory->createSidebarMenu($request),
                 'component' => null,
             ]));
@@ -49,7 +49,7 @@ final readonly class StoryController
             ]));
         }
 
-        return new Response($this->twig->render('@IQ2iArqui/story.html.twig', [
+        return new Response($this->twig->render('@IQ2iArqui/view/story.html.twig', [
             'menu' => $this->menuFactory->createSidebarMenu($request),
             'tabs' => $this->menuFactory->createTabMenu($request, $component),
             'component' => $component,

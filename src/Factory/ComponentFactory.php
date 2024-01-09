@@ -49,9 +49,6 @@ readonly class ComponentFactory
 
         $component->setVariant(new Variant($variantPath, $variantName));
 
-        $iframe = $this->twig->render('@IQ2iArqui/iframe.html.twig', ['component' => $component->getPath(), 'variant' => $component->getVariant()->getPath()]);
-        $component->setIframeContent($iframe);
-
         $content = file_get_contents($this->defaultPath.'/'.$component->getPath());
         preg_match('/{% block '.$component->getVariant()->getPath().' %}((?!{% endblock '.$component->getVariant()->getPath().' %}).*){% endblock '.$component->getVariant()->getPath().' %}/s', $content, $matches);
         $twig = $matches[1] ?? null;

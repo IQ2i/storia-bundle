@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use IQ2i\ArquiBundle\ArgumentResolver\ComponentValueResolver;
+use IQ2i\ArquiBundle\Controller\IframeController;
 use IQ2i\ArquiBundle\Controller\StoryController;
 use IQ2i\ArquiBundle\Factory\ComponentFactory;
 use IQ2i\ArquiBundle\Factory\MenuFactory;
 use IQ2i\ArquiBundle\Registry\ComponentRegistry;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 return static function (ContainerConfigurator $container) {
     $services = $container
@@ -29,6 +31,10 @@ return static function (ContainerConfigurator $container) {
         ->set(ComponentValueResolver::class)
             ->tag('controller.argument_value_resolver', ['priority' => 150])
             ->arg(0, service(ComponentFactory::class))
+
+        ->set(IframeController::class)
+            ->tag('controller.service_arguments')
+            ->arg(0, service('twig'))
 
         ->set(StoryController::class)
             ->tag('controller.service_arguments')
@@ -47,5 +53,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(2, service(ComponentRegistry::class))
 
         ->set(ComponentRegistry::class)
-            ->arg(0, service('twig'));
+            ->arg(0, service('twig'))
+
+        ->alias(Profiler::class, 'profiler');
 };

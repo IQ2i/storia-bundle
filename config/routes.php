@@ -11,11 +11,15 @@
 
 declare(strict_types=1);
 
+use IQ2i\ArquiBundle\Controller\IframeController;
 use IQ2i\ArquiBundle\Controller\StoryController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
     $routes
         ->add('iq2i_arqui_story', '/stories/{component<.+>?}')
-        ->controller(StoryController::class);
+        ->controller(StoryController::class)
+
+        ->add('iq2i_arqui_iframe', '/iframe/{component<.+>?}')
+        ->controller(IframeController::class);
 };
