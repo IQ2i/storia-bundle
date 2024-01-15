@@ -15,6 +15,7 @@ namespace IQ2i\ArquiBundle\Factory;
 
 use IQ2i\ArquiBundle\Dto\Component;
 use IQ2i\ArquiBundle\Dto\Variant;
+use Michelf\MarkdownExtra;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -56,6 +57,12 @@ readonly class ComponentFactory
 
         $html = $this->twig->load($component->getPath())->renderBlock($component->getVariant()->getPath());
         $component->setHtmlContent($this->cleanSource($html));
+
+        $markdownPath = u($component->getPath())->replace('.html.twig', '.md');
+        $markdownContent = file_get_contents($this->defaultPath.'/'.$markdownPath);
+        if (false !== $markdownContent) {
+            $component->setMarkdownContent(MarkdownExtra::defaultTransform($markdownContent));
+        }
 
         return $component;
     }

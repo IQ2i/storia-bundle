@@ -72,6 +72,10 @@ readonly class MenuFactory
                 $child = new Menu($label);
                 $this->getMenuChildren($request, $child, $file->getPathname());
             } else {
+                if ('twig' !== $file->getExtension()) {
+                    continue;
+                }
+
                 $label = u($file->getFilenameWithoutExtension())->replace('.html', '')->title()->toString();
                 $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->toString();
                 $path = $this->router->generate('iq2i_arqui_story', ['component' => $componentPath]);

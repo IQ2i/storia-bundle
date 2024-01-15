@@ -21,6 +21,7 @@ class Component implements \Stringable
         private ?Variant $variant = null,
         private ?string $twigContent = null,
         private ?string $htmlContent = null,
+        private ?string $markdownContent = null,
     ) {
     }
 
@@ -66,6 +67,18 @@ class Component implements \Stringable
     public function setHtmlContent(?string $htmlContent): static
     {
         $this->htmlContent = $htmlContent;
+
+        return $this;
+    }
+
+    public function getMarkdownContent(): ?string
+    {
+        return $this->markdownContent;
+    }
+
+    public function setMarkdownContent(?string $markdownContent): static
+    {
+        $this->markdownContent = $markdownContent;
 
         return $this;
     }

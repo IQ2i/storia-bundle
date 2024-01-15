@@ -96,7 +96,7 @@
         {% endif %}
 
         {% if tabs is defined %}
-            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 overflow-x-auto sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
+            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
                 <ul class="flex flex-wrap -mb-px">
                     {% for tab in tabs %}
                         <li class="me-2">
@@ -117,7 +117,7 @@
                     </div>
                 </div>
 
-                <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 overflow-x-auto sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
+                <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="me-2">
                             <a href="#twig" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg tab-is-active" data-tab-target="tab" data-action="click->tab#change">
@@ -129,12 +129,17 @@
                                 HTML
                             </a>
                         </li>
+                        <li class="me-2">
+                            <a href="#notes" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
+                                Notes
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
-                <div>
-                    <div id="twig" class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}" data-tab-target="tabPanel">
-                        <div class="overflow-x-auto h-full">
+                <div class="h-full">
+                    <div id="twig" class="relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}" data-tab-target="tabPanel">
+                        <div class="overflow-x-auto p-4">
                             <pre><code class="language-twig" data-controller="highlight">
                                 {{- component.twigContent -}}
                             </code></pre>
@@ -148,8 +153,8 @@
                         </button>
                     </div>
 
-                    <div id="html" class="hidden relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}" data-tab-target="tabPanel">
-                        <div class="overflow-x-auto h-full">
+                    <div id="html" class="hidden relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}" data-tab-target="tabPanel">
+                        <div class="overflow-x-auto p-4">
                             <pre><code class="language-html" data-controller="highlight">
                                 {{- component.htmlContent -}}
                             </code></pre>
@@ -161,6 +166,16 @@
                             </svg>
                             <span class="hidden block text-xs" data-copy-to-clipboard-target="text">Copied!</span>
                         </button>
+                    </div>
+
+                    <div id="notes" class="hidden h-full" data-tab-target="tabPanel">
+                        <div class="p-4 prose dark:prose-invert">
+                            {% if component.markdownContent is not null %}
+                                {{ component.markdownContent|raw }}
+                            {% else %}
+                                <em>No notes defined.</em>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endif %}
