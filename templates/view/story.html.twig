@@ -109,7 +109,7 @@
             </div>
         {% endif %}
 
-        <main class="flex flex-col flex-1 divide-y divide-gray-200 dark:divide-gray-600">
+        <main class="flex flex-col flex-1 divide-y divide-gray-200 dark:divide-gray-600" data-controller="tab">
             {% if component is not null %}
                 <div class="flex" style="height: 256px;">
                     <div class="relative w-full" data-iframe-size-target="iframe">
@@ -117,8 +117,23 @@
                     </div>
                 </div>
 
-                <div class="flex-1 grid grid-cols-2 w-full divide-x divide-gray-200 dark:divide-gray-600">
-                    <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}">
+                <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 overflow-x-auto sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
+                    <ul class="flex flex-wrap -mb-px">
+                        <li class="me-2">
+                            <a href="#twig" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg tab-is-active" data-tab-target="tab" data-action="click->tab#change">
+                                Twig
+                            </a>
+                        </li>
+                        <li class="me-2">
+                            <a href="#html" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
+                                HTML
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div id="twig" class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}" data-tab-target="tabPanel">
                         <div class="overflow-x-auto h-full">
                             <pre><code class="language-twig" data-controller="highlight">
                                 {{- component.twigContent -}}
@@ -133,7 +148,7 @@
                         </button>
                     </div>
 
-                    <div class="relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}">
+                    <div id="html" class="hidden relative p-4 bg-white group overflow-hidden dark:bg-gray-900" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}" data-tab-target="tabPanel">
                         <div class="overflow-x-auto h-full">
                             <pre><code class="language-html" data-controller="highlight">
                                 {{- component.htmlContent -}}

@@ -76,8 +76,41 @@ class MenuController extends Controller {
     }
 }
 
+class TabController extends Controller {
+    static values = {
+        index: {
+            type: Number,
+            default: 0,
+        },
+    };
+    static targets = ['tab', 'tabPanel'];
+
+    initialize() {
+        this.showTab();
+    }
+
+    change(e) {
+        this.indexValue = [...e.currentTarget?.parentElement?.parentElement.children].indexOf(e.currentTarget.parentElement);
+    }
+
+    indexValueChanged() {
+        this.showTab();
+    }
+
+    showTab() {
+        console.log(this.indexValue);
+        this.tabTargets.forEach((tab, index) => {
+            const panel = this.tabPanelTargets[index];
+            tab.classList.toggle('tab-is-unactive', index !== this.indexValue);
+            tab.classList.toggle('tab-is-active', index === this.indexValue);
+            panel.classList.toggle('hidden', index !== this.indexValue);
+        });
+    }
+}
+
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
 app.register('iframe-size', IframeSizeController);
 app.register('menu', MenuController);
+app.register('tab', TabController);
