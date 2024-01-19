@@ -21,6 +21,6 @@ final class IQ2iArquiBundle extends AbstractBundle
 {
     public function getContainerExtension(): ?ExtensionInterface
     {
-        return new IQ2IArquiExtension();
+        return new IQ2iArquiExtension();
     }
 }
