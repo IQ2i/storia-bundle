@@ -81,9 +81,9 @@
             <header class="sticky top-0 z-40 flex h-16 shrink-0 justify-between gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
                 <div class="flex w-full px-2 lg:px-0 items-center justify-between">
                     <h1 class="flex items-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        {{ component.name }} - {{ component.variant.name }}
+                        {{ component.name }} - {{ component.currentVariant.name }}
 
-                        <a href="{{ path('iq2i_arqui_iframe', { component, variant: component.variant }) }}" target="_blank">
+                        <a href="{{ path('iq2i_arqui_iframe', { component, variant: component.currentVariant }) }}" target="_blank">
                             <svg class="ml-4 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                             </svg>
@@ -95,13 +95,13 @@
             </header>
         {% endif %}
 
-        {% if tabs is defined %}
+        {% if component.variants is not empty %}
             <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-4 sm:px-6 lg:px-8 dark:text-gray-400 dark:border-gray-600">
                 <ul class="flex flex-wrap -mb-px">
-                    {% for tab in tabs %}
+                    {% for variant in component.variants %}
                         <li class="me-2">
-                            <a href="{{ tab.url }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg {% if tab.active %}text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500{% else %}hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300{% endif %}">
-                                {{ tab.label }}
+                            <a href="{{ path('iq2i_arqui_story', {component, variant}) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg {% if app.request.query.get('variant') == variant.path %}text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500{% else %}hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300{% endif %}">
+                                {{ variant.name }}
                             </a>
                         </li>
                     {% endfor %}
@@ -113,7 +113,7 @@
             {% if component is not null %}
                 <div class="flex" style="height: 256px;">
                     <div class="relative w-full" data-iframe-size-target="iframe">
-                        <iframe src="{{ path('iq2i_arqui_iframe', {component, variant: component.variant}) }}" class="absolute inset-0 w-full h-full"></iframe>
+                        <iframe src="{{ path('iq2i_arqui_iframe', {component, variant: component.currentVariant}) }}" class="absolute inset-0 w-full h-full"></iframe>
                     </div>
                 </div>
 
@@ -138,10 +138,10 @@
                 </div>
 
                 <div class="h-full">
-                    <div id="twig" class="relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.twigContent }}" data-tab-target="tabPanel">
+                    <div id="twig" class="relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.twigContent }}" data-tab-target="tabPanel">
                         <div class="overflow-x-auto p-4">
                             <pre><code class="language-twig" data-controller="highlight">
-                                {{- component.twigContent -}}
+                                {{- component.currentVariant.twigContent -}}
                             </code></pre>
                         </div>
 
@@ -153,10 +153,10 @@
                         </button>
                     </div>
 
-                    <div id="html" class="hidden relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.htmlContent }}" data-tab-target="tabPanel">
+                    <div id="html" class="hidden relative h-full group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.htmlContent }}" data-tab-target="tabPanel">
                         <div class="overflow-x-auto p-4">
                             <pre><code class="language-html" data-controller="highlight">
-                                {{- component.htmlContent -}}
+                                {{- component.currentVariant.htmlContent -}}
                             </code></pre>
                         </div>
 
@@ -170,8 +170,8 @@
 
                     <div id="notes" class="hidden h-full" data-tab-target="tabPanel">
                         <div class="p-4 prose dark:prose-invert">
-                            {% if component.markdownContent is not null %}
-                                {{ component.markdownContent|raw }}
+                            {% if component.currentVariant.markdownContent is not null %}
+                                {{ component.currentVariant.markdownContent|raw }}
                             {% else %}
                                 <em>No notes defined.</em>
                             {% endif %}

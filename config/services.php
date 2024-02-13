@@ -18,7 +18,6 @@ use IQ2i\ArquiBundle\Controller\IframeController;
 use IQ2i\ArquiBundle\Controller\StoryController;
 use IQ2i\ArquiBundle\Factory\ComponentFactory;
 use IQ2i\ArquiBundle\Factory\MenuFactory;
-use IQ2i\ArquiBundle\Registry\ComponentRegistry;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 return static function (ContainerConfigurator $container) {
@@ -41,7 +40,6 @@ return static function (ContainerConfigurator $container) {
             ->arg(0, service(MenuFactory::class))
             ->arg(1, service('twig'))
             ->arg(2, service('router'))
-            ->arg(3, service(ComponentRegistry::class))
 
         ->set(ComponentFactory::class)
             ->arg(0, param('arqui_bundle.default_path'))
@@ -50,10 +48,6 @@ return static function (ContainerConfigurator $container) {
         ->set(MenuFactory::class)
             ->arg(0, param('arqui_bundle.default_path'))
             ->arg(1, service('router'))
-            ->arg(2, service(ComponentRegistry::class))
-
-        ->set(ComponentRegistry::class)
-            ->arg(0, service('twig'))
 
         ->alias(Profiler::class, 'profiler');
 };

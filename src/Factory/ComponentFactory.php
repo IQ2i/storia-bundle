@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Factory;
 
+use IQ2i\ArquiBundle\Config\ComponentConfiguration;
 use IQ2i\ArquiBundle\Dto\Component;
 use IQ2i\ArquiBundle\Dto\Variant;
 use Michelf\MarkdownExtra;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 
 use function Symfony\Component\String\u;
@@ -36,46 +39,64 @@ readonly class ComponentFactory
             return null;
         }
 
-        $componentName = pathinfo(str_replace('.twig', '', (string) $componentPath), \PATHINFO_FILENAME);
-        $componentName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
+        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$componentPath));
+        $componentConfiguration = new ComponentConfiguration();
+        $config = (new Processor())->processConfiguration($componentConfiguration, [$yaml]);
 
-        $component = new Component($componentPath, $componentName);
-
-        if (null === $request->query->get('variant')) {
-            return $component;
+        $componentName = $config['name'] ?? null;
+        if (null === $componentName) {
+            $componentName = pathinfo(str_replace('.yaml', '', (string) $componentPath), \PATHINFO_FILENAME);
+            $componentName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
         }
 
-        $variantPath = $request->query->get('variant');
-        $variantName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $variantPath))));
+        $componentTemplate = $config['template'];
 
-        $component->setVariant(new Variant($variantPath, $variantName));
+        $component = new Component($componentPath, $componentName, $componentTemplate, $request->query->get('variant'));
 
-        $content = file_get_contents($this->defaultPath.'/'.$component->getPath());
-        preg_match('/{% block '.$component->getVariant()->getPath().' %}((?!{% endblock '.$component->getVariant()->getPath().' %}).*){% endblock '.$component->getVariant()->getPath().' %}/s', $content, $matches);
-        $twig = $matches[1] ?? null;
-        $component->setTwigContent($this->cleanSource($twig, true));
-
-        $html = $this->twig->load($component->getPath())->renderBlock($component->getVariant()->getPath());
-        $component->setHtmlContent($this->cleanSource($html));
-
-        $markdownPath = u($component->getPath())->replace('.html.twig', '.md');
+        $markdownPath = u($component->getPath())->replace('.yaml', '.md');
         $markdownContent = file_get_contents($this->defaultPath.'/'.$markdownPath);
         if (false !== $markdownContent) {
-            $component->setMarkdownContent(MarkdownExtra::defaultTransform($markdownContent));
+            $markdownContent = MarkdownExtra::defaultTransform($markdownContent);
+        }
+
+        foreach ($config['variants'] as $variantPath => $variantConfig) {
+            $variantName = $variantConfig['name'] ?? null;
+            if (null === $variantName) {
+                $variantName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], (string) $variantPath))));
+            }
+
+            $variantArgs = $variantConfig['args'];
+
+            $variant = new Variant($variantPath, $variantName, $variantArgs);
+
+            $variant->setTwigContent($this->generateTwig($component->getTemplate(), $variantArgs));
+            $variant->setHtmlContent($this->generateHtml($variant->getTwigContent()));
+            $variant->setMarkdownContent($markdownContent);
+
+            $component->addVariant($variant);
         }
 
         return $component;
     }
 
-    private function cleanSource(string $source, bool $unindent = false): string
+    private function generateTwig(string $template, array $args): string
     {
-        $lines = explode("\n", $source);
-        if ($unindent) {
-            $lines = array_map(static fn (string $line): string => substr($line, 4), $lines);
-        }
+        $skeletonPath = __DIR__.'/../../skeleton/template.tpl.php';
+        $parameters = array_merge($args, [
+            'template' => $template,
+        ]);
 
-        $source = u(implode("\n", $lines));
+        ob_start();
+        extract($parameters, \EXTR_SKIP);
+        include $skeletonPath;
 
-        return $source->trim()->toString();
+        return ob_get_clean();
+    }
+
+    private function generateHtml(string $content): string
+    {
+        $template = $this->twig->createTemplate($content);
+
+        return $template->render();
     }
 }

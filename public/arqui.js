@@ -98,7 +98,6 @@ class TabController extends Controller {
     }
 
     showTab() {
-        console.log(this.indexValue);
         this.tabTargets.forEach((tab, index) => {
             const panel = this.tabPanelTargets[index];
             tab.classList.toggle('tab-is-unactive', index !== this.indexValue);

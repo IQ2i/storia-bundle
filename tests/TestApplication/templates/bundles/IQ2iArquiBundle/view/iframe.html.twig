@@ -1,9 +1,5 @@
-{% extends '@IQ2iArqui/base.html.twig' %}
+{% extends '@!IQ2iArqui/view/iframe.html.twig' %}
 
 {% block stylesheets %}
     <script src="https://cdn.tailwindcss.com"></script>
-{% endblock %}
-
-{% block body %}
-    {{ block(component.variant.path, component.path)|raw }}
 {% endblock %}

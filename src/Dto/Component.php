@@ -15,13 +15,13 @@ namespace IQ2i\ArquiBundle\Dto;
 
 class Component implements \Stringable
 {
+    private array $variants = [];
+
     public function __construct(
         private readonly string $path,
         private readonly string $name,
-        private ?Variant $variant = null,
-        private ?string $twigContent = null,
-        private ?string $htmlContent = null,
-        private ?string $markdownContent = null,
+        private readonly string $template,
+        private readonly ?string $currentVariantPath = null,
     ) {
     }
 
@@ -35,50 +35,52 @@ class Component implements \Stringable
         return $this->name;
     }
 
-    public function getVariant(): ?Variant
+    public function getTemplate(): string
     {
-        return $this->variant;
+        return $this->template;
     }
 
-    public function setVariant(?Variant $variant): static
+    public function getCurrentVariantPath(): ?string
     {
-        $this->variant = $variant;
+        return $this->currentVariantPath;
+    }
+
+    public function getCurrentVariant(): ?Variant
+    {
+        $variant = current(array_filter($this->variants, fn (Variant $variant): bool => $this->currentVariantPath === $variant->getPath()));
+
+        return $variant ?: null;
+    }
+
+    public function getFirstVariant(): ?Variant
+    {
+        $variant = current($this->variants);
+
+        return $variant ?: null;
+    }
+
+    public function getVariants(): array
+    {
+        return $this->variants;
+    }
+
+    public function addVariant(Variant $variant): static
+    {
+        if (!\in_array($variant, $this->variants, true)) {
+            $this->variants[] = $variant;
+        }
 
         return $this;
     }
 
-    public function getTwigContent(): ?string
+    public function removeVariant(Variant $variant): static
     {
-        return $this->twigContent;
-    }
+        $key = array_search($variant, $this->variants, true);
+        if (false === $key) {
+            return $this;
+        }
 
-    public function setTwigContent(?string $twigContent): static
-    {
-        $this->twigContent = $twigContent;
-
-        return $this;
-    }
-
-    public function getHtmlContent(): ?string
-    {
-        return $this->htmlContent;
-    }
-
-    public function setHtmlContent(?string $htmlContent): static
-    {
-        $this->htmlContent = $htmlContent;
-
-        return $this;
-    }
-
-    public function getMarkdownContent(): ?string
-    {
-        return $this->markdownContent;
-    }
-
-    public function setMarkdownContent(?string $markdownContent): static
-    {
-        $this->markdownContent = $markdownContent;
+        unset($this->variants[$key]);
 
         return $this;
     }

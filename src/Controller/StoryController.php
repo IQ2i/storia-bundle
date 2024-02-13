@@ -16,7 +16,6 @@ namespace IQ2i\ArquiBundle\Controller;
 use IQ2i\ArquiBundle\Dto\Component;
 use IQ2i\ArquiBundle\Dto\Variant;
 use IQ2i\ArquiBundle\Factory\MenuFactory;
-use IQ2i\ArquiBundle\Registry\ComponentRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +28,6 @@ final readonly class StoryController
         private MenuFactory $menuFactory,
         private Environment $twig,
         private RouterInterface $router,
-        private ComponentRegistry $componentRegistry,
     ) {
     }
 
@@ -42,16 +40,15 @@ final readonly class StoryController
             ]));
         }
 
-        if (!$component->getVariant() instanceof Variant) {
+        if (!$component->getCurrentVariant() instanceof Variant) {
             return new RedirectResponse($this->router->generate('iq2i_arqui_story', [
                 'component' => $component,
-                'variant' => $this->componentRegistry->findFirstComponentVariant($component),
+                'variant' => $component->getFirstVariant(),
             ]));
         }
 
         return new Response($this->twig->render('@IQ2iArqui/view/story.html.twig', [
             'menu' => $this->menuFactory->createSidebarMenu($request),
-            'tabs' => $this->menuFactory->createTabMenu($request, $component),
             'component' => $component,
         ]));
     }

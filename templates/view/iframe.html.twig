@@ -1,5 +1,5 @@
 {% extends '@IQ2iArqui/base.html.twig' %}
 
 {% block body %}
-    {{ block(component.variant.path, component.path)|raw }}
+    {{ component.currentVariant.htmlContent|raw }}
 {% endblock %}

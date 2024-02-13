@@ -13,11 +13,18 @@ declare(strict_types=1);
 
 namespace IQ2i\ArquiBundle\Dto;
 
-readonly class Variant implements \Stringable
+class Variant implements \Stringable
 {
+    private ?string $twigContent = null;
+
+    private ?string $htmlContent = null;
+
+    private ?string $markdownContent = null;
+
     public function __construct(
-        private string $path,
-        private string $name,
+        private readonly string $path,
+        private readonly string $name,
+        private readonly array $args,
     ) {
     }
 
@@ -29,6 +36,47 @@ readonly class Variant implements \Stringable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getArgs(): array
+    {
+        return $this->args;
+    }
+
+    public function getTwigContent(): ?string
+    {
+        return $this->twigContent;
+    }
+
+    public function setTwigContent(?string $twigContent): static
+    {
+        $this->twigContent = $twigContent;
+
+        return $this;
+    }
+
+    public function getHtmlContent(): ?string
+    {
+        return $this->htmlContent;
+    }
+
+    public function setHtmlContent(?string $htmlContent): static
+    {
+        $this->htmlContent = $htmlContent;
+
+        return $this;
+    }
+
+    public function getMarkdownContent(): ?string
+    {
+        return $this->markdownContent;
+    }
+
+    public function setMarkdownContent(?string $markdownContent): static
+    {
+        $this->markdownContent = $markdownContent;
+
+        return $this;
     }
 
     public function __toString(): string
