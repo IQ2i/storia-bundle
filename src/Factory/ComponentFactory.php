@@ -54,7 +54,7 @@ readonly class ComponentFactory
         $component = new Component($componentPath, $componentName, $componentTemplate, $request->query->get('variant'));
 
         $markdownPath = u($component->getPath())->replace('.yaml', '.md');
-        $markdownContent = file_get_contents($this->defaultPath.'/'.$markdownPath);
+        $markdownContent = @file_get_contents($this->defaultPath.'/'.$markdownPath);
         if (false !== $markdownContent) {
             $markdownContent = MarkdownExtra::defaultTransform($markdownContent);
         }
@@ -71,7 +71,7 @@ readonly class ComponentFactory
 
             $variant->setTwigContent($this->generateTwig($component->getTemplate(), $variantArgs));
             $variant->setHtmlContent($this->generateHtml($variant->getTwigContent()));
-            $variant->setMarkdownContent($markdownContent);
+            $variant->setMarkdownContent($markdownContent ?: null);
 
             $component->addVariant($variant);
         }
