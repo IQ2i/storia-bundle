@@ -1,0 +1,17 @@
+template: ui/progress.html.twig
+variants:
+    small:
+        args:
+            height: 1.5
+
+    default:
+        args:
+            height: 2.5
+
+    large:
+        args:
+            height: 4
+
+    extra_large:
+        args:
+            height: 6

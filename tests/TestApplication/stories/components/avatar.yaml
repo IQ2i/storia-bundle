@@ -1,0 +1,13 @@
+template: ui/avatar.html.twig
+variants:
+    rounded:
+        args:
+            class: rounded
+
+    rounded-full:
+        args:
+            class: rounded-full
+
+    bordered:
+        args:
+            class: p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500
