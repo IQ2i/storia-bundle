@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 .tab-is-active {
-    @apply text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500;
+    @apply text-cyan-600 border-cyan-600 dark:text-cyan-500 dark:border-cyan-500;
 }
 .tab-is-unactive {
-    @apply hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300;
+    @apply hover:text-gray-300 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-300;
+}
+iframe {
+    transform: scale(1);
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
 }

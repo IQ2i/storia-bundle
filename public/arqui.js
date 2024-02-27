@@ -34,21 +34,34 @@ class HighlightController extends Controller {
     }
 }
 
-class IframeSizeController extends Controller {
-    static targets = ['iframe', 'size'];
+class ControlsController extends Controller {
+    static targets = ['iframe'];
+    static values = {
+        scale: { type: Number, default: 1 },
+    };
 
-    connect() {
-        new ResizeObserver((entries) => {
-            const [entry] = entries;
-            this.sizeTarget.innerText = `${entry.contentRect.width} x ${entry.contentRect.height}`;
-        }).observe(this.iframeTarget);
+    refreshIframe() {
+        this.iframeTarget.contentWindow.location.reload();
     }
 
-    disconnect() {
-        new ResizeObserver((entries) => {
-            const [entry] = entries;
-            this.sizeTarget.innerText = `${entry.contentRect.width} x ${entry.contentRect.height}`;
-        }).observe(this.iframeTarget);
+    zoomIn() {
+        this.scaleValue = this.scaleValue * 1.1;
+    }
+
+    zoomOut() {
+        this.scaleValue = this.scaleValue * 0.9;
+    }
+
+    resetZoom() {
+        this.scaleValue = 1;
+    }
+
+    scaleValueChanged() {
+        this.iframeTarget.style.transform = `scale(${this.scaleValue})`;
+    }
+
+    copyLink() {
+        navigator.clipboard.writeText(window.location.href);
     }
 }
 
@@ -110,6 +123,6 @@ class TabController extends Controller {
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
-app.register('iframe-size', IframeSizeController);
+app.register('controls', ControlsController);
 app.register('menu', MenuController);
 app.register('tab', TabController);
