@@ -15,6 +15,8 @@ namespace IQ2i\ArquiBundle\Dto;
 
 class Variant implements \Stringable
 {
+    private ?string $includeContent = null;
+
     private ?string $twigContent = null;
 
     private ?string $htmlContent = null;
@@ -41,6 +43,18 @@ class Variant implements \Stringable
     public function getArgs(): array
     {
         return $this->args;
+    }
+
+    public function getIncludeContent(): ?string
+    {
+        return $this->includeContent;
+    }
+
+    public function setIncludeContent(?string $includeContent): static
+    {
+        $this->includeContent = $includeContent;
+
+        return $this;
     }
 
     public function getTwigContent(): ?string

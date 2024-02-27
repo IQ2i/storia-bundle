@@ -69,8 +69,9 @@ readonly class ComponentFactory
 
             $variant = new Variant($variantPath, $variantName, $variantArgs);
 
-            $variant->setTwigContent($this->generateTwig($component->getTemplate(), $variantArgs));
-            $variant->setHtmlContent($this->generateHtml($variant->getTwigContent()));
+            $variant->setIncludeContent($this->generateInclude($component->getTemplate(), $variantArgs));
+            $variant->setTwigContent($this->getTwigContent($component->getTemplate()));
+            $variant->setHtmlContent($this->generateHtml($variant->getIncludeContent()));
             $variant->setMarkdownContent($markdownContent ?: null);
 
             $component->addVariant($variant);
@@ -79,7 +80,7 @@ readonly class ComponentFactory
         return $component;
     }
 
-    private function generateTwig(string $template, array $args): string
+    private function generateInclude(string $template, array $args): string
     {
         $skeletonPath = __DIR__.'/../../skeleton/template.tpl.php';
         $parameters = array_merge($args, [
@@ -91,6 +92,13 @@ readonly class ComponentFactory
         include $skeletonPath;
 
         return ob_get_clean();
+    }
+
+    private function getTwigContent(string $template): string
+    {
+        $source = $this->twig->getLoader()->getSourceContext($template);
+
+        return $source->getCode();
     }
 
     private function generateHtml(string $content): string
