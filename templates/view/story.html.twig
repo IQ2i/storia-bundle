@@ -3,6 +3,13 @@
 {% block html_classes %}h-full bg-white dark:bg-gray-900{% endblock %}
 {% block body_classes %}h-full{% endblock %}
 
+{% block meta %}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/bundles/iq2iarqui/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/bundles/iq2iarqui/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/bundles/iq2iarqui/favicon-16x16.png') }}">
+    <meta name="theme-color" content="#ffffff">
+{% endblock %}
+
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('/bundles/iq2iarqui/arqui.css') }}"/>
 {% endblock %}
