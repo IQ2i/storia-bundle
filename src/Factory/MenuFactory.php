@@ -51,6 +51,16 @@ readonly class MenuFactory
                 $label = u($file->getBasename())->title()->toString();
                 $child = new Menu($label);
                 $this->getMenuChildren($request, $child, $file->getPathname());
+
+                if ([] === $child->getChildren()) {
+                    continue;
+                }
+
+                if (1 === \count($child->getChildren())) {
+                    $menuItem = $child->getChildren()[0];
+                    $opened = $opened || $menuItem->isActive();
+                    $child = new MenuItem($label, $menuItem->getUrl(), $menuItem->isActive());
+                }
             } else {
                 if ('yaml' !== $file->getExtension()) {
                     continue;
@@ -71,5 +81,6 @@ readonly class MenuFactory
         }
 
         $menu->setOpened($opened);
+        $menu->reorderChildren();
     }
 }

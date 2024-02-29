@@ -53,4 +53,11 @@ class Menu
 
         return $this;
     }
+
+    public function reorderChildren(): static
+    {
+        usort($this->children, static fn (Menu|MenuItem $itemA, Menu|MenuItem $itemB): int => strcmp($itemA->getLabel(), $itemB->getLabel()));
+
+        return $this;
+    }
 }
