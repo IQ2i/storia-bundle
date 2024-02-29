@@ -49,7 +49,14 @@ readonly class ComponentFactory
             $componentName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
         }
 
-        $componentTemplate = $config['template'];
+        $componentTemplate = $config['template'] ?? null;
+        if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig'))) {
+            $componentTemplate = u($componentPath)->replace('.yaml', '.html.twig')->toString();
+        }
+
+        if (null === $componentTemplate) {
+            throw new \LogicException(sprintf('Missing template for component "%s"', $componentPath));
+        }
 
         $component = new Component($componentPath, $componentName, $componentTemplate, $request->query->get('variant'));
 
