@@ -44,6 +44,7 @@ return static function (ContainerConfigurator $container) {
         ->set(ComponentFactory::class)
             ->arg(0, param('arqui_bundle.default_path'))
             ->arg(1, service('twig'))
+            ->arg(2, service('ux.twig_component.component_template_finder'))
 
         ->set(MenuFactory::class)
             ->arg(0, param('arqui_bundle.default_path'))

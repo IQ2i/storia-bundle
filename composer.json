@@ -13,6 +13,7 @@
     "symfony/http-kernel": "^6.4|^7.0",
     "symfony/routing": "^6.4|^7.0",
     "symfony/string": "^6.4|^7.0",
+    "symfony/ux-twig-component": "^2.16",
     "symfony/yaml": "^6.4|^7.0",
     "twig/twig": "^2.13|^3.0.4"
   },

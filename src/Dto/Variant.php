@@ -26,7 +26,6 @@ class Variant implements \Stringable
     public function __construct(
         private readonly string $path,
         private readonly string $name,
-        private readonly array $args,
     ) {
     }
 
@@ -38,11 +37,6 @@ class Variant implements \Stringable
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getArgs(): array
-    {
-        return $this->args;
     }
 
     public function getIncludeContent(): ?string

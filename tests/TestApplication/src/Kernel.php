@@ -22,6 +22,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
 
 final class Kernel extends SymfonyKernel
 {
@@ -37,6 +38,7 @@ final class Kernel extends SymfonyKernel
         return [
             new FrameworkBundle(),
             new TwigBundle(),
+            new TwigComponentBundle(),
             new WebProfilerBundle(),
             new IQ2iArquiBundle(),
         ];

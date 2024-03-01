@@ -14,7 +14,8 @@ HEADER;
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->exclude([
-        '**vendor**',
+        'skeleton/',
+        'vendor/',
     ])
 ;
 

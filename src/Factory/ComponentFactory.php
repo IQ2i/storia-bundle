@@ -20,6 +20,7 @@ use Michelf\MarkdownExtra;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 use Twig\Environment;
 
 use function Symfony\Component\String\u;
@@ -29,6 +30,7 @@ readonly class ComponentFactory
     public function __construct(
         private string $defaultPath,
         private Environment $twig,
+        private ComponentTemplateFinder $componentTemplateFinder,
     ) {
     }
 
@@ -49,9 +51,15 @@ readonly class ComponentFactory
             $componentName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
         }
 
+        $isComponent = false;
         $componentTemplate = $config['template'] ?? null;
         if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig'))) {
             $componentTemplate = u($componentPath)->replace('.yaml', '.html.twig')->toString();
+        }
+
+        if (null === $componentTemplate && null !== $config['component']) {
+            $isComponent = true;
+            $componentTemplate = $config['component'];
         }
 
         if (null === $componentTemplate) {
@@ -72,12 +80,25 @@ readonly class ComponentFactory
                 $variantName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], (string) $variantPath))));
             }
 
-            $variantArgs = $variantConfig['args'];
+            $variant = new Variant($variantPath, $variantName);
 
-            $variant = new Variant($variantPath, $variantName, $variantArgs);
+            $skeletonPath = $isComponent
+                ? __DIR__.'/../../skeleton/component.tpl.php'
+                : __DIR__.'/../../skeleton/template.tpl.php';
 
-            $variant->setIncludeContent($this->generateInclude($component->getTemplate(), $variantArgs));
-            $variant->setTwigContent($this->getTwigContent($component->getTemplate()));
+            $parameters = [
+                'template' => $component->getTemplate(),
+                'args' => $variantConfig['args'],
+                'blocks' => $variantConfig['blocks'],
+            ];
+
+            if ($isComponent && isset($parameters['blocks']['content'])) {
+                $parameters['content'] = $parameters['blocks']['content'];
+                unset($parameters['blocks']['content']);
+            }
+
+            $variant->setIncludeContent($this->generateInclude($skeletonPath, $parameters));
+            $variant->setTwigContent($this->getTwigContent($component->getTemplate(), $isComponent));
             $variant->setHtmlContent($this->generateHtml($variant->getIncludeContent()));
             $variant->setMarkdownContent($markdownContent ?: null);
 
@@ -87,13 +108,8 @@ readonly class ComponentFactory
         return $component;
     }
 
-    private function generateInclude(string $template, array $args): string
+    private function generateInclude(string $skeletonPath, array $parameters): string
     {
-        $skeletonPath = __DIR__.'/../../skeleton/template.tpl.php';
-        $parameters = array_merge($args, [
-            'template' => $template,
-        ]);
-
         ob_start();
         extract($parameters, \EXTR_SKIP);
         include $skeletonPath;
@@ -101,8 +117,12 @@ readonly class ComponentFactory
         return ob_get_clean();
     }
 
-    private function getTwigContent(string $template): string
+    private function getTwigContent(string $template, bool $isComponent = false): string
     {
+        if ($isComponent) {
+            $template = $this->componentTemplateFinder->findAnonymousComponentTemplate($template);
+        }
+
         $source = $this->twig->getLoader()->getSourceContext($template);
 
         return $source->getCode();
