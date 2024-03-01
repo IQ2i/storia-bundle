@@ -26,7 +26,7 @@ final readonly class IframeController
     ) {
     }
 
-    public function __invoke(Request $request, ?Profiler $profiler, Component $component = null): Response
+    public function __invoke(Request $request, ?Profiler $profiler, ?Component $component = null): Response
     {
         if ($profiler instanceof Profiler) {
             $profiler->disable();

@@ -48,7 +48,7 @@ readonly class ComponentFactory
         $componentName = $config['name'] ?? null;
         if (null === $componentName) {
             $componentName = pathinfo(str_replace('.yaml', '', (string) $componentPath), \PATHINFO_FILENAME);
-            $componentName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
+            $componentName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
         }
 
         $isComponent = false;
@@ -77,7 +77,7 @@ readonly class ComponentFactory
         foreach ($config['variants'] as $variantPath => $variantConfig) {
             $variantName = $variantConfig['name'] ?? null;
             if (null === $variantName) {
-                $variantName = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], (string) $variantPath))));
+                $variantName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], (string) $variantPath))));
             }
 
             $variant = new Variant($variantPath, $variantName);

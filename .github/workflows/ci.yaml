@@ -31,7 +31,7 @@ jobs:
               run: composer-require-checker
 
             - name: Composer Unused
-              run: composer-unused --excludePackage=symfony/dependency-injection  --excludePackage=symfony/property-access
+              run: composer-unused
 
     php-cs-fixer:
         runs-on: ubuntu-latest
