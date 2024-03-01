@@ -23,7 +23,7 @@ jobs:
                   tools: composer-require-checker, composer-unused
 
             - name: Install dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.dependencies }}
 
@@ -46,7 +46,7 @@ jobs:
                   coverage: none
 
             - name: Install dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.dependencies }}
 
@@ -66,7 +66,7 @@ jobs:
                   coverage: none
 
             - name: Install dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.dependencies }}
 
@@ -86,7 +86,7 @@ jobs:
                   coverage: none
 
             - name: Install dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.dependencies }}
 
@@ -95,25 +95,60 @@ jobs:
 
     phpunit:
         strategy:
+            fail-fast: false
             matrix:
-                operating-system: [ 'ubuntu-latest' ]
-                php-version: [ '8.1', '8.2', '8.3' ]
+                include:
+                    # Latest Symfony version support
+                    -   os: ubuntu-latest
+                        php_version: "8.3"
+                        symfony_version: "7.0"
+                        stability: "stable"
+                    # LTS Symfony version support
+                    -   os: ubuntu-latest
+                        php_version: "8.3"
+                        symfony_version: "6.4"
+                        stability: "stable"
+                    # Lowest deps support
+                    -   os: ubuntu-latest
+                        php_version: "8.3"
+                        symfony_version: "6.4"
+                        composer_args: "--prefer-lowest"
+                        stability: "stable"
+                    # Upcoming Symfony versions
+                    -   os: ubuntu-latest
+                        php_version: "8.3"
+                        symfony_version: "7.1.x-dev"
+                        stability: "dev"
 
-        runs-on: ${{ matrix.operating-system }}
+        runs-on: ${{ matrix.os }}
 
         steps:
-            - uses: actions/checkout@v4
+            -   uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: ${{ matrix.php_version }}
-                  coverage: none
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
 
-            - name: Install dependencies
-              uses: ramsey/composer-install@v2
-              with:
-                  dependency-versions: ${{ matrix.dependencies }}
+            -   name: symfony/flex is required to install the correct symfony version
+                if: ${{ matrix.symfony_version }}
+                run: |
+                    composer global config --no-plugins allow-plugins.symfony/flex true
+                    composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
-            - name: Test PHPUnit
-              run: php vendor/bin/phpunit
+            -   name: Configure Composer stability
+                run: |
+                    composer config minimum-stability ${{ matrix.stability }}
+
+            -   name: Configure Symfony version for symfony/flex
+                if: ${{ matrix.symfony_version }}
+                run: composer config extra.symfony.require "${{ matrix.symfony_version }}"
+
+            -   name: Install dependencies
+                run: |
+                    composer update --prefer-dist --no-progress ${{ matrix.composer_args }}
+
+            -   name: Test PHPUnit
+                run: |
+                    vendor/bin/phpunit
