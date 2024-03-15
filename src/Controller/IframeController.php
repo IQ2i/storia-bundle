@@ -32,7 +32,7 @@ final readonly class IframeController
             $profiler->disable();
         }
 
-        return new Response($this->twig->render('@IQ2iArqui/view/iframe.html.twig', [
+        return new Response($this->twig->render('@IQ2iArqui/iframe.html.twig', [
             'component' => $component,
         ]));
     }
