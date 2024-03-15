@@ -36,12 +36,19 @@ readonly class MenuFactory
     public function createSidebarMenu(Request $request): array
     {
         $menu = new Menu();
-        $this->getMenuChildren($request, $menu, $this->defaultPath);
+
+        $components = new Menu('Components');
+        $this->getMenu($request, $components, $this->defaultPath.'/components');
+        $menu->addChild($components);
+
+        $pages = new Menu('Pages');
+        $this->getMenu($request, $pages, $this->defaultPath.'/pages');
+        $menu->addChild($pages);
 
         return $menu->getChildren();
     }
 
-    private function getMenuChildren(Request $request, Menu $menu, string $path): void
+    private function getMenu(Request $request, Menu $menu, string $path): void
     {
         $opened = false;
 
@@ -50,7 +57,7 @@ readonly class MenuFactory
             if ($file->isDir()) {
                 $label = u($file->getBasename())->title()->toString();
                 $child = new Menu($label);
-                $this->getMenuChildren($request, $child, $file->getPathname());
+                $this->getMenu($request, $child, $file->getPathname());
 
                 if ([] === $child->getChildren()) {
                     continue;
