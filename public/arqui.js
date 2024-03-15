@@ -89,6 +89,33 @@ class MenuController extends Controller {
     }
 }
 
+class ResizeController extends Controller {
+    static targets = ['sidebar', 'content', 'draggable'];
+    static values = {
+        width: { type: Number, default: 288 },
+    };
+
+    resize(event) {
+        event.preventDefault();
+
+        const doResize = (e) => {
+            this.widthValue = e.pageX - this.sidebarTarget.getBoundingClientRect().left + 2.5;
+        };
+        const stopResize = () => {
+            window.removeEventListener('mousemove', doResize);
+        };
+
+        window.addEventListener('mousemove', doResize);
+        window.addEventListener('mouseup', stopResize);
+    }
+
+    widthValueChanged() {
+        this.sidebarTarget.style.width = `${this.widthValue}px`;
+        this.contentTarget.style.left = `${this.widthValue}px`;
+        this.draggableTarget.style.transform = `translate(${this.widthValue}px, 0px)`;
+    }
+}
+
 class TabController extends Controller {
     static values = {
         index: {
@@ -125,4 +152,5 @@ app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
 app.register('controls', ControlsController);
 app.register('menu', MenuController);
+app.register('resize', ResizeController);
 app.register('tab', TabController);
