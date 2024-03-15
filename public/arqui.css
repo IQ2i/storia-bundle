@@ -907,9 +907,6 @@ video {
 .prose :where(.prose > :last-child):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
   margin-bottom: 0;
 }
-.fixed {
-  position: fixed;
-}
 .absolute {
   position: absolute;
 }
@@ -944,12 +941,6 @@ video {
 .z-40 {
   z-index: 40;
 }
-.z-50 {
-  z-index: 50;
-}
-.-m-3 {
-  margin: -0.75rem;
-}
 .-m-1 {
   margin: -0.25rem;
 }
@@ -982,9 +973,6 @@ video {
 }
 .h-12 {
   height: 3rem;
-}
-.h-16 {
-  height: 4rem;
 }
 .h-2 {
   height: 0.5rem;
@@ -1164,27 +1152,38 @@ video {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.pl-12 {
-  padding-left: 3rem;
+.pl-\[108px\] {
+  padding-left: 108px;
 }
-.pl-6 {
-  padding-left: 1.5rem;
+.pl-\[120px\] {
+  padding-left: 120px;
 }
-.pl-72 {
-  padding-left: 18rem;
+.pl-\[132px\] {
+  padding-left: 132px;
 }
-.pl-9 {
-  padding-left: 2.25rem;
+.pl-\[24px\] {
+  padding-left: 24px;
+}
+.pl-\[48px\] {
+  padding-left: 48px;
+}
+.pl-\[60px\] {
+  padding-left: 60px;
+}
+.pl-\[72px\] {
+  padding-left: 72px;
+}
+.pl-\[84px\] {
+  padding-left: 84px;
+}
+.pl-\[96px\] {
+  padding-left: 96px;
 }
 .text-left {
   text-align: left;
 }
 .text-center {
   text-align: center;
-}
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
 }
 .text-3xl {
   font-size: 1.875rem;

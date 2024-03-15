@@ -58,6 +58,7 @@ readonly class MenuFactory
                 $label = u($file->getBasename())->title()->toString();
                 $child = new Menu($label);
                 $this->getMenu($request, $child, $file->getPathname());
+                $opened = $opened || $child->isOpened();
 
                 if ([] === $child->getChildren()) {
                     continue;

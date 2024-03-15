@@ -1,0 +1,4 @@
+component: ButtonGroup
+variants:
+    default:
+        args:
