@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .tab-is-active {
     @apply text-cyan-600 border-cyan-600 dark:text-cyan-500 dark:border-cyan-500;
 }

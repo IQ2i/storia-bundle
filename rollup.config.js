@@ -1,7 +1,5 @@
 import copy from 'rollup-plugin-copy';
-import postcss from 'rollup-plugin-postcss';
-import autoprefixer from 'autoprefixer';
-import tailwindcss from 'tailwindcss';
+import scss from 'rollup-plugin-scss';
 
 export default [
     {
@@ -17,10 +15,8 @@ export default [
             'highlight.js/lib/languages/xml',
         ],
         plugins: [
-            postcss({
-                extract: true,
-                extensions: ['.css'],
-                plugins: [tailwindcss, autoprefixer],
+            scss({
+                fileName: 'arqui.css',
             }),
             copy({
                 targets: [

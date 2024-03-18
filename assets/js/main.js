@@ -1,5 +1,5 @@
-import '../css/main.css';
-import '../css/vendor/_highlight.css';
+import '../scss/main.scss';
+import '../vendor/_highlight.css';
 import { Application } from '@hotwired/stimulus';
 import CopyToClipboardController from './controllers/copy_to_clipboard_controller.js';
 import HighlightController from './controllers/highlight_controller.js';
