@@ -1,0 +1,59 @@
+.code {
+  overflow: scroll;
+
+  pre {
+    margin: 0;
+    padding: 1rem;
+  }
+}
+
+.code {
+
+  pre::-webkit-scrollbar-track {
+    background-color: var(--color-bg);
+  }
+
+  pre::-webkit-scrollbar {
+    height: .2rem;
+    width: 2rem;
+    background-color: var(--color-primary-20);
+  }
+
+  pre::-webkit-scrollbar-thumb
+  {
+    background-color: var(--color-primary);
+  }
+}
+
+.group {
+  position: relative;
+  padding: 2rem;
+
+  &:hover {
+
+    .copy--link {
+      transform: translateX(0);
+    }
+  }
+}
+
+.copy--link {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  padding: .4rem .6rem;
+  border-radius: .4rem;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  color: var(--color-light);
+  font-size: 1.4rem;
+  gap: .4rem;
+  transition: all ease-in-out .2s;
+  transform: translateX(100%);
+
+  svg {
+    width: 2rem;
+    fill: var(--color-light);
+  }
+}

@@ -1,0 +1,23 @@
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 480;
+  line-height: 1.75;
+  font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  background: var(--color-light);
+}
+
+.hidden {
+  display: none;
+}

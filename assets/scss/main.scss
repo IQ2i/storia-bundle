@@ -1,14 +1,34 @@
-.tab-is-active {
-    @apply text-cyan-600 border-cyan-600 dark:text-cyan-500 dark:border-cyan-500;
-}
-.tab-is-unactive {
-    @apply hover:text-gray-300 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-300;
-}
-iframe {
-    transform: scale(1);
-    -ms-transform-origin: 0 0;
-    -moz-transform-origin: 0 0;
-    -o-transform-origin: 0 0;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-}
+// ------------------ //
+// SETTINGS
+// ------------------ //
+@import
+"01_settings/settings.breakpoints",
+"01_settings/settings.colors",
+"01_settings/settings.spacing",
+"01_settings/settings.fonts"
+;
+
+// ------------------ //
+// GENERICS
+// ------------------ //
+@import
+"02_generics/generics.box-sizing",
+"02_generics/generics.reset",
+"02_generics/generics.reduced-motion",
+"02_generics/generics.misc"
+;
+
+
+// ------------------ //
+// COMPONENTS
+// ------------------ //
+@import
+"05_components/components.layout",
+"05_components/components.sidebar",
+"05_components/components.resizer",
+"05_components/components.tabs",
+"05_components/components.actions",
+"05_components/components.code",
+"05_components/components.component"
+;
+

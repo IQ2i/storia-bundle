@@ -1,0 +1,66 @@
+.main__sidebar {
+  width: 288px;
+  flex-shrink: 0;
+  background: var(--color-bg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.main__sidebar_nav {
+  padding: 0 0 0 1.5rem;
+
+  > ul {
+
+    > li {
+      padding: .5rem 0;
+    }
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+[aria-controls="sub-menu-1"] {
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-weight: 480;
+
+  svg {
+    position: absolute;
+    left: -1.6rem;
+  }
+
+  svg {
+    width: 1.4rem;
+  }
+}
+
+.sub-menu-2, .sub-menu-1 {
+
+  > ul {
+    padding-left: .8rem;
+  }
+}
+
+.menu_item {
+
+  &.active {
+    padding: 0 .8rem;
+    background: var(--color-primary);
+    color: var(--color-light);
+    border-radius: .4rem;
+    margin: .2rem 0;
+    position: relative;
+    left: -.8rem;
+  }
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
