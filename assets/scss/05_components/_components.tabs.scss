@@ -1,0 +1,30 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  padding: 0 2rem;
+  border-bottom: .1rem solid var(--color-primary-10);
+  border-top: .1rem solid var(--color-primary-10);
+}
+
+.tabs__item {
+  display: flex;
+}
+
+.tabs__item_link {
+  align-self: stretch;
+  padding: 1rem 0;
+}
+
+.tab-is-unactive {
+  border-bottom: .1rem solid transparent;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.tab-is-active {
+  color: var(--color-primary);
+  border-bottom: .1rem solid var(--color-primary);
+}

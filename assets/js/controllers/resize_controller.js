@@ -23,6 +23,7 @@ export default class extends Controller {
     widthValueChanged() {
         this.sidebarTarget.style.width = `${this.widthValue}px`;
         this.contentTarget.style.left = `${this.widthValue}px`;
+        this.contentTarget.style.setProperty('--offset-left', `${this.widthValue}px`);
         this.draggableTarget.style.transform = `translate(${this.widthValue}px, 0px)`;
     }
 }

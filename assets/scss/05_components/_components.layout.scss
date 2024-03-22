@@ -1,0 +1,13 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+}
+
+header {
+    position: relative;
+}
+
+.main__content {
+    flex-grow: 1;
+    width: calc(100% - var(--offset-left));
+}
