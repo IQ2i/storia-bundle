@@ -27,6 +27,7 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
     {
         $config = $this->processConfiguration($this, $configs);
         $container->setParameter('arqui_bundle.default_path', $config['default_path']);
+        $container->setParameter('arqui_bundle.enabled', $config['enabled']);
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.php');
@@ -48,6 +49,7 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
                 ->scalarNode('default_path')
                     ->defaultValue('%kernel.project_dir%/stories')
                 ->end()
+                ->booleanNode('enabled')->defaultTrue()->end()
             ->end();
 
         return $treeBuilder;

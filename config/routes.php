@@ -16,10 +16,11 @@ use IQ2i\ArquiBundle\Controller\StoryController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
-    $routes
-        ->add('iq2i_arqui_story', '/stories/{component<.+>?}')
+    $routes->add('iq2i_arqui_story', '/stories/{component<.+>?}')
         ->controller(StoryController::class)
+        ->condition('"%arqui_bundle.enabled%"');
 
-        ->add('iq2i_arqui_iframe', '/iframe/{component<.+>?}')
-        ->controller(IframeController::class);
+    $routes->add('iq2i_arqui_iframe', '/iframe/{component<.+>?}')
+        ->controller(IframeController::class)
+        ->condition('"%arqui_bundle.enabled%"');
 };

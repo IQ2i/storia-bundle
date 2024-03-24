@@ -24,7 +24,4 @@ return static function (ContainerConfigurator $container) {
 
     $services->load('IQ2i\\ArquiBundle\\Tests\\TestApplication\\', '../src/*')
         ->exclude('../{Entity,Tests,Kernel.php}');
-
-    //    $services->load('IQ2i\\ArquiBundle\\Tests\\TestApplication\\Controller\\', '../src/Controller/')
-    //        ->tag('controller.service_arguments');
 };
