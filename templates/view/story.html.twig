@@ -1,3 +1,5 @@
+{# @var component \IQ2i\ArquiBundle\Dto\Component #}
+
 {% extends '@IQ2iArqui/base.html.twig' %}
 
 {% block body %}
@@ -59,11 +61,6 @@
                 <div>
                     <ul class="tabs">
                         <li class="tabs__item">
-                            <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
-                                Include
-                            </a>
-                        </li>
-                        <li class="tabs__item">
                             <a href="#twig" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
                                 Twig
                             </a>
@@ -73,28 +70,26 @@
                                 HTML
                             </a>
                         </li>
-                        <li class="tabs__item">
-                            <a href="#notes" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
-                                Notes
-                            </a>
-                        </li>
+
+                        {% if component.currentVariant.includeContent is not null %}
+                            <li class="tabs__item">
+                                <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
+                                    Include
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% if component.currentVariant.markdownContent is not null %}
+                            <li class="tabs__item">
+                                <a href="#notes" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
+                                    Notes
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
 
                 <div>
-                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.includeContent }}" data-tab-target="tabPanel">
-                        <div class="code">
-                            <pre><code class="language-twig" data-controller="highlight">
-                                {{- component.currentVariant.includeContent -}}
-                            </code></pre>
-                        </div>
-
-                        <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
-                            <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
-                            <span class="hidden" data-copy-to-clipboard-target="text">Copied!</span>
-                        </button>
-                    </div>
-
                     <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.twigContent }}" data-tab-target="tabPanel">
                         <div class="code">
                             <pre><code class="language-twig" data-controller="highlight">
@@ -121,15 +116,28 @@
                         </button>
                     </div>
 
-                    <div id="notes" class="group hidden" data-tab-target="tabPanel">
-                        <div class="prose dark:prose-invert">
-                            {% if component.currentVariant.markdownContent is not null %}
-                                {{ component.currentVariant.markdownContent|raw }}
-                            {% else %}
-                                <em>No notes defined.</em>
-                            {% endif %}
+                    {% if component.currentVariant.includeContent is not null %}
+                        <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.includeContent }}" data-tab-target="tabPanel">
+                            <div class="code">
+                                <pre><code class="language-twig" data-controller="highlight">
+                                    {{- component.currentVariant.includeContent -}}
+                                </code></pre>
+                            </div>
+
+                            <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
+                                <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
+                                <span class="hidden" data-copy-to-clipboard-target="text">Copied!</span>
+                            </button>
                         </div>
-                    </div>
+                    {% endif %}
+
+                    {% if component.currentVariant.markdownContent is not null %}
+                        <div id="notes" class="group hidden" data-tab-target="tabPanel">
+                            <div class="prose dark:prose-invert">
+                                {{ component.currentVariant.markdownContent|raw }}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
         </main>

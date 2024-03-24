@@ -19,7 +19,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Twig\Loader\FilesystemLoader;
 
 final class IQ2iArquiExtension extends Extension implements ConfigurationInterface
 {
@@ -31,14 +30,6 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.php');
-
-        $container
-            ->register('iq2i_arqui.twig.loader', FilesystemLoader::class)
-            ->addTag('twig.loader')
-            ->setArguments([
-                $config['default_path'],
-            ])
-        ;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder

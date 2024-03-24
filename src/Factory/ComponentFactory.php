@@ -52,9 +52,11 @@ readonly class ComponentFactory
         }
 
         $isComponent = false;
+        $isLocal = false;
         $componentTemplate = $config['template'] ?? null;
         if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig'))) {
-            $componentTemplate = u($componentPath)->replace('.yaml', '.html.twig')->toString();
+            $isLocal = true;
+            $componentTemplate = $this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig')->toString();
         }
 
         if (null === $componentTemplate && null !== $config['component']) {
@@ -97,9 +99,12 @@ readonly class ComponentFactory
                 unset($parameters['blocks']['content']);
             }
 
-            $variant->setIncludeContent($this->generateInclude($skeletonPath, $parameters));
+            if (!$isLocal) {
+                $variant->setIncludeContent($this->generateInclude($skeletonPath, $parameters));
+            }
+
             $variant->setTwigContent($this->getTwigContent($component->getTemplate(), $isComponent));
-            $variant->setHtmlContent($this->generateHtml($variant->getIncludeContent()));
+            $variant->setHtmlContent($this->generateHtml($isLocal ? $variant->getTwigContent() : $variant->getIncludeContent()));
             $variant->setMarkdownContent($markdownContent ?: null);
 
             $component->addVariant($variant);
@@ -121,6 +126,10 @@ readonly class ComponentFactory
     {
         if ($isComponent) {
             $template = $this->componentTemplateFinder->findAnonymousComponentTemplate($template);
+        }
+
+        if (str_starts_with((string) $template, '/') && @file_exists($template)) {
+            return @file_get_contents($template);
         }
 
         $source = $this->twig->getLoader()->getSourceContext($template);
