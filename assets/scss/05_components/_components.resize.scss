@@ -1,0 +1,21 @@
+.resize {
+  --resize-size: 0.20;
+
+  &[data-resize-orientation-value="horizontal"] {
+    [data-resize-target="panelA"] {
+      width: calc(var(--resize-size) * 100% - 0.5px);
+    }
+    [data-resize-target="panelB"] {
+      width: calc((1 - var(--resize-size)) * 100% - 0.5px);
+    }
+  }
+
+  &[data-resize-orientation-value="vertical"] {
+    [data-resize-target="panelA"] {
+      height: calc(var(--resize-size) * 100% - 0.5px);
+    }
+    [data-resize-target="panelB"] {
+      height: calc((1 - var(--resize-size)) * 100% - 0.5px);
+    }
+  }
+}

@@ -1,12 +1,66 @@
 .resizer {
-  position: absolute;
-  width: .1rem;
-  top: 0;
-  bottom: 0;
+  position: relative;
+  flex-shrink: 0;
   z-index: 99;
 
-  &:hover {
+  &:before {
+    content: "";
+    position: absolute;
     background: var(--color-primary-20);
+    opacity: 0;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+  }
+
+  [data-resize-orientation-value="horizontal"] & {
+    width: 1px;
+    height: 100%;
+    margin-left: -.5px;
     cursor: col-resize;
+
+    &:before {
+      left: 50%;
+      width: 3px;
+      height: 100%;
+      margin-left: -1.5px;
+    }
+
+    &:after {
+      left: 50%;
+      width: 6px;
+      height: 100%;
+      margin-left: -3px;
+    }
+  }
+
+  [data-resize-orientation-value="vertical"] & {
+    height: 1px;
+    width: 100%;
+    margin-top: -.5px;
+    cursor: row-resize;
+
+    &:before {
+      top: 50%;
+      height: 3px;
+      width: 100%;
+      margin-top: -1.5px;
+    }
+
+    &:after {
+      top: 50%;
+      height: 6px;
+      width: 100%;
+      margin-top: -3px;
+    }
+  }
+
+  &:hover,
+  [data-resize-is-resizing-value="true"] & {
+    &:before {
+      opacity: 1;
+    }
   }
 }
