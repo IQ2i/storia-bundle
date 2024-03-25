@@ -7,6 +7,8 @@ export default class extends Controller {
         startSize: { type: Number, default: 0.20 },
         startX: { type: Number, default: 0 },
         startY: { type: Number, default: 0 },
+        min: { type: Number, default: 0.1 },
+        max: { type: Number, default: 0.9 },
         isResizing: { type: Boolean, default: false },
         orientation: { type: String, default: 'horizontal' }
     };
@@ -27,13 +29,13 @@ export default class extends Controller {
             const calculateSize = () => {
                 if (this.orientationValue === 'horizontal') {
                     return Math.min(
-                        Math.max(this.startSizeValue + (e.clientX - this.startXValue) / this.element.clientWidth, 0.1),
-                        0.9,
+                        Math.max(this.startSizeValue + (e.clientX - this.startXValue) / this.element.clientWidth, this.minValue),
+                        this.maxValue,
                     );
                 } else {
                     return Math.min(
-                        Math.max(this.startSizeValue + (e.clientY - this.startYValue) / this.element.clientHeight, 0.1),
-                        0.9,
+                        Math.max(this.startSizeValue + (e.clientY - this.startYValue) / this.element.clientHeight, this.minValue),
+                        this.maxValue,
                     );
                 }
             };

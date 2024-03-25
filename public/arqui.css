@@ -639,25 +639,30 @@ header {
 
 .resize {
   --resize-size: 0.20;
+  --resizer-size: 1px;
   display: flex;
 }
 .resize[data-resize-orientation-value=horizontal] {
   flex-direction: row;
 }
 .resize[data-resize-orientation-value=horizontal] > [data-resize-target=panelA] {
-  width: calc(var(--resize-size) * 100% - 0.5px);
+  width: calc(var(--resize-size) * 100% - var(--resizer-size) / 2);
 }
 .resize[data-resize-orientation-value=horizontal] > [data-resize-target=panelB] {
-  width: calc((1 - var(--resize-size)) * 100% - 0.5px);
+  width: calc((1 - var(--resize-size)) * 100% - var(--resizer-size) / 2);
 }
 .resize[data-resize-orientation-value=vertical] {
   flex-direction: column;
 }
 .resize[data-resize-orientation-value=vertical] > [data-resize-target=panelA] {
-  height: calc(var(--resize-size) * 100% - 0.5px);
+  height: calc(var(--resize-size) * 100% - var(--resizer-size) / 2);
 }
 .resize[data-resize-orientation-value=vertical] > [data-resize-target=panelB] {
-  height: calc((1 - var(--resize-size)) * 100% - 0.5px);
+  height: calc((1 - var(--resize-size)) * 100% - var(--resizer-size) / 2);
+}
+
+.resize__panel {
+  position: relative;
 }
 
 .resizer {
@@ -676,9 +681,9 @@ header {
   position: absolute;
 }
 [data-resize-orientation-value=horizontal] > .resizer {
-  width: 1px;
+  width: var(--resizer-size);
   height: 100%;
-  margin-left: -0.5px;
+  margin-left: calc(var(--resizer-size) * -0.5);
   cursor: col-resize;
 }
 [data-resize-orientation-value=horizontal] > .resizer:before {
@@ -694,9 +699,9 @@ header {
   margin-left: -3px;
 }
 [data-resize-orientation-value=vertical] > .resizer {
-  height: 1px;
+  height: var(--resizer-size);
   width: 100%;
-  margin-top: -0.5px;
+  margin-top: calc(var(--resizer-size) * -0.5);
   cursor: row-resize;
 }
 [data-resize-orientation-value=vertical] > .resizer:before {
@@ -712,6 +717,27 @@ header {
   margin-top: -3px;
 }
 .resizer:hover:before, [data-resize-is-resizing-value=true] > .resizer:before {
+  opacity: 1;
+}
+
+[data-resize-orientation-value=horizontal] > .resizer__large:before {
+  width: 10px;
+  margin-left: -5px;
+}
+[data-resize-orientation-value=horizontal] > .resizer__large:after {
+  width: 15px;
+  margin-left: -7.5px;
+}
+[data-resize-orientation-value=vertical] > .resizer__large:before {
+  height: 10px;
+  margin-top: -5px;
+}
+[data-resize-orientation-value=vertical] > .resizer__large:after {
+  height: 15px;
+  margin-top: -7.5px;
+}
+
+.resizer__visible:before {
   opacity: 1;
 }
 
