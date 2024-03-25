@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Tests\Config;
+namespace IQ2i\StoriaBundle\Tests\Config;
 
-use IQ2i\ArquiBundle\Config\ComponentConfiguration;
+use IQ2i\StoriaBundle\Config\ComponentConfiguration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;

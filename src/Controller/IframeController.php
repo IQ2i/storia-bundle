@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Controller;
+namespace IQ2i\StoriaBundle\Controller;
 
-use IQ2i\ArquiBundle\Dto\Component;
+use IQ2i\StoriaBundle\Dto\Component;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -32,7 +32,7 @@ final readonly class IframeController
             $profiler->disable();
         }
 
-        return new Response($this->twig->render('@IQ2iArqui/iframe.html.twig', [
+        return new Response($this->twig->render('@IQ2iStoria/iframe.html.twig', [
             'component' => $component,
         ]));
     }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\DependencyInjection;
+namespace IQ2i\StoriaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -20,13 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-final class IQ2iArquiExtension extends Extension implements ConfigurationInterface
+final class IQ2iStoriaExtension extends Extension implements ConfigurationInterface
 {
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration($this, $configs);
-        $container->setParameter('arqui_bundle.default_path', $config['default_path']);
-        $container->setParameter('arqui_bundle.enabled', $config['enabled']);
+        $container->setParameter('iq2i_storia.default_path', $config['default_path']);
+        $container->setParameter('iq2i_storia.enabled', $config['enabled']);
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.php');
@@ -34,7 +34,7 @@ final class IQ2iArquiExtension extends Extension implements ConfigurationInterfa
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('iq2i_arqui');
+        $treeBuilder = new TreeBuilder('iq2i_storia');
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('default_path')

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Tests\TestApplication;
+namespace IQ2i\StoriaBundle\Tests\TestApplication;
 
-use IQ2i\ArquiBundle\IQ2iArquiBundle;
+use IQ2i\StoriaBundle\IQ2iStoriaBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -40,18 +40,18 @@ final class Kernel extends SymfonyKernel
             new TwigBundle(),
             new TwigComponentBundle(),
             new WebProfilerBundle(),
-            new IQ2iArquiBundle(),
+            new IQ2iStoriaBundle(),
         ];
     }
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/arqui/tests/var/'.$this->environment.'/cache';
+        return sys_get_temp_dir().'/storia/tests/var/'.$this->environment.'/cache';
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir().'/arqui/tests/var/'.$this->environment.'/log';
+        return sys_get_temp_dir().'/storia/tests/var/'.$this->environment.'/log';
     }
 
     public function getProjectDir(): string

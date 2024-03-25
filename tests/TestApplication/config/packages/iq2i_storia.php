@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 return static function (ContainerConfigurator $container): void {
-    $container->extension('iq2i_arqui', [
-        'default_path' => '%kernel.project_dir%/stories',
-    ]);
+    //    $container->extension('iq2i_storia', [
+    //        'default_path' => '%kernel.project_dir%/stories',
+    //    ]);
 };

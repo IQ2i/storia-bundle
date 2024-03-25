@@ -5,7 +5,7 @@ export default [
     {
         input: 'assets/js/main.js',
         output: {
-            file: 'public/arqui.js',
+            file: 'public/storia.js',
             format: 'esm',
         },
         external: [
@@ -16,7 +16,7 @@ export default [
         ],
         plugins: [
             scss({
-                fileName: 'arqui.css',
+                fileName: 'storia.css',
                 watch: 'assets/scss',
             }),
             copy({

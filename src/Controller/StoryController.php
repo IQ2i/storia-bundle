@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Controller;
+namespace IQ2i\StoriaBundle\Controller;
 
-use IQ2i\ArquiBundle\Dto\Component;
-use IQ2i\ArquiBundle\Dto\Variant;
-use IQ2i\ArquiBundle\Factory\MenuFactory;
+use IQ2i\StoriaBundle\Dto\Component;
+use IQ2i\StoriaBundle\Dto\Variant;
+use IQ2i\StoriaBundle\Factory\MenuFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,20 +34,20 @@ final readonly class StoryController
     public function __invoke(Request $request, ?Component $component = null): Response
     {
         if (!$component instanceof Component) {
-            return new Response($this->twig->render('@IQ2iArqui/view/story.html.twig', [
+            return new Response($this->twig->render('@IQ2iStoria/view/story.html.twig', [
                 'menu' => $this->menuFactory->createSidebarMenu($request),
                 'component' => null,
             ]));
         }
 
         if (!$component->getCurrentVariant() instanceof Variant) {
-            return new RedirectResponse($this->router->generate('iq2i_arqui_story', [
+            return new RedirectResponse($this->router->generate('iq2i_storia_story', [
                 'component' => $component,
                 'variant' => $component->getFirstVariant(),
             ]));
         }
 
-        return new Response($this->twig->render('@IQ2iArqui/view/story.html.twig', [
+        return new Response($this->twig->render('@IQ2iStoria/view/story.html.twig', [
             'menu' => $this->menuFactory->createSidebarMenu($request),
             'component' => $component,
         ]));

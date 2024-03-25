@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Factory;
+namespace IQ2i\StoriaBundle\Factory;
 
-use IQ2i\ArquiBundle\Config\ComponentConfiguration;
-use IQ2i\ArquiBundle\Dto\Component;
-use IQ2i\ArquiBundle\Dto\Variant;
+use IQ2i\StoriaBundle\Config\ComponentConfiguration;
+use IQ2i\StoriaBundle\Dto\Component;
+use IQ2i\StoriaBundle\Dto\Variant;
 use Michelf\MarkdownExtra;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;

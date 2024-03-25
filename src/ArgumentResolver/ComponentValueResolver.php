@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\ArgumentResolver;
+namespace IQ2i\StoriaBundle\ArgumentResolver;
 
-use IQ2i\ArquiBundle\Dto\Component;
-use IQ2i\ArquiBundle\Factory\ComponentFactory;
+use IQ2i\StoriaBundle\Dto\Component;
+use IQ2i\StoriaBundle\Factory\ComponentFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;

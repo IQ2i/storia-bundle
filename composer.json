@@ -1,7 +1,7 @@
 {
-  "name": "iq2i/arqui-bundle",
+  "name": "iq2i/storia-bundle",
   "type": "symfony-bundle",
-  "description": "Arqui bundle",
+  "description": "UI Storia bundle",
   "license": "MIT",
   "require": {
     "php": ">=8.3",
@@ -37,13 +37,13 @@
   },
   "autoload": {
     "psr-4": {
-      "IQ2i\\ArquiBundle\\": "src/"
+      "IQ2i\\StoriaBundle\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "IQ2i\\ArquiBundle\\Tests\\TestApplication\\": "tests/TestApplication/src",
-      "IQ2i\\ArquiBundle\\Tests\\": "tests"
+      "IQ2i\\StoriaBundle\\Tests\\TestApplication\\": "tests/TestApplication/src",
+      "IQ2i\\StoriaBundle\\Tests\\": "tests"
     }
   }
 }
