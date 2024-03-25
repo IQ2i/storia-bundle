@@ -17,6 +17,7 @@ export default [
         plugins: [
             scss({
                 fileName: 'arqui.css',
+                watch: 'assets/scss',
             }),
             copy({
                 targets: [
