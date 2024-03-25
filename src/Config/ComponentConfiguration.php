@@ -15,6 +15,7 @@ namespace IQ2i\ArquiBundle\Config;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 
 class ComponentConfiguration implements ConfigurationInterface
 {
@@ -45,16 +46,16 @@ class ComponentConfiguration implements ConfigurationInterface
                 ->end()
             ->end()
             ->validate()
-                ->ifTrue(static fn($v) => isset($v['template']) && isset($v['component']))
-                    return isset($v['template']) && isset($v['component']);
-                })
+                ->ifTrue(static fn ($v) => isset($v['template']) && isset($v['component']))
                 ->thenInvalid('"template" and "component" cannot be used together.')
             ->end()
             ->validate()
-                ->ifTrue(static fn($v) => !isset($v['template']) && !isset($v['component']))
-                    return !isset($v['template']) && !isset($v['component']);
-                })
+                ->ifTrue(static fn ($v) => !isset($v['template']) && !isset($v['component']))
                 ->thenInvalid('"template" or "component" should be configured.')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => isset($v['component']) && !class_exists(ComponentTemplateFinder::class))
+                ->thenInvalid('TwigComponent support cannot be enabled as the Symfony UX TwigComponent package is not installed. Try running "composer require symfony/ux-twig-component".')
             ->end()
         ;
 
