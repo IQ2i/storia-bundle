@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
-final readonly class StoryController
+final readonly class ComponentController
 {
     public function __construct(
         private MenuFactory $menuFactory,
@@ -34,20 +34,20 @@ final readonly class StoryController
     public function __invoke(Request $request, ?Component $component = null): Response
     {
         if (!$component instanceof Component) {
-            return new Response($this->twig->render('@IQ2iStoria/view/story.html.twig', [
+            return new Response($this->twig->render('@IQ2iStoria/view/component.html.twig', [
                 'menu' => $this->menuFactory->createSidebarMenu($request),
                 'component' => null,
             ]));
         }
 
         if (!$component->getCurrentVariant() instanceof Variant) {
-            return new RedirectResponse($this->router->generate('iq2i_storia_story', [
+            return new RedirectResponse($this->router->generate('iq2i_storia_view', [
                 'component' => $component,
                 'variant' => $component->getFirstVariant(),
             ]));
         }
 
-        return new Response($this->twig->render('@IQ2iStoria/view/story.html.twig', [
+        return new Response($this->twig->render('@IQ2iStoria/view/component.html.twig', [
             'menu' => $this->menuFactory->createSidebarMenu($request),
             'component' => $component,
         ]));

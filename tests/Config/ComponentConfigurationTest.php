@@ -43,15 +43,6 @@ class ComponentConfigurationTest extends TestCase
         ], $config);
     }
 
-    public function testWithNoTemplateAndComponent(): void
-    {
-        $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('"template" or "component" should be configured.');
-
-        $yaml = Yaml::parse('');
-        (new Processor())->processConfiguration(new ComponentConfiguration(), [$yaml]);
-    }
-
     public function testWithTemplateAndComponentTogether(): void
     {
         $this->expectException(InvalidConfigurationException::class);

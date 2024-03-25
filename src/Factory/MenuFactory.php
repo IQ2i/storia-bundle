@@ -75,8 +75,8 @@ readonly class MenuFactory
                 }
 
                 $label = u($file->getFilenameWithoutExtension())->title()->toString();
-                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->toString();
-                $path = $this->router->generate('iq2i_storia_story', ['component' => $componentPath]);
+                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->trimSuffix('.yaml')->toString();
+                $path = $this->router->generate('iq2i_storia_view', ['component' => $componentPath]);
 
                 $urlParts = parse_url($request->getRequestUri());
                 $isActive = isset($urlParts['path']) && str_ends_with($path, $urlParts['path']);

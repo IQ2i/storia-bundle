@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use IQ2i\StoriaBundle\ArgumentResolver\ComponentValueResolver;
+use IQ2i\StoriaBundle\Controller\ComponentController;
 use IQ2i\StoriaBundle\Controller\IframeController;
-use IQ2i\StoriaBundle\Controller\StoryController;
 use IQ2i\StoriaBundle\Factory\ComponentFactory;
 use IQ2i\StoriaBundle\Factory\MenuFactory;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -35,7 +35,7 @@ return static function (ContainerConfigurator $container) {
             ->tag('controller.service_arguments')
             ->arg(0, service('twig'))
 
-        ->set(StoryController::class)
+        ->set(ComponentController::class)
             ->tag('controller.service_arguments')
             ->arg(0, service(MenuFactory::class))
             ->arg(1, service('twig'))

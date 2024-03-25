@@ -38,7 +38,7 @@ final class IQ2iStoriaExtension extends Extension implements ConfigurationInterf
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('default_path')
-                    ->defaultValue('%kernel.project_dir%/stories')
+                    ->defaultValue('%kernel.project_dir%/storia')
                 ->end()
                 ->booleanNode('enabled')->defaultTrue()->end()
             ->end();

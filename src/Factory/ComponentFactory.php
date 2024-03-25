@@ -23,8 +23,6 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 use Twig\Environment;
 
-use function Symfony\Component\String\u;
-
 readonly class ComponentFactory
 {
     public function __construct(
@@ -41,7 +39,7 @@ readonly class ComponentFactory
             return null;
         }
 
-        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$componentPath));
+        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$componentPath.'.yaml'));
         $componentConfiguration = new ComponentConfiguration();
         $config = (new Processor())->processConfiguration($componentConfiguration, [$yaml]);
 
@@ -54,9 +52,9 @@ readonly class ComponentFactory
         $isComponent = false;
         $isLocal = false;
         $componentTemplate = $config['template'] ?? null;
-        if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig'))) {
+        if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.$componentPath.'.html.twig')) {
             $isLocal = true;
-            $componentTemplate = $this->defaultPath.'/'.u($componentPath)->replace('.yaml', '.html.twig')->toString();
+            $componentTemplate = $this->defaultPath.'/'.$componentPath.'.html.twig';
         }
 
         if (null === $componentTemplate && null !== $config['component']) {
@@ -70,7 +68,7 @@ readonly class ComponentFactory
 
         $component = new Component($componentPath, $componentName, $componentTemplate, $request->query->get('variant'));
 
-        $markdownPath = u($component->getPath())->replace('.yaml', '.md');
+        $markdownPath = $component->getPath().'.md';
         $markdownContent = @file_get_contents($this->defaultPath.'/'.$markdownPath);
         if (false !== $markdownContent) {
             $markdownContent = MarkdownExtra::defaultTransform($markdownContent);

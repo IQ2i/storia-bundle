@@ -10,7 +10,7 @@
                     <ul class="tabs">
                         {% for variant in component.variants %}
                             <li class="tabs__item">
-                                <a href="{{ path('iq2i_storia_story', {component, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
+                                <a href="{{ path('iq2i_storia_view', {component, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
                                     {{ variant.name }}
                                 </a>
                             </li>
