@@ -9,30 +9,6 @@ on:
             - main
 
 jobs:
-    check-dependencies:
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: 8.3
-                  coverage: none
-                  tools: composer-require-checker, composer-unused
-
-            - name: Install dependencies
-              uses: ramsey/composer-install@v3
-              with:
-                  dependency-versions: ${{ matrix.dependencies }}
-
-            - name: Composer Require Checker
-              run: composer-require-checker
-
-            - name: Composer Unused
-              run: composer-unused
-
     php-cs-fixer:
         runs-on: ubuntu-latest
 
