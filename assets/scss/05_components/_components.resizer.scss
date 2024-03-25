@@ -16,9 +16,9 @@
   }
 
   [data-resize-orientation-value="horizontal"] > & {
-    width: 1px;
+    width: var(--resizer-size);
     height: 100%;
-    margin-left: -.5px;
+    margin-left: calc(var(--resizer-size) * -0.5);
     cursor: col-resize;
 
     &:before {
@@ -37,9 +37,9 @@
   }
 
   [data-resize-orientation-value="vertical"] > & {
-    height: 1px;
+    height: var(--resizer-size);
     width: 100%;
-    margin-top: -.5px;
+    margin-top: calc(var(--resizer-size) * -0.5);
     cursor: row-resize;
 
     &:before {
@@ -61,6 +61,32 @@
   [data-resize-is-resizing-value="true"] > & {
     &:before {
       opacity: 1;
+    }
+  }
+}
+
+.resizer__large {
+  [data-resize-orientation-value="horizontal"] > & {
+    &:before {
+      width: 10px;
+      margin-left: -5px;
+    }
+
+    &:after {
+      width: 15px;
+      margin-left: -7.5px;
+    }
+  }
+
+  [data-resize-orientation-value="vertical"] > & {
+    &:before {
+      height: 10px;
+      margin-top: -5px;
+    }
+
+    &:after {
+      height: 15px;
+      margin-top: -7.5px;
     }
   }
 }

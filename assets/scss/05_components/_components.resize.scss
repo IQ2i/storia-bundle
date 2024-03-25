@@ -1,5 +1,6 @@
 .resize {
   --resize-size: 0.20;
+  --resizer-size: 1px;
 
   display: flex;
 
@@ -7,10 +8,10 @@
     flex-direction: row;
 
     > [data-resize-target="panelA"] {
-      width: calc(var(--resize-size) * 100% - 0.5px);
+      width: calc(var(--resize-size) * 100% - var(--resizer-size) / 2);
     }
     > [data-resize-target="panelB"] {
-      width: calc((1 - var(--resize-size)) * 100% - 0.5px);
+      width: calc((1 - var(--resize-size)) * 100% - var(--resizer-size) / 2);
     }
   }
 
@@ -18,10 +19,14 @@
     flex-direction: column;
 
     > [data-resize-target="panelA"] {
-      height: calc(var(--resize-size) * 100% - 0.5px);
+      height: calc(var(--resize-size) * 100% - var(--resizer-size) / 2);
     }
     > [data-resize-target="panelB"] {
-      height: calc((1 - var(--resize-size)) * 100% - 0.5px);
+      height: calc((1 - var(--resize-size)) * 100% - var(--resizer-size) / 2);
     }
   }
+}
+
+.resize__panel {
+  position: relative;
 }

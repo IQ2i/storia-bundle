@@ -3,7 +3,7 @@
 {% extends '@IQ2iArqui/base.html.twig' %}
 
 {% block body %}
-    <div class="main__content" data-controller="controls" data-resize-target="panelB">
+    <div class="main__content resize__panel" data-controller="controls" data-resize-target="panelB">
         {% if component is not null %}
             <header>
                 {% if component.variants is not empty %}
@@ -50,17 +50,23 @@
             </header>
         {% endif %}
 
-        <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical">
+        <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
             {% if component is not null %}
-                <div class="component" data-resize-target="panelA">
-                    <div class="component__content">
-                        <iframe src="{{ path('iq2i_arqui_iframe', {component, variant: component.currentVariant}) }}" data-controls-target="iframe"></iframe>
+                <div class="component resize__panel" data-resize-target="panelA">
+                    <div class="component__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
+                        <div class="resize__panel" data-resize-target="panelA">
+                            <iframe src="{{ path('iq2i_arqui_iframe', {component, variant: component.currentVariant}) }}" data-controls-target="iframe"></iframe>
+                        </div>
+
+                        <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
+
+                        <div class="resize__panel" data-resize-target="panelB"></div>
                     </div>
                 </div>
 
                 <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
-                <div data-resize-target="panelB">
+                <div class="resize__panel" data-resize-target="panelB">
                     <div>
                         <ul class="tabs">
                             <li class="tabs__item">
