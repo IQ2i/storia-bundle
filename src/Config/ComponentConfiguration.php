@@ -24,8 +24,12 @@ class ComponentConfiguration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('name')->end()
-                ->scalarNode('template')->end()
-                ->scalarNode('component')->end()
+                ->scalarNode('template')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('component')
+                    ->cannotBeEmpty()
+                ->end()
                 ->arrayNode('variants')
                     ->arrayPrototype()
                         ->children()
@@ -40,7 +44,18 @@ class ComponentConfiguration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-
+            ->validate()
+                ->ifTrue(static fn($v) => isset($v['template']) && isset($v['component']))
+                    return isset($v['template']) && isset($v['component']);
+                })
+                ->thenInvalid('"template" and "component" cannot be used together.')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn($v) => !isset($v['template']) && !isset($v['component']))
+                    return !isset($v['template']) && !isset($v['component']);
+                })
+                ->thenInvalid('"template" or "component" should be configured.')
+            ->end()
         ;
 
         return $treeBuilder;
