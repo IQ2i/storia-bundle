@@ -1,29 +1,65 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['sidebar', 'content', 'draggable'];
+    static targets = ['panelA', 'panelB', 'resizer'];
     static values = {
-        width: { type: Number, default: 288 },
+        size: { type: Number, default: 0.20 },
+        startSize: { type: Number, default: 0.20 },
+        startX: { type: Number, default: 0 },
+        startY: { type: Number, default: 0 },
+        isResizing: { type: Boolean, default: false },
+        orientation: { type: String, default: 'horizontal' }
     };
+
+    get cursor() {
+        return this.orientationValue === 'horizontal' ? 'col-resize' : 'row-resize';
+    }
 
     resize(event) {
         event.preventDefault();
 
+        this.isResizingValue = true;
+        this.startSizeValue = this.sizeValue;
+        this.startXValue = event.clientX;
+        this.startYValue = event.clientY;
+
         const doResize = (e) => {
-            this.widthValue = e.pageX - this.sidebarTarget.getBoundingClientRect().left + 2.5;
+            const calculateSize = () => {
+                if (this.orientationValue === 'horizontal') {
+                    return Math.min(
+                        Math.max(this.startSizeValue + (e.clientX - this.startXValue) / this.element.clientWidth, 0.1),
+                        0.9,
+                    );
+                } else {
+                    return Math.min(
+                        Math.max(this.startSizeValue + (e.clientY - this.startYValue) / this.element.clientHeight, 0.1),
+                        0.9,
+                    );
+                }
+            };
+
+            this.sizeValue = calculateSize();
         };
         const stopResize = () => {
-            window.removeEventListener('mousemove', doResize);
+            window.removeEventListener('pointermove', doResize);
+            this.isResizingValue = false;
         };
 
-        window.addEventListener('mousemove', doResize)
-        window.addEventListener('mouseup', stopResize)
+        window.addEventListener('pointermove', doResize)
+        window.addEventListener('pointerup', stopResize)
     }
 
-    widthValueChanged() {
-        this.sidebarTarget.style.width = `${this.widthValue}px`;
-        this.contentTarget.style.left = `${this.widthValue}px`;
-        this.contentTarget.style.setProperty('--offset-left', `${this.widthValue}px`);
-        this.draggableTarget.style.transform = `translate(${this.widthValue}px, 0px)`;
+    sizeValueChanged() {
+        this.element.style.setProperty('--resize-size', this.sizeValue);
+    }
+
+    isResizingValueChanged() {
+        if (this.isResizingValue) {
+            document.body.style.setProperty('pointer-events', 'none', 'important');
+            document.documentElement.style.setProperty('cursor', this.cursor, 'important');
+        } else {
+            document.body.style.removeProperty('pointer-events');
+            document.documentElement.style.removeProperty('cursor');
+        }
     }
 }
