@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Factory;
+namespace IQ2i\StoriaBundle\Factory;
 
-use IQ2i\ArquiBundle\Dto\Menu;
-use IQ2i\ArquiBundle\Dto\MenuItem;
+use IQ2i\StoriaBundle\Dto\Menu;
+use IQ2i\StoriaBundle\Dto\MenuItem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,8 +75,8 @@ readonly class MenuFactory
                 }
 
                 $label = u($file->getFilenameWithoutExtension())->title()->toString();
-                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->toString();
-                $path = $this->router->generate('iq2i_arqui_story', ['component' => $componentPath]);
+                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->trimSuffix('.yaml')->toString();
+                $path = $this->router->generate('iq2i_storia_view', ['component' => $componentPath]);
 
                 $urlParts = parse_url($request->getRequestUri());
                 $isActive = isset($urlParts['path']) && str_ends_with($path, $urlParts['path']);

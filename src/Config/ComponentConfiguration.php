@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle\Config;
+namespace IQ2i\StoriaBundle\Config;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -48,10 +48,6 @@ class ComponentConfiguration implements ConfigurationInterface
             ->validate()
                 ->ifTrue(static fn ($v) => isset($v['template']) && isset($v['component']))
                 ->thenInvalid('"template" and "component" cannot be used together.')
-            ->end()
-            ->validate()
-                ->ifTrue(static fn ($v) => !isset($v['template']) && !isset($v['component']))
-                ->thenInvalid('"template" or "component" should be configured.')
             ->end()
             ->validate()
                 ->ifTrue(static fn ($v) => isset($v['component']) && !class_exists(ComponentTemplateFinder::class))

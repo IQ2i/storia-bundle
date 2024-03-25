@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-use IQ2i\ArquiBundle\Controller\IframeController;
-use IQ2i\ArquiBundle\Controller\StoryController;
+use IQ2i\StoriaBundle\Controller\ComponentController;
+use IQ2i\StoriaBundle\Controller\IframeController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
-    $routes->add('iq2i_arqui_story', '/stories/{component<.+>?}')
-        ->controller(StoryController::class)
-        ->condition('"%arqui_bundle.enabled%"');
-
-    $routes->add('iq2i_arqui_iframe', '/iframe/{component<.+>?}')
+    $routes->add('iq2i_storia_iframe', '/iframe/{component<.+>?}')
         ->controller(IframeController::class)
-        ->condition('"%arqui_bundle.enabled%"');
+        ->condition('"%iq2i_storia.enabled%"');
+
+    $routes->add('iq2i_storia_view', '/{component<.+>?}')
+        ->controller(ComponentController::class)
+        ->condition('"%iq2i_storia.enabled%"');
 };

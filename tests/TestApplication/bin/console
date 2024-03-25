@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use IQ2i\ArquiBundle\Tests\TestApplication\Kernel;
+use IQ2i\StoriaBundle\Tests\TestApplication\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 require_once dirname(__DIR__).'/../../vendor/autoload_runtime.php';

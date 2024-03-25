@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -22,6 +22,6 @@ return static function (ContainerConfigurator $container) {
         ->autoconfigure()
     ;
 
-    $services->load('IQ2i\\ArquiBundle\\Tests\\TestApplication\\', '../src/*')
+    $services->load('IQ2i\\StoriaBundle\\Tests\\TestApplication\\', '../src/*')
         ->exclude('../{Entity,Tests,Kernel.php}');
 };

@@ -1,8 +1,8 @@
 {
-  "name": "arqui",
+  "name": "storia",
   "private": true,
   "type": "module",
-  "main": "arqui.js",
+  "main": "storia.js",
   "scripts": {
     "watch": "rollup -c --watch",
     "build": "rollup -c"

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Arqui project.
+ * This file is part of the UI Storia project.
  *
  * (c) Loïc Sapone <loic@sapone.fr>
  *
@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\ArquiBundle;
+namespace IQ2i\StoriaBundle;
 
-use IQ2i\ArquiBundle\DependencyInjection\IQ2iArquiExtension;
+use IQ2i\StoriaBundle\DependencyInjection\IQ2iStoriaExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-final class IQ2iArquiBundle extends AbstractBundle
+final class IQ2iStoriaBundle extends AbstractBundle
 {
     public function getContainerExtension(): ?ExtensionInterface
     {
-        return new IQ2iArquiExtension();
+        return new IQ2iStoriaExtension();
     }
 }
