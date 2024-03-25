@@ -523,10 +523,6 @@ header {
   margin-top: -7.5px;
 }
 
-.resizer__visible:before {
-  opacity: 1;
-}
-
 .tabs {
   display: flex;
   align-items: center;
@@ -645,7 +641,7 @@ header {
   font-size: 1.4rem;
   gap: 0.4rem;
   transition: all ease-in-out 0.2s;
-  transform: translateX(100%);
+  transform: translateX(5rem);
 }
 .copy--link svg {
   width: 2rem;
