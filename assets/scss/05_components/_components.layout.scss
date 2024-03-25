@@ -1,6 +1,7 @@
 .main {
     display: flex;
-    min-height: 100vh;
+    position: fixed;
+    inset: 0;
 }
 
 header {
@@ -8,6 +9,12 @@ header {
 }
 
 .main__content {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     width: calc(100% - var(--offset-left));
+}
+
+.main__inner {
+    flex: 1;
 }
