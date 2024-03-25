@@ -15,7 +15,7 @@
     position: absolute;
   }
 
-  [data-resize-orientation-value="horizontal"] & {
+  [data-resize-orientation-value="horizontal"] > & {
     width: 1px;
     height: 100%;
     margin-left: -.5px;
@@ -36,7 +36,7 @@
     }
   }
 
-  [data-resize-orientation-value="vertical"] & {
+  [data-resize-orientation-value="vertical"] > & {
     height: 1px;
     width: 100%;
     margin-top: -.5px;
@@ -58,7 +58,7 @@
   }
 
   &:hover,
-  [data-resize-is-resizing-value="true"] & {
+  [data-resize-is-resizing-value="true"] > & {
     &:before {
       opacity: 1;
     }

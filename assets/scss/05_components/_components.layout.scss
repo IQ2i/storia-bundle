@@ -9,6 +9,12 @@ header {
 }
 
 .main__content {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     width: calc(100% - var(--offset-left));
+}
+
+.main__inner {
+    flex: 1;
 }

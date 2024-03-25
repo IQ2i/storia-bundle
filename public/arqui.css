@@ -573,8 +573,14 @@ header {
 }
 
 .main__content {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   width: calc(100% - var(--offset-left));
+}
+
+.main__inner {
+  flex: 1;
 }
 
 .main__sidebar {
@@ -633,17 +639,24 @@ header {
 
 .resize {
   --resize-size: 0.20;
+  display: flex;
 }
-.resize[data-resize-orientation-value=horizontal] [data-resize-target=panelA] {
+.resize[data-resize-orientation-value=horizontal] {
+  flex-direction: row;
+}
+.resize[data-resize-orientation-value=horizontal] > [data-resize-target=panelA] {
   width: calc(var(--resize-size) * 100% - 0.5px);
 }
-.resize[data-resize-orientation-value=horizontal] [data-resize-target=panelB] {
+.resize[data-resize-orientation-value=horizontal] > [data-resize-target=panelB] {
   width: calc((1 - var(--resize-size)) * 100% - 0.5px);
 }
-.resize[data-resize-orientation-value=vertical] [data-resize-target=panelA] {
+.resize[data-resize-orientation-value=vertical] {
+  flex-direction: column;
+}
+.resize[data-resize-orientation-value=vertical] > [data-resize-target=panelA] {
   height: calc(var(--resize-size) * 100% - 0.5px);
 }
-.resize[data-resize-orientation-value=vertical] [data-resize-target=panelB] {
+.resize[data-resize-orientation-value=vertical] > [data-resize-target=panelB] {
   height: calc((1 - var(--resize-size)) * 100% - 0.5px);
 }
 
@@ -662,43 +675,43 @@ header {
   content: "";
   position: absolute;
 }
-[data-resize-orientation-value=horizontal] .resizer {
+[data-resize-orientation-value=horizontal] > .resizer {
   width: 1px;
   height: 100%;
   margin-left: -0.5px;
   cursor: col-resize;
 }
-[data-resize-orientation-value=horizontal] .resizer:before {
+[data-resize-orientation-value=horizontal] > .resizer:before {
   left: 50%;
   width: 3px;
   height: 100%;
   margin-left: -1.5px;
 }
-[data-resize-orientation-value=horizontal] .resizer:after {
+[data-resize-orientation-value=horizontal] > .resizer:after {
   left: 50%;
   width: 6px;
   height: 100%;
   margin-left: -3px;
 }
-[data-resize-orientation-value=vertical] .resizer {
+[data-resize-orientation-value=vertical] > .resizer {
   height: 1px;
   width: 100%;
   margin-top: -0.5px;
   cursor: row-resize;
 }
-[data-resize-orientation-value=vertical] .resizer:before {
+[data-resize-orientation-value=vertical] > .resizer:before {
   top: 50%;
   height: 3px;
   width: 100%;
   margin-top: -1.5px;
 }
-[data-resize-orientation-value=vertical] .resizer:after {
+[data-resize-orientation-value=vertical] > .resizer:after {
   top: 50%;
   height: 6px;
   width: 100%;
   margin-top: -3px;
 }
-.resizer:hover:before, [data-resize-is-resizing-value=true] .resizer:before {
+.resizer:hover:before, [data-resize-is-resizing-value=true] > .resizer:before {
   opacity: 1;
 }
 
