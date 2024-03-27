@@ -86,9 +86,18 @@ readonly class ComponentFactory
                 ? __DIR__.'/../../skeleton/component.tpl.php'
                 : __DIR__.'/../../skeleton/template.tpl.php';
 
+            $variantArgs = [];
+            foreach ($variantConfig['args'] as $name => $value) {
+                if (\is_array($value)) {
+                    $variantArgs[':'.$name] = str_replace('"', "'", json_encode($value, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
+                } else {
+                    $variantArgs[$name] = $value;
+                }
+            }
+
             $parameters = [
                 'template' => $component->getTemplate(),
-                'args' => $variantConfig['args'],
+                'args' => $variantArgs,
                 'blocks' => $variantConfig['blocks'],
             ];
 
