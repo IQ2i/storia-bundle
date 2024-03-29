@@ -18,31 +18,45 @@ Unlike Fractal or StoryBook, which rely on a port of Twig to JS for Symfony proj
 
 ## Installation
 
-To install UI Storia into your Symfony project, follow these steps:
+Add [iq2i/storia-bundle](https://packagist.org/packages/iq2i/storia-bundle) to your composer.json file:
 
-1. Make sure you have Symfony installed locally.
-2. Add UI Storia to your project using Composer:
-    ```bash
-    composer require iq2i/storia-bundle
-    ```
-3. Once installation is complete, activate the bundle in the `config/bundles.php` file:
-    ```php
-    return [
-        // ...
-        IQ2i\StoriaBundle\IQ2iStoriaBundle::class => ['all' => true],
-    ];
-    ```
-4. Create a new routing file to add UI Storia's routes:
-    ```yaml
-    # config/routes/is2i_storia.yaml
-    iq2i_storia:
-        resource: '@IQ2iStoriaBundle/config/routes.php'
-        prefix: '/storia'
-    ```
-5. Create the `storia` folder at the root of your project, with two subfolders: `components` and `pages`.
-6. Configure UI Storia following the detailed configuration steps below.
+```bash
+composer require iq2i/storia-bundle
+```
 
-## Configuration
+## Register and configure the bundle
+
+If you are using Symfony Flex, the following steps should be done automatically. Otherwise, follow the instructions.
+
+### Register the bundle
+
+Inside config/bundles.php, add the following line:
+
+```php
+// config/bundles.php
+
+return [
+    // ...
+    IQ2i\StoriaBundle\IQ2iStoriaBundle::class => ['all' => true],
+];
+```
+
+### Add routes
+
+Create a new routing file to add UI Storia's routes:
+
+ ```yaml
+# config/routes/is2i_storia.yaml
+iq2i_storia:
+    resource: '@IQ2iStoriaBundle/config/routes.php'
+    prefix: '/storia'
+```
+
+### Create folders where YAML files are stored
+
+Create the `storia` folder at the root of your project, with two subfolders: `components` and `pages`.
+
+## Configuration the bundle
 
 By default, UI Storia will try to read YAML files in the `storia` folder at the root of your application.
 You can change this behavior by creating a configuration file `config/packages/iq2i_storia.yaml` with the following content:
