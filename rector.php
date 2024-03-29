@@ -11,6 +11,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
@@ -37,6 +38,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         __DIR__.'/tests/TestApplication/*',
         AddOverrideAttributeToOverriddenMethodsRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
         FirstClassCallableRector::class => [
             __DIR__.'/src/Twig',
         ],

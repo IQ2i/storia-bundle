@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Controller;
 
 use IQ2i\StoriaBundle\Dto\Component;
-use IQ2i\StoriaBundle\Dto\Variant;
 use IQ2i\StoriaBundle\Factory\MenuFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +32,7 @@ final readonly class ComponentController
 
     public function __invoke(Request $request, ?Component $component = null): Response
     {
-        if ($component instanceof Component && !$component->getCurrentVariant() instanceof Variant) {
+        if (null !== $component && null === $component->getCurrentVariant()) {
             return new RedirectResponse($this->router->generate('iq2i_storia_view', [
                 'component' => $component,
                 'variant' => $component->getFirstVariant(),
