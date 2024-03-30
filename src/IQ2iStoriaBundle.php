@@ -13,14 +13,31 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
-use IQ2i\StoriaBundle\DependencyInjection\IQ2iStoriaExtension;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 final class IQ2iStoriaBundle extends AbstractBundle
 {
-    public function getContainerExtension(): ?ExtensionInterface
+    public function configure(DefinitionConfigurator $definition): void
     {
-        return new IQ2iStoriaExtension();
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $definition->rootNode();
+        $rootNode
+            ->children()
+                ->scalarNode('default_path')
+                    ->defaultValue('%kernel.project_dir%/storia')
+                ->end()
+                ->booleanNode('enabled')->defaultTrue()->end()
+            ->end();
+    }
+
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->parameters()->set('iq2i_storia.default_path', $config['default_path']);
+        $container->parameters()->set('iq2i_storia.enabled', $config['enabled']);
+        $container->import('../config/services.php');
     }
 }
