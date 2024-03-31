@@ -13,11 +13,19 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
+use IQ2i\StoriaBundle\Controller\ComponentController;
+use IQ2i\StoriaBundle\Controller\IframeController;
+use IQ2i\StoriaBundle\Factory\ComponentFactory;
+use IQ2i\StoriaBundle\Factory\MenuFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 final class IQ2iStoriaBundle extends AbstractBundle
 {
@@ -38,6 +46,36 @@ final class IQ2iStoriaBundle extends AbstractBundle
     {
         $container->parameters()->set('iq2i_storia.default_path', $config['default_path']);
         $container->parameters()->set('iq2i_storia.enabled', $config['enabled']);
-        $container->import('../config/services.php');
+
+        $container->services()->set(IframeController::class)
+            ->tag('controller.service_arguments')
+            ->args([
+                service(ComponentFactory::class),
+                service('twig'),
+            ]);
+
+        $container->services()->set(ComponentController::class)
+            ->tag('controller.service_arguments')
+            ->args([
+                service(ComponentFactory::class),
+                service(MenuFactory::class),
+                service('twig'),
+                service('router'),
+            ]);
+
+        $container->services()->set(ComponentFactory::class)
+            ->args([
+                param('iq2i_storia.default_path'),
+                service('twig'),
+                service('ux.twig_component.component_template_finder'),
+            ]);
+
+        $container->services()->set(MenuFactory::class)
+            ->args([
+                param('iq2i_storia.default_path'),
+                service('router'),
+            ]);
+
+        $container->services()->alias(Profiler::class, 'profiler');
     }
 }
