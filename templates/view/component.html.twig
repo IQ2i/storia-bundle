@@ -101,9 +101,9 @@
                     <div>
                         <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.twigContent }}" data-tab-target="tabPanel">
                             <div class="code">
-                            <pre><code class="language-twig" data-controller="highlight">
-                                {{- component.currentVariant.twigContent -}}
-                            </code></pre>
+                                <pre>
+                                    {{- component.currentVariant.highlightedTwigContent|raw -}}
+                                </pre>
                             </div>
 
                             <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
@@ -114,9 +114,9 @@
 
                         <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.htmlContent }}" data-tab-target="tabPanel">
                             <div class="code">
-                            <pre><code class="language-html" data-controller="highlight">
-                                {{- component.currentVariant.htmlContent -}}
-                            </code></pre>
+                                <pre>
+                                    {{- component.currentVariant.highlightedHtmlContent|raw -}}
+                                </pre>
                             </div>
 
                             <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
@@ -128,9 +128,9 @@
                         {% if component.currentVariant.includeContent is not null %}
                             <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.includeContent }}" data-tab-target="tabPanel">
                                 <div class="code">
-                                <pre><code class="language-twig" data-controller="highlight">
-                                    {{- component.currentVariant.includeContent -}}
-                                </code></pre>
+                                    <pre>
+                                        {{- component.currentVariant.highlightedIncludeContent|raw -}}
+                                    </pre>
                                 </div>
 
                                 <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
