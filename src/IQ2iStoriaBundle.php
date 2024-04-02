@@ -15,7 +15,6 @@ namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Controller\ComponentController;
 use IQ2i\StoriaBundle\Controller\IframeController;
-use IQ2i\StoriaBundle\Factory\ComponentFactory;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;

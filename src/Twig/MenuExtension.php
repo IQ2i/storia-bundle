@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Twig;
 
-use IQ2i\StoriaBundle\Dto\Menu;
-use IQ2i\StoriaBundle\Dto\MenuItem;
+use IQ2i\StoriaBundle\Twig\Dto\Menu;
+use IQ2i\StoriaBundle\Twig\Dto\MenuItem;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
