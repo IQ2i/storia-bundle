@@ -16,7 +16,7 @@ namespace IQ2i\StoriaBundle;
 use IQ2i\StoriaBundle\Controller\ComponentController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Factory\ComponentFactory;
-use IQ2i\StoriaBundle\Factory\MenuFactory;
+use IQ2i\StoriaBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -58,7 +58,6 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->tag('controller.service_arguments')
             ->args([
                 service(ComponentFactory::class),
-                service(MenuFactory::class),
                 service('twig'),
                 service('router'),
             ]);
@@ -70,7 +69,8 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 service('ux.twig_component.component_template_finder'),
             ]);
 
-        $container->services()->set(MenuFactory::class)
+        $container->services()->set(MenuExtension::class)
+            ->tag('twig.extension')
             ->args([
                 param('iq2i_storia.default_path'),
                 service('router'),

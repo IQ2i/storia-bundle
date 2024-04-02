@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Controller;
 
 use IQ2i\StoriaBundle\Factory\ComponentFactory;
-use IQ2i\StoriaBundle\Factory\MenuFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +24,6 @@ final readonly class ComponentController
 {
     public function __construct(
         private ComponentFactory $componentFactory,
-        private MenuFactory $menuFactory,
         private Environment $twig,
         private RouterInterface $router,
     ) {
@@ -43,7 +41,6 @@ final readonly class ComponentController
         }
 
         return new Response($this->twig->render('@IQ2iStoria/view/component.html.twig', [
-            'menu' => $this->menuFactory->createSidebarMenu($request),
             'component' => $component,
         ]));
     }

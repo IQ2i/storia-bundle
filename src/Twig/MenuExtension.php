@@ -11,58 +11,70 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle\Factory;
+namespace IQ2i\StoriaBundle\Twig;
 
 use IQ2i\StoriaBundle\Dto\Menu;
 use IQ2i\StoriaBundle\Dto\MenuItem;
+use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 use function Symfony\Component\String\u;
 
-readonly class MenuFactory
+class MenuExtension extends AbstractExtension
 {
     public function __construct(
-        private string $defaultPath,
-        private RouterInterface $router,
+        private readonly string $defaultPath,
+        private readonly RouterInterface $router,
     ) {
     }
 
-    /**
-     * @return array<Menu|MenuItem>
-     */
-    public function createSidebarMenu(Request $request): array
+    public function getFunctions(): array
     {
+        return [
+            new TwigFunction('iq2i_storia_menu', [$this, 'getMenu'], ['needs_context' => true]),
+        ];
+    }
+
+    public function getMenu(array $context): array
+    {
+        /** @var AppVariable $appVariable */
+        $appVariable = $context['app'];
+        $request = $appVariable->getRequest();
+
         $menu = new Menu();
 
         $components = new Menu('Components');
-        $this->getMenu($request, $components, $this->defaultPath.'/components');
+        $this->getChildren($request, $components, 'components');
         $menu->addChild($components);
 
         $pages = new Menu('Pages');
-        $this->getMenu($request, $pages, $this->defaultPath.'/pages');
+        $this->getChildren($request, $pages, 'pages');
         $menu->addChild($pages);
 
         return $menu->getChildren();
     }
 
-    private function getMenu(Request $request, Menu $menu, string $path): void
+    private function getChildren(Request $request, Menu $menu, string $folder): void
     {
         $opened = false;
 
         /** @var SplFileInfo $file */
-        foreach ((new Finder())->in($path)->depth('== 0')->sortByName(true)->sortByType() as $file) {
-            if ($file->isDir()) {
-                $label = u($file->getBasename())->title()->toString();
-                $child = new Menu($label);
-                $this->getMenu($request, $child, $file->getPathname());
-                $opened = $opened || $child->isOpened();
+        foreach ((new Finder())->in($this->defaultPath.'/'.$folder)->depth('== 0')->sortByName(true)->sortByType() as $file) {
+            $label = u($file->getFilenameWithoutExtension())->title()->toString();
 
+            if ($file->isDir()) {
+                $child = new Menu($label);
+                $this->getChildren($request, $child, $folder.'/'.$file->getBasename());
                 if ([] === $child->getChildren()) {
                     continue;
                 }
+
+                $opened = $opened || $child->isOpened();
 
                 if (1 === \count($child->getChildren())) {
                     $menuItem = $child->getChildren()[0];
@@ -74,9 +86,9 @@ readonly class MenuFactory
                     continue;
                 }
 
-                $label = u($file->getFilenameWithoutExtension())->title()->toString();
-                $componentPath = u($file->getPathname())->replace($this->defaultPath, '')->trim('/')->trimSuffix('.yaml')->toString();
-                $path = $this->router->generate('iq2i_storia_view', ['component' => $componentPath]);
+                $path = $this->router->generate('iq2i_storia_view', [
+                    'component' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.yaml')->toString(),
+                ]);
 
                 $urlParts = parse_url($request->getRequestUri());
                 $isActive = isset($urlParts['path']) && str_ends_with($path, $urlParts['path']);

@@ -37,7 +37,7 @@
                 </div>
                 <nav class="main__sidebar_nav">
                     <ul role="list">
-                        {% for menu_item in menu %}
+                        {% for menu_item in iq2i_storia_menu() %}
                             {{ _self.generate_submenu(menu_item) }}
                         {% endfor %}
                     </ul>
