@@ -11,11 +11,9 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle\Factory;
+namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Config\ComponentConfiguration;
-use IQ2i\StoriaBundle\Dto\Component;
-use IQ2i\StoriaBundle\Dto\Variant;
 use Michelf\MarkdownExtra;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,8 +81,8 @@ readonly class ComponentFactory
             $variant = new Variant($variantPath, $variantName);
 
             $skeletonPath = $isComponent
-                ? __DIR__.'/../../skeleton/component.tpl.php'
-                : __DIR__.'/../../skeleton/template.tpl.php';
+                ? __DIR__.'/../skeleton/component.tpl.php'
+                : __DIR__.'/../skeleton/template.tpl.php';
 
             $variantArgs = [];
             foreach ($variantConfig['args'] as $name => $value) {

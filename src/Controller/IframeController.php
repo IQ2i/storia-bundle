@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controller;
 
-use IQ2i\StoriaBundle\Dto\Component;
+use IQ2i\StoriaBundle\ComponentFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -22,13 +22,16 @@ use Twig\Environment;
 final readonly class IframeController
 {
     public function __construct(
+        private ComponentFactory $componentFactory,
         private Environment $twig,
     ) {
     }
 
-    public function __invoke(Request $request, ?Profiler $profiler, ?Component $component = null): Response
+    public function __invoke(Request $request, ?Profiler $profiler): Response
     {
-        if ($profiler instanceof Profiler) {
+        $component = $this->componentFactory->createFromRequest($request);
+
+        if (null !== $profiler) {
             $profiler->disable();
         }
 
