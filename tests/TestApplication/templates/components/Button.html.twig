@@ -4,9 +4,7 @@
     {% if icon is not null and icon.position|default == 'left' %}
         {{ icon.svg|raw }}
     {% endif %}
-
-    {% block content %}{% endblock %}
-
+    {%- block content -%}{%- endblock -%}
     {% if icon is not null and icon.position|default == 'right' %}
         {{ icon.svg|raw }}
     {% endif %}

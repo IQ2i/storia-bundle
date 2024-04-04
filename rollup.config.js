@@ -10,9 +10,6 @@ export default [
         },
         external: [
             '@hotwired/stimulus',
-            'highlight.js/lib/core',
-            'highlight.js/lib/languages/twig',
-            'highlight.js/lib/languages/xml',
         ],
         plugins: [
             scss({
