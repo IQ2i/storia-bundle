@@ -83,7 +83,7 @@ To instruct UI Storia to use your styles and scripts, simply override the `ifram
 
 
 ```twig
-{# templates/bundles/Iq2iStoriaBundle/iframe.html.twig #}
+{# templates/bundles/IQ2iStoriaBundle/iframe.html.twig #}
 
 {% extends '@!IQ2iStoria/iframe.html.twig' %}
 
