@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle\Twig\Dto;
+namespace IQ2i\StoriaBundle\Menu\Dto;
 
 readonly class MenuItem
 {
