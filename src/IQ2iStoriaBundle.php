@@ -23,10 +23,8 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 final class IQ2iStoriaBundle extends AbstractBundle
 {
@@ -45,40 +43,40 @@ final class IQ2iStoriaBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $container->parameters()->set('iq2i_storia.default_path', $config['default_path']);
-        $container->parameters()->set('iq2i_storia.enabled', $config['enabled']);
+        $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
+        $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
 
-        $container->services()->set(IframeController::class)
-            ->tag('controller.service_arguments')
-            ->args([
-                service(ViewBuilder::class),
-                service('twig'),
+        $builder->register(IframeController::class)
+            ->addTag('controller.service_arguments')
+            ->setArguments([
+                new Reference(ViewBuilder::class),
+                new Reference('twig'),
             ]);
-        $container->services()->set(ViewController::class)
-            ->tag('controller.service_arguments')
-            ->args([
-                service(ViewBuilder::class),
-                service('twig'),
-                service('router'),
-            ]);
-
-        $container->services()->set(MenuBuilder::class)
-            ->args([
-                param('iq2i_storia.default_path'),
-                service('router'),
+        $builder->register(ViewController::class)
+            ->addTag('controller.service_arguments')
+            ->setArguments([
+                new Reference(ViewBuilder::class),
+                new Reference('twig'),
+                new Reference('router'),
             ]);
 
-        $container->services()->set(MenuExtension::class)
-            ->tag('twig.extension')
-            ->args([
-                service(MenuBuilder::class),
+        $builder->register(MenuBuilder::class)
+            ->setArguments([
+                '%iq2i_storia.default_path%',
+                new Reference('router'),
             ]);
 
-        $container->services()->set(ViewBuilder::class)
-            ->args([
-                param('iq2i_storia.default_path'),
-                service('twig'),
-                service('ux.twig_component.component_template_finder'),
+        $builder->register(ViewBuilder::class)
+            ->setArguments([
+                '%iq2i_storia.default_path%',
+                new Reference('twig'),
+                new Reference('ux.twig_component.component_template_finder'),
+            ]);
+
+        $builder->register(MenuExtension::class)
+            ->addTag('twig.extension')
+            ->setArguments([
+                new Reference(MenuBuilder::class),
             ]);
     }
 
