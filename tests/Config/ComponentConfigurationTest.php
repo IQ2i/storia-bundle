@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Config;
 
-use IQ2i\StoriaBundle\Config\ComponentConfiguration;
+use IQ2i\StoriaBundle\Config\ViewConfiguration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -30,7 +30,7 @@ class ComponentConfigurationTest extends TestCase
                     args:
                         foo: bar
             EOF);
-        $config = (new Processor())->processConfiguration(new ComponentConfiguration(), [$yaml]);
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
 
         $this->assertEquals([
             'template' => 'some_template.html.twig',
@@ -52,6 +52,6 @@ class ComponentConfigurationTest extends TestCase
             template: some_template.html.twig
             component: some_component.html.twig
             EOF);
-        (new Processor())->processConfiguration(new ComponentConfiguration(), [$yaml]);
+        (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
     }
 }

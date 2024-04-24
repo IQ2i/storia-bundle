@@ -73,7 +73,7 @@ readonly class MenuBuilder
                 }
 
                 $path = $this->router->generate('iq2i_storia_view', [
-                    'component' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.yaml')->toString(),
+                    'view' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.yaml')->toString(),
                 ]);
 
                 $urlParts = parse_url($request->getRequestUri());

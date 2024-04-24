@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle;
+namespace IQ2i\StoriaBundle\View\Dto;
 
 use Tempest\Highlight\Highlighter;
 

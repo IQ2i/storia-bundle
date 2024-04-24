@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle;
+namespace IQ2i\StoriaBundle\View;
 
-use IQ2i\StoriaBundle\Config\ComponentConfiguration;
+use IQ2i\StoriaBundle\Config\ViewConfiguration;
+use IQ2i\StoriaBundle\View\Dto\Variant;
+use IQ2i\StoriaBundle\View\Dto\View;
 use Michelf\MarkdownExtra;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +23,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 use Twig\Environment;
 
-readonly class ComponentFactory
+readonly class ViewBuilder
 {
     public function __construct(
         private string $defaultPath,
@@ -30,43 +32,43 @@ readonly class ComponentFactory
     ) {
     }
 
-    public function createFromRequest(Request $request): ?Component
+    public function createFromRequest(Request $request): ?View
     {
-        $componentPath = $request->attributes->get('component');
-        if (null === $componentPath) {
+        $viewPath = $request->attributes->get('view');
+        if (null === $viewPath) {
             return null;
         }
 
-        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$componentPath.'.yaml'));
-        $componentConfiguration = new ComponentConfiguration();
-        $config = (new Processor())->processConfiguration($componentConfiguration, [$yaml]);
+        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$viewPath.'.yaml'));
+        $viewConfiguration = new ViewConfiguration();
+        $config = (new Processor())->processConfiguration($viewConfiguration, [$yaml]);
 
-        $componentName = $config['name'] ?? null;
-        if (null === $componentName) {
-            $componentName = pathinfo(str_replace('.yaml', '', (string) $componentPath), \PATHINFO_FILENAME);
-            $componentName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $componentName))));
+        $viewName = $config['name'] ?? null;
+        if (null === $viewName) {
+            $viewName = pathinfo(str_replace('.yaml', '', (string) $viewPath), \PATHINFO_FILENAME);
+            $viewName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $viewName))));
         }
 
         $isComponent = false;
         $isLocal = false;
-        $componentTemplate = $config['template'] ?? null;
-        if (null === $componentTemplate && @file_exists($this->defaultPath.'/'.$componentPath.'.html.twig')) {
+        $viewTemplate = $config['template'] ?? null;
+        if (null === $viewTemplate && @file_exists($this->defaultPath.'/'.$viewPath.'.html.twig')) {
             $isLocal = true;
-            $componentTemplate = $this->defaultPath.'/'.$componentPath.'.html.twig';
+            $viewTemplate = $this->defaultPath.'/'.$viewPath.'.html.twig';
         }
 
-        if (null === $componentTemplate && null !== $config['component']) {
+        if (null === $viewTemplate && null !== $config['component']) {
             $isComponent = true;
-            $componentTemplate = $config['component'];
+            $viewTemplate = $config['component'];
         }
 
-        if (null === $componentTemplate) {
-            throw new \LogicException(sprintf('Missing template for component "%s"', $componentPath));
+        if (null === $viewTemplate) {
+            throw new \LogicException(sprintf('Missing template for component "%s"', $viewPath));
         }
 
-        $component = new Component($componentPath, $componentName, $componentTemplate, $request->query->get('variant'));
+        $view = new View($viewPath, $viewName, $viewTemplate, $request->query->get('variant'));
 
-        $markdownPath = $component->getPath().'.md';
+        $markdownPath = $view->getPath().'.md';
         $markdownContent = @file_get_contents($this->defaultPath.'/'.$markdownPath);
         if (false !== $markdownContent) {
             $markdownContent = MarkdownExtra::defaultTransform($markdownContent);
@@ -81,8 +83,8 @@ readonly class ComponentFactory
             $variant = new Variant($variantPath, $variantName);
 
             $skeletonPath = $isComponent
-                ? __DIR__.'/../skeleton/component.tpl.php'
-                : __DIR__.'/../skeleton/template.tpl.php';
+                ? __DIR__.'/../../skeleton/component.tpl.php'
+                : __DIR__.'/../../skeleton/template.tpl.php';
 
             $variantArgs = [];
             foreach ($variantConfig['args'] as $name => $value) {
@@ -94,7 +96,7 @@ readonly class ComponentFactory
             }
 
             $parameters = [
-                'template' => $component->getTemplate(),
+                'template' => $view->getTemplate(),
                 'args' => $variantArgs,
                 'blocks' => $variantConfig['blocks'],
             ];
@@ -108,14 +110,14 @@ readonly class ComponentFactory
                 $variant->setIncludeContent($this->generateInclude($skeletonPath, $parameters));
             }
 
-            $variant->setTwigContent($this->getTwigContent($component->getTemplate(), $isComponent));
+            $variant->setTwigContent($this->getTwigContent($view->getTemplate(), $isComponent));
             $variant->setHtmlContent($this->generateHtml($isLocal ? $variant->getTwigContent() : $variant->getIncludeContent()));
             $variant->setMarkdownContent($markdownContent ?: null);
 
-            $component->addVariant($variant);
+            $view->addVariant($variant);
         }
 
-        return $component;
+        return $view;
     }
 
     private function generateInclude(string $skeletonPath, array $parameters): string

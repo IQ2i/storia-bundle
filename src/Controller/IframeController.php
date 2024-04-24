@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controller;
 
-use IQ2i\StoriaBundle\ComponentFactory;
+use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -22,21 +22,19 @@ use Twig\Environment;
 final readonly class IframeController
 {
     public function __construct(
-        private ComponentFactory $componentFactory,
+        private ViewBuilder $viewBuilder,
         private Environment $twig,
     ) {
     }
 
     public function __invoke(Request $request, ?Profiler $profiler): Response
     {
-        $component = $this->componentFactory->createFromRequest($request);
-
         if (null !== $profiler) {
             $profiler->disable();
         }
 
         return new Response($this->twig->render('@IQ2iStoria/iframe.html.twig', [
-            'component' => $component,
+            'view' => $this->viewBuilder->createFromRequest($request),
         ]));
     }
 }

@@ -1,3 +1,5 @@
+{# @var view \IQ2i\StoriaBundle\View\Dto\View #}
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -11,7 +13,7 @@
 
     <body>
         {% block body %}
-            {{ component.currentVariant.htmlContent|raw }}
+            {{ view.currentVariant.htmlContent|raw }}
         {% endblock %}
     </body>
 </html>

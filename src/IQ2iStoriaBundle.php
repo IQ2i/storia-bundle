@@ -18,6 +18,7 @@ use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
+use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -50,13 +51,13 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $container->services()->set(IframeController::class)
             ->tag('controller.service_arguments')
             ->args([
-                service(ComponentFactory::class),
+                service(ViewBuilder::class),
                 service('twig'),
             ]);
         $container->services()->set(ViewController::class)
             ->tag('controller.service_arguments')
             ->args([
-                service(ComponentFactory::class),
+                service(ViewBuilder::class),
                 service('twig'),
                 service('router'),
             ]);
@@ -73,7 +74,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 service(MenuBuilder::class),
             ]);
 
-        $container->services()->set(ComponentFactory::class)
+        $container->services()->set(ViewBuilder::class)
             ->args([
                 param('iq2i_storia.default_path'),
                 service('twig'),

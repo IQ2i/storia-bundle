@@ -25,7 +25,7 @@ class MenuBuilderTest extends TestCase
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->any())
             ->method('generate')
-            ->willReturnCallback(static fn (string $name, array $parameters = []): string => '/'.$parameters['component']);
+            ->willReturnCallback(static fn (string $name, array $parameters = []): string => '/'.$parameters['view']);
 
         $builder = new MenuBuilder(\dirname(__DIR__).'/TestApplication/storia', $router);
         $menu = $builder->createSidebarMenu(Request::create('/components/avatar'));

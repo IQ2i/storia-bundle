@@ -1,4 +1,4 @@
-{# @var component \IQ2i\StoriaBundle\Component #}
+{# @var view \IQ2i\StoriaBundle\View\Dto\View #}
 
 <!doctype html>
 <html lang="en">
@@ -46,13 +46,13 @@
             <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
             <div class="main__content resize__panel" data-controller="controls" data-resize-target="panelB">
-                {% if component is not null %}
+                {% if view is not null %}
                     <header>
-                        {% if component.variants is not empty %}
+                        {% if view.variants is not empty %}
                             <ul class="tabs">
-                                {% for variant in component.variants %}
+                                {% for variant in view.variants %}
                                     <li class="tabs__item">
-                                        <a href="{{ path('iq2i_storia_view', {component, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
+                                        <a href="{{ path('iq2i_storia_view', {view, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
                                             {{ variant.name }}
                                         </a>
                                     </li>
@@ -80,7 +80,7 @@
 
                             <div class="actions_separator"></div>
 
-                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { component, variant: component.currentVariant }) }}" target="_blank" title="Open in new tab">
+                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { view, variant: view.currentVariant }) }}" target="_blank" title="Open in new tab">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                 <span>Iframe</span>
                             </a>
@@ -93,11 +93,11 @@
                 {% endif %}
 
                 <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
-                    {% if component is not null %}
+                    {% if view is not null %}
                         <div class="component resize__panel" data-resize-target="panelA">
                             <div class="component__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ path('iq2i_storia_iframe', {component, variant: component.currentVariant}) }}" data-controls-target="iframe"></iframe>
+                                    <iframe src="{{ path('iq2i_storia_iframe', {view, variant: view.currentVariant}) }}" data-controls-target="iframe"></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
@@ -122,7 +122,7 @@
                                         </a>
                                     </li>
 
-                                    {% if component.currentVariant.includeContent is not null %}
+                                    {% if view.currentVariant.includeContent is not null %}
                                         <li class="tabs__item">
                                             <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
                                                 Include
@@ -130,7 +130,7 @@
                                         </li>
                                     {% endif %}
 
-                                    {% if component.currentVariant.markdownContent is not null %}
+                                    {% if view.currentVariant.markdownContent is not null %}
                                         <li class="tabs__item">
                                             <a href="#notes" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
                                                 Notes
@@ -141,10 +141,10 @@
                             </div>
 
                             <div>
-                                <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.twigContent }}" data-tab-target="tabPanel">
+                                <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.twigContent }}" data-tab-target="tabPanel">
                                     <div class="code">
                                 <pre>
-                                    {{- component.currentVariant.highlightedTwigContent|raw -}}
+                                    {{- view.currentVariant.highlightedTwigContent|raw -}}
                                 </pre>
                                     </div>
 
@@ -154,10 +154,10 @@
                                     </button>
                                 </div>
 
-                                <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.htmlContent }}" data-tab-target="tabPanel">
+                                <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.htmlContent }}" data-tab-target="tabPanel">
                                     <div class="code">
                                 <pre>
-                                    {{- component.currentVariant.highlightedHtmlContent|raw -}}
+                                    {{- view.currentVariant.highlightedHtmlContent|raw -}}
                                 </pre>
                                     </div>
 
@@ -167,11 +167,11 @@
                                     </button>
                                 </div>
 
-                                {% if component.currentVariant.includeContent is not null %}
-                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.includeContent }}" data-tab-target="tabPanel">
+                                {% if view.currentVariant.includeContent is not null %}
+                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.includeContent }}" data-tab-target="tabPanel">
                                         <div class="code">
                                     <pre>
-                                        {{- component.currentVariant.highlightedIncludeContent|raw -}}
+                                        {{- view.currentVariant.highlightedIncludeContent|raw -}}
                                     </pre>
                                         </div>
 
@@ -182,10 +182,10 @@
                                     </div>
                                 {% endif %}
 
-                                {% if component.currentVariant.markdownContent is not null %}
+                                {% if view.currentVariant.markdownContent is not null %}
                                     <div id="notes" class="group hidden" data-tab-target="tabPanel">
                                         <div class="prose dark:prose-invert">
-                                            {{ component.currentVariant.markdownContent|raw }}
+                                            {{ view.currentVariant.markdownContent|raw }}
                                         </div>
                                     </div>
                                 {% endif %}

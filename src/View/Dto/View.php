@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace IQ2i\StoriaBundle;
+namespace IQ2i\StoriaBundle\View\Dto;
 
-class Component implements \Stringable
+class View implements \Stringable
 {
     private array $variants = [];
 

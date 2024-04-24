@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controller;
 
-use IQ2i\StoriaBundle\ComponentFactory;
+use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Twig\Environment;
 final readonly class ViewController
 {
     public function __construct(
-        private ComponentFactory $componentFactory,
+        private ViewBuilder $viewBuilder,
         private Environment $twig,
         private RouterInterface $router,
     ) {
@@ -31,17 +31,17 @@ final readonly class ViewController
 
     public function __invoke(Request $request): Response
     {
-        $component = $this->componentFactory->createFromRequest($request);
+        $view = $this->viewBuilder->createFromRequest($request);
 
-        if (null !== $component && null === $component->getCurrentVariant()) {
+        if (null !== $view && null === $view->getCurrentVariant()) {
             return new RedirectResponse($this->router->generate('iq2i_storia_view', [
-                'component' => $component,
-                'variant' => $component->getFirstVariant(),
+                'view' => $view,
+                'variant' => $view->getFirstVariant(),
             ]));
         }
 
         return new Response($this->twig->render('@IQ2iStoria/view.html.twig', [
-            'component' => $component,
+            'view' => $view,
         ]));
     }
 }
