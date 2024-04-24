@@ -144,7 +144,7 @@
                                 <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.twigContent }}" data-tab-target="tabPanel">
                                     <div class="code">
                                 <pre>
-                                    {{- view.currentVariant.highlightedTwigContent|raw -}}
+                                    {{- view.currentVariant.twigContent|iq2i_storia_highlight('twig')|raw -}}
                                 </pre>
                                     </div>
 
@@ -157,7 +157,7 @@
                                 <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.htmlContent }}" data-tab-target="tabPanel">
                                     <div class="code">
                                 <pre>
-                                    {{- view.currentVariant.highlightedHtmlContent|raw -}}
+                                    {{- view.currentVariant.htmlContent|iq2i_storia_highlight('html')|raw -}}
                                 </pre>
                                     </div>
 
@@ -171,7 +171,7 @@
                                     <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.includeContent }}" data-tab-target="tabPanel">
                                         <div class="code">
                                     <pre>
-                                        {{- view.currentVariant.highlightedIncludeContent|raw -}}
+                                        {{- view.currentVariant.includeContent|iq2i_storia_highlight('twig')|raw -}}
                                     </pre>
                                         </div>
 

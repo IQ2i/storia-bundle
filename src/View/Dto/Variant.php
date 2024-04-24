@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Dto;
 
-use Tempest\Highlight\Highlighter;
-
 class Variant implements \Stringable
 {
     private ?string $includeContent = null;
@@ -41,13 +39,6 @@ class Variant implements \Stringable
         return $this->name;
     }
 
-    public function getHighlightedIncludeContent(): ?string
-    {
-        $highlighter = new Highlighter();
-
-        return $highlighter->parse($this->includeContent, 'twig');
-    }
-
     public function getIncludeContent(): ?string
     {
         return $this->includeContent;
@@ -60,13 +51,6 @@ class Variant implements \Stringable
         return $this;
     }
 
-    public function getHighlightedTwigContent(): ?string
-    {
-        $highlighter = new Highlighter();
-
-        return $highlighter->parse($this->twigContent, 'twig');
-    }
-
     public function getTwigContent(): ?string
     {
         return $this->twigContent;
@@ -77,13 +61,6 @@ class Variant implements \Stringable
         $this->twigContent = $twigContent;
 
         return $this;
-    }
-
-    public function getHighlightedHtmlContent(): ?string
-    {
-        $highlighter = new Highlighter();
-
-        return $highlighter->parse($this->htmlContent, 'html');
     }
 
     public function getHtmlContent(): ?string
