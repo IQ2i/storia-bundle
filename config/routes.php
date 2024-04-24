@@ -11,8 +11,8 @@
 
 declare(strict_types=1);
 
-use IQ2i\StoriaBundle\Controller\ComponentController;
 use IQ2i\StoriaBundle\Controller\IframeController;
+use IQ2i\StoriaBundle\Controller\ViewController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
@@ -21,6 +21,6 @@ return static function (RoutingConfigurator $routes) {
         ->condition('"%iq2i_storia.enabled%"');
 
     $routes->add('iq2i_storia_view', '/{component<.+>?}')
-        ->controller(ComponentController::class)
+        ->controller(ViewController::class)
         ->condition('"%iq2i_storia.enabled%"');
 };

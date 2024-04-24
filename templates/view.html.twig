@@ -1,0 +1,224 @@
+{# @var component \IQ2i\StoriaBundle\Component #}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>UI Storia</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/bundles/iq2istoria/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/bundles/iq2istoria/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/bundles/iq2istoria/favicon-16x16.png') }}">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="{{ asset('/bundles/iq2istoria/storia.css') }}"/>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "storia": "{{ asset('/bundles/iq2istoria/storia.js') }}",
+                    "@hotwired/stimulus": "{{ asset('/bundles/iq2istoria/vendor/stimulus/stimulus.js') }}"
+                }
+            }
+        </script>
+        <script type="module">import 'storia';</script>
+    </head>
+
+    <body>
+        <div class="main resize" data-controller="resize" data-resize-orientation-value="horizontal">
+            <div class="main__sidebar resize__panel" data-resize-target="panelA">
+                <div class="logo">
+                    <svg width="121" height="27" viewBox="0 0 121 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.42437 3.95097C2.55529 2.46723 3.798 1.32935 5.2875 1.32935H30.4149C32.102 1.32935 33.4263 2.77564 33.278 4.45623L31.6295 23.1389C31.4986 24.6226 30.2559 25.7605 28.7664 25.7605H3.63903C1.95191 25.7605 0.627614 24.3142 0.775901 22.6336L2.42437 3.95097Z" fill="#002DCB"/>
+                        <path d="M14.5263 21.2299C9.92752 21.2299 7.3062 18.7926 7.3062 14.6077V5.59401H9.76656V14.4467C9.76656 17.5509 11.1462 18.8386 14.5263 18.8386C17.9064 18.8386 19.2861 17.5509 19.2861 14.4467V5.59401H21.7694V14.6077C21.7694 18.7926 19.1481 21.2299 14.5263 21.2299ZM26.4534 21H23.97V5.59401H26.4534V21Z" fill="white"/>
+                        <path d="M47.8222 23.2874C42.0737 23.2874 39.1419 20.7581 39.1419 16.7054V16.5329H42.2461V16.9928C42.2461 19.2922 43.597 20.4419 47.8222 20.4419C51.5012 20.4419 52.7946 19.6371 52.7946 17.8263C52.7946 16.1593 51.8174 15.5269 49.3743 15.0671L44.6605 14.291C41.4126 13.7162 39.1132 12.2216 39.1132 9.05988C39.1132 6.27186 41.4126 3.45509 47.391 3.45509C53.0246 3.45509 55.5827 6.27186 55.5827 10.0371V10.2096H52.5072V9.83593C52.5072 7.47904 51.0988 6.3006 47.1036 6.3006C43.597 6.3006 42.2174 7.16287 42.2174 8.88742C42.2174 10.5545 43.1946 11.1006 45.4653 11.5892L50.1503 12.394C54.0018 13.0838 55.8988 14.8371 55.8988 17.6539C55.8988 20.5856 53.5132 23.2874 47.8222 23.2874ZM67.4726 23H64.196C61.1205 23 59.2235 21.6491 59.2235 18.1713V11.3018H56.8092V8.71497H59.2235V5.58204H62.299V8.71497H67.4726V11.3018H62.299V17.9988C62.299 19.7521 63.1038 20.212 64.8858 20.212H67.4726V23ZM76.7149 23.2874C71.9724 23.2874 68.782 20.2695 68.782 15.8719C68.782 11.4168 71.9724 8.42754 76.7149 8.42754C81.4862 8.42754 84.6766 11.4168 84.6766 15.8719C84.6766 20.2695 81.4862 23.2874 76.7149 23.2874ZM76.7149 20.5281C80.1928 20.5281 81.6299 18.8898 81.6299 15.8719C81.6299 12.8251 80.1928 11.1581 76.7149 11.1581C73.2658 11.1581 71.8287 12.8251 71.8287 15.8719C71.8287 18.8898 73.2658 20.5281 76.7149 20.5281ZM90.0335 23H86.9293V8.71497H89.7748V12.5665H89.976C90.4071 10.2671 91.9592 8.42754 94.891 8.42754C98.1389 8.42754 99.5473 10.7557 99.5473 13.4575V15.3257H96.4718V14.0611C96.4718 12.0204 95.6095 11.0719 93.4826 11.0719C91.0395 11.0719 90.0335 12.4228 90.0335 14.9808V23ZM104.601 7.0479H101.497V3.74251H104.601V7.0479ZM104.601 23H101.497V8.71497H104.601V23ZM111.672 23.2874C108.712 23.2874 106.843 21.9078 106.843 19.5509C106.843 17.3377 108.625 16.188 111.442 15.8719L117.938 15.182V14.3485C117.938 11.9916 116.903 11.1581 114.173 11.1581C111.528 11.1581 110.235 12.0204 110.235 14.1186V14.2335H107.16V14.1186C107.16 10.8707 109.861 8.42754 114.403 8.42754C118.944 8.42754 120.985 10.8994 120.985 14.3198V23H118.139V19.4359H117.938C117.191 21.8503 114.92 23.2874 111.672 23.2874ZM109.948 19.3497C109.948 20.4994 110.724 21.0455 112.506 21.0455C115.754 21.0455 117.938 19.8383 117.938 17.0216L112.333 17.6539C110.724 17.8551 109.948 18.2287 109.948 19.3497Z" fill="#002DCB"/>
+                    </svg>
+                </div>
+                <nav class="main__sidebar_nav">
+                    <ul role="list">
+                        {% for menu_item in iq2i_storia_menu() %}
+                            {{ _self.generate_submenu(menu_item) }}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
+
+            <div class="main__content resize__panel" data-controller="controls" data-resize-target="panelB">
+                {% if component is not null %}
+                    <header>
+                        {% if component.variants is not empty %}
+                            <ul class="tabs">
+                                {% for variant in component.variants %}
+                                    <li class="tabs__item">
+                                        <a href="{{ path('iq2i_storia_view', {component, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
+                                            {{ variant.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        <div class="actions">
+                            <button class="actions_item" title="Refresh iframe" data-action="controls#refreshIframe">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M64,64s24-24,64-24c56,0,88,56,88,56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M192,192s-24,24-64,24c-56,0-88-56-88-56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="168 96 216 96 216 48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="88 160 40 160 40 208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                            <button class="actions_item" title="Zoom in" data-action="controls#zoomIn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M152,112a8,8,0,0,1-8,8H120v24a8,8,0,0,1-16,0V120H80a8,8,0,0,1,0-16h24V80a8,8,0,0,1,16,0v24h24A8,8,0,0,1,152,112Zm77.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88.11,88.11,0,1,1,11.31-11.31l50.07,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z"></path></svg>
+                                <span>Zoom in</span>
+                            </button>
+                            <button class="actions_item" title="Zoom out" data-action="controls#zoomOut">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M152,112a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h64A8,8,0,0,1,152,112Zm77.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88.11,88.11,0,1,1,11.31-11.31l50.07,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z"></path></svg>
+                                <span>Zoom out</span>
+                            </button>
+                            <button class="actions_item" title="Reset zoom" data-action="controls#resetZoom">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+                                <span>Zoom 100%</span>
+                            </button>
+
+                            <div class="actions_separator"></div>
+
+                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { component, variant: component.currentVariant }) }}" target="_blank" title="Open in new tab">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
+                                <span>Iframe</span>
+                            </a>
+                            <button class="actions_item" title="Copy link" data-action="controls#copyLink">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path></svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                    </header>
+                {% endif %}
+
+                <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
+                    {% if component is not null %}
+                        <div class="component resize__panel" data-resize-target="panelA">
+                            <div class="component__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
+                                <div class="resize__panel" data-resize-target="panelA">
+                                    <iframe src="{{ path('iq2i_storia_iframe', {component, variant: component.currentVariant}) }}" data-controls-target="iframe"></iframe>
+                                </div>
+
+                                <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
+
+                                <div class="resize__panel" data-resize-target="panelB"></div>
+                            </div>
+                        </div>
+
+                        <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
+
+                        <div class="resize__panel" data-resize-target="panelB">
+                            <div>
+                                <ul class="tabs">
+                                    <li class="tabs__item">
+                                        <a href="#twig" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
+                                            Twig
+                                        </a>
+                                    </li>
+                                    <li class="tabs__item">
+                                        <a href="#html" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
+                                            HTML
+                                        </a>
+                                    </li>
+
+                                    {% if component.currentVariant.includeContent is not null %}
+                                        <li class="tabs__item">
+                                            <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
+                                                Include
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if component.currentVariant.markdownContent is not null %}
+                                        <li class="tabs__item">
+                                            <a href="#notes" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
+                                                Notes
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+
+                            <div>
+                                <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.twigContent }}" data-tab-target="tabPanel">
+                                    <div class="code">
+                                <pre>
+                                    {{- component.currentVariant.highlightedTwigContent|raw -}}
+                                </pre>
+                                    </div>
+
+                                    <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
+                                        <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
+                                        <span class="hidden" data-copy-to-clipboard-target="text">Copied!</span>
+                                    </button>
+                                </div>
+
+                                <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.htmlContent }}" data-tab-target="tabPanel">
+                                    <div class="code">
+                                <pre>
+                                    {{- component.currentVariant.highlightedHtmlContent|raw -}}
+                                </pre>
+                                    </div>
+
+                                    <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
+                                        <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
+                                        <span class="hidden" data-copy-to-clipboard-target="text">Copied!</span>
+                                    </button>
+                                </div>
+
+                                {% if component.currentVariant.includeContent is not null %}
+                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ component.currentVariant.includeContent }}" data-tab-target="tabPanel">
+                                        <div class="code">
+                                    <pre>
+                                        {{- component.currentVariant.highlightedIncludeContent|raw -}}
+                                    </pre>
+                                        </div>
+
+                                        <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
+                                            <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
+                                            <span class="hidden" data-copy-to-clipboard-target="text">Copied!</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+
+                                {% if component.currentVariant.markdownContent is not null %}
+                                    <div id="notes" class="group hidden" data-tab-target="tabPanel">
+                                        <div class="prose dark:prose-invert">
+                                            {{ component.currentVariant.markdownContent|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </main>
+            </div>
+        </div>
+    </body>
+</html>
+
+{% macro generate_submenu(menu_item, level = 1) %}
+    {% if menu_item.children is defined %}
+        <li class="sub-menu-{{ level }}" data-controller="menu" data-menu-opened-value="{{ menu_item.opened ? 'true' : 'false' }}" data-menu-opened-class="rotate-90" data-menu-closed-class="rotate-0">
+            <button type="button" aria-controls="sub-menu-1" aria-expanded="true" data-action="menu#toggle">
+                <svg data-menu-target="svg" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.25 10.4999L8.75 6.99988L5.25 3.49988" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{{ menu_item.label }}</span>
+            </button>
+
+            <ul class="hidden" id="sub-menu-{{ level }}" data-menu-target="submenu">
+                {% for submenu_item in menu_item.children %}
+                    {{ _self.generate_submenu(submenu_item, level + 1) }}
+                {% endfor %}
+            </ul>
+        </li>
+    {% else %}
+        <li class="menu_item {% if menu_item.active %}active{% endif %}">
+            <a href="{{ menu_item.url }}">
+                {{ menu_item.label }}
+            </a>
+        </li>
+    {% endif %}
+{% endmacro %}

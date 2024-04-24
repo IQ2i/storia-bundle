@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
-final readonly class ComponentController
+final readonly class ViewController
 {
     public function __construct(
         private ComponentFactory $componentFactory,
@@ -40,7 +40,7 @@ final readonly class ComponentController
             ]));
         }
 
-        return new Response($this->twig->render('@IQ2iStoria/view/component.html.twig', [
+        return new Response($this->twig->render('@IQ2iStoria/view.html.twig', [
             'component' => $component,
         ]));
     }

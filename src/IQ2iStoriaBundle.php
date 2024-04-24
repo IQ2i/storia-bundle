@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
-use IQ2i\StoriaBundle\Controller\ComponentController;
 use IQ2i\StoriaBundle\Controller\IframeController;
+use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -53,7 +53,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 service(ComponentFactory::class),
                 service('twig'),
             ]);
-        $container->services()->set(ComponentController::class)
+        $container->services()->set(ViewController::class)
             ->tag('controller.service_arguments')
             ->args([
                 service(ComponentFactory::class),
