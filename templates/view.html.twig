@@ -94,8 +94,8 @@
 
                 <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
                     {% if view is not null %}
-                        <div class="component resize__panel" data-resize-target="panelA">
-                            <div class="component__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
+                        <div class="view resize__panel" data-resize-target="panelA">
+                            <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
                                     <iframe src="{{ path('iq2i_storia_iframe', {view, variant: view.currentVariant}) }}" data-controls-target="iframe"></iframe>
                                 </div>
