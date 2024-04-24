@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
+use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -22,7 +23,6 @@ use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -79,7 +79,12 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 service('twig'),
                 service('ux.twig_component.component_template_finder'),
             ]);
+    }
 
-        $container->services()->alias(Profiler::class, 'profiler');
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ProfilerPass());
     }
 }
