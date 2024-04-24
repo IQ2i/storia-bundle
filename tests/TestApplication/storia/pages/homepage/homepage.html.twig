@@ -1,1 +1,11 @@
-This is a homepage template
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block hero %}
+        <p>This is the homepage hero</p>
+    {% endblock %}
+
+    {% block content %}
+        <p>This is the main content of the page</p>
+    {% endblock %}
+{% endblock %}

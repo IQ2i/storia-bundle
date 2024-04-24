@@ -15,7 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\TemplateController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return function (RoutingConfigurator $routes) {
-    $routes->add('home', '/')->controller(TemplateController::class)->defaults(['template' => 'home.html.twig']);
+    $routes->add('home', '/')
+        ->controller(TemplateController::class)
+        ->defaults(['template' => 'pages/homepage.html.twig']);
+
     $routes->import('@IQ2iStoriaBundle/config/routes.php')->prefix('/storia');
 
     if ('dev' === $routes->env()) {

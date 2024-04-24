@@ -1,19 +1,19 @@
-{# @var view \IQ2i\StoriaBundle\View\Dto\View #}
-
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UI Storia</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/bundles/iq2istoria/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/bundles/iq2istoria/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/bundles/iq2istoria/favicon-16x16.png') }}">
+        <meta name="theme-color" content="#ffffff">
 
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </head>
 
     <body>
-        {% block body %}
-            {{ view.currentVariant.htmlContent|raw }}
-        {% endblock %}
+        {% block body %}{{ content|raw }}{% endblock %}
     </body>
 </html>

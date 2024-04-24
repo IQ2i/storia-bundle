@@ -16,6 +16,7 @@ namespace IQ2i\StoriaBundle\Controller;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
 
@@ -33,8 +34,20 @@ final readonly class IframeController
             $profiler->disable();
         }
 
+        $view = $this->viewBuilder->createFromRequest($request);
+        if (null === $view) {
+            throw new NotFoundHttpException();
+        }
+
+        $content = $view->getCurrentVariant()->getHtmlContent();
+
+        $pos = strripos((string) $content, '</body>');
+        if (false !== $pos) {
+            return new Response($content);
+        }
+
         return new Response($this->twig->render('@IQ2iStoria/iframe.html.twig', [
-            'view' => $this->viewBuilder->createFromRequest($request),
+            'content' => $content,
         ]));
     }
 }
