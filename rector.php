@@ -18,7 +18,7 @@ use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRecto
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonyLevelSetList;
+use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -31,7 +31,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         LevelSetList::UP_TO_PHP_83,
-        SymfonyLevelSetList::UP_TO_SYMFONY_64,
+        SymfonySetList::SYMFONY_64,
         PHPUnitSetList::PHPUNIT_100,
     ]);
 
