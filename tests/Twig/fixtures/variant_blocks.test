@@ -1,0 +1,8 @@
+--TEST--
+"iq2i_storia_variant_blocks" function
+--TEMPLATE--
+{{ iq2i_storia_variant_blocks('button/button', 'plain_icon_right').content }}
+--DATA--
+return []
+--EXPECT--
+Choose plan

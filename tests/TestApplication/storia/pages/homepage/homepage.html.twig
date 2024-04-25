@@ -7,5 +7,10 @@
 
     {% block content %}
         <p>This is the main content of the page</p>
+
+        {% set button_args = iq2i_storia_variant_args('button/button', 'plain_icon_right') %}
+        <twig:Button class="{{ button_args.class }}" icon="{{ button_args.icon }}">
+            {{ iq2i_storia_variant_blocks('button/button', 'plain_icon_right').content }}
+        </twig:Button>
     {% endblock %}
 {% endblock %}

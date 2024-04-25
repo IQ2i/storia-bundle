@@ -19,6 +19,7 @@ use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\HighlightExtension;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
+use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -80,6 +81,11 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->addTag('twig.extension')
             ->setArguments([
                 new Reference(MenuBuilder::class),
+            ]);
+        $builder->register(ViewExtension::class)
+            ->addTag('twig.extension')
+            ->setArguments([
+                '%iq2i_storia.default_path%',
             ]);
     }
 
