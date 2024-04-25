@@ -9,6 +9,12 @@
          processIsolation="false"
          stopOnFailure="false"
 >
+    <php>
+        <env name="APP_ENV" value="test" />
+        <env name="KERNEL_CLASS" value="IQ2i\StoriaBundle\Tests\TestApplication\Kernel" />
+        <server name="SHELL_VERBOSITY" value="-1" />
+    </php>
+
     <testsuites>
         <testsuite name="Storia Test Suite">
             <directory>tests</directory>

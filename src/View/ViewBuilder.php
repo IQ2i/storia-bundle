@@ -39,6 +39,10 @@ readonly class ViewBuilder
             return null;
         }
 
+        if (!file_exists($this->defaultPath.'/'.$viewPath.'.yaml')) {
+            return null;
+        }
+
         $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$viewPath.'.yaml'));
         $viewConfiguration = new ViewConfiguration();
         $config = (new Processor())->processConfiguration($viewConfiguration, [$yaml]);

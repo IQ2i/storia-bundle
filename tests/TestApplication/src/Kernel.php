@@ -28,11 +28,6 @@ final class Kernel extends SymfonyKernel
 {
     use MicroKernelTrait;
 
-    public function __construct()
-    {
-        parent::__construct('dev', true);
-    }
-
     public function registerBundles(): iterable
     {
         return [
