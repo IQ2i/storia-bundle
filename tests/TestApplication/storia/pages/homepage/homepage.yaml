@@ -1,3 +1,4 @@
 variants:
     default:
         args:
+            message: This is the main content of the page

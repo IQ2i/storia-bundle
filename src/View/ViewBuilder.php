@@ -115,7 +115,7 @@ readonly class ViewBuilder
             }
 
             $variant->setTwigContent($this->getTwigContent($view->getTemplate(), $isComponent));
-            $variant->setHtmlContent($this->generateHtml($isLocal ? $variant->getTwigContent() : $variant->getIncludeContent()));
+            $variant->setHtmlContent($this->generateHtml($isLocal ? $variant->getTwigContent() : $variant->getIncludeContent(), $parameters['args']));
             $variant->setMarkdownContent($markdownContent ?: null);
 
             $view->addVariant($variant);
@@ -148,10 +148,10 @@ readonly class ViewBuilder
         return $source->getCode();
     }
 
-    private function generateHtml(string $content): string
+    private function generateHtml(string $content, array $parameters): string
     {
         $template = $this->twig->createTemplate($content);
 
-        return $template->render();
+        return $template->render($parameters);
     }
 }

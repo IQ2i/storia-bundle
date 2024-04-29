@@ -6,7 +6,7 @@
     {% endblock %}
 
     {% block content %}
-        <p>This is the main content of the page</p>
+        <p>{{ message }}</p>
 
         {% set button_args = iq2i_storia_variant_args('button/button', 'plain_icon_right') %}
         <twig:Button class="{{ button_args.class }}" icon="{{ button_args.icon }}">
