@@ -648,15 +648,15 @@ header {
   fill: var(--color-light);
 }
 
-.component {
+.view {
   display: flex;
 }
 
-.component__content {
+.view__content {
   width: 100%;
   position: relative;
 }
-.component__content iframe {
+.view__content iframe {
   position: absolute;
   width: 100%;
   height: 100%;
