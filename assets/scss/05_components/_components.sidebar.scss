@@ -5,15 +5,23 @@
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+  overflow-y: auto;
 }
 
 .main__sidebar_nav {
   padding: 0 0 0 1.5rem;
 
-  > ul {
+  ul {
 
     > li {
-      padding: .5rem 0;
+
+      > a {
+        margin-left: 1.6rem;
+      }
+
+      > button {
+        margin-left: 1rem;
+      }
     }
   }
 }
@@ -32,18 +40,15 @@
 
   svg {
     position: absolute;
-    left: -1.6rem;
-  }
-
-  svg {
     width: 1.4rem;
+    left: -1.6rem;
   }
 }
 
 .sub-menu-2, .sub-menu-1 {
 
   > ul {
-    padding-left: .8rem;
+    padding-left: 1.6rem;
   }
 }
 

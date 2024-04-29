@@ -376,13 +376,17 @@ header {
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+  overflow-y: auto;
 }
 
 .main__sidebar_nav {
   padding: 0 0 0 1.5rem;
 }
-.main__sidebar_nav > ul > li {
-  padding: 0.5rem 0;
+.main__sidebar_nav ul > li > a {
+  margin-left: 1.6rem;
+}
+.main__sidebar_nav ul > li > button {
+  margin-left: 1rem;
 }
 
 .logo {
@@ -399,14 +403,12 @@ header {
 }
 [aria-controls=sub-menu-1] svg {
   position: absolute;
-  left: -1.6rem;
-}
-[aria-controls=sub-menu-1] svg {
   width: 1.4rem;
+  left: -1.6rem;
 }
 
 .sub-menu-2 > ul, .sub-menu-1 > ul {
-  padding-left: 0.8rem;
+  padding-left: 1.6rem;
 }
 
 .menu_item.active {
