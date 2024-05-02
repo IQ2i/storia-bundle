@@ -22,7 +22,7 @@ class HighlightExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('iq2i_storia_highlight', [$this, 'highlight']),
+            new TwigFilter('iq2i_storia_highlight', [$this, 'highlight'], ['is_safe' => ['html']]),
         ];
     }
 

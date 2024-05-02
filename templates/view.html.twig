@@ -140,11 +140,9 @@
 
                             <div>
                                 <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.twigContent }}" data-tab-target="tabPanel">
-                                    <div class="code">
-                                <pre>
-                                    {{- view.currentVariant.twigContent|iq2i_storia_highlight('twig')|raw -}}
-                                </pre>
-                                    </div>
+                                    <div class="code"><pre>
+                                        {{- view.currentVariant.twigContent|iq2i_storia_highlight('twig') -}}
+                                    </pre></div>
 
                                     <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
                                         <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
@@ -153,11 +151,13 @@
                                 </div>
 
                                 <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.htmlContent }}" data-tab-target="tabPanel">
-                                    <div class="code">
-                                <pre>
-                                    {{- view.currentVariant.htmlContent|iq2i_storia_highlight('html')|raw -}}
-                                </pre>
-                                    </div>
+                                    <div class="code"><pre>
+                                        {% if view.currentVariant.htmlContent|length <= 5000 %}
+                                            {{- view.currentVariant.htmlContent|iq2i_storia_highlight('html') -}}
+                                        {% else %}
+                                            {{- view.currentVariant.htmlContent -}}
+                                        {% endif %}
+                                    </pre></div>
 
                                     <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
                                         <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
@@ -167,11 +167,9 @@
 
                                 {% if view.currentVariant.includeContent is not null %}
                                     <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.includeContent }}" data-tab-target="tabPanel">
-                                        <div class="code">
-                                    <pre>
-                                        {{- view.currentVariant.includeContent|iq2i_storia_highlight('twig')|raw -}}
-                                    </pre>
-                                        </div>
+                                        <div class="code"><pre>
+                                            {{- view.currentVariant.includeContent|iq2i_storia_highlight('twig')|raw -}}
+                                        </pre></div>
 
                                         <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
                                             <svg data-copy-to-clipboard-target="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,34H88a6,6,0,0,0-6,6V82H40a6,6,0,0,0-6,6V216a6,6,0,0,0,6,6H168a6,6,0,0,0,6-6V174h42a6,6,0,0,0,6-6V40A6,6,0,0,0,216,34ZM162,210H46V94H162Zm48-48H174V88a6,6,0,0,0-6-6H94V46H210Z"></path></svg>
