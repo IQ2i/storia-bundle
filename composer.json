@@ -14,7 +14,7 @@
     "symfony/http-kernel": "^6.4|^7.0",
     "symfony/routing": "^6.4|^7.0",
     "symfony/yaml": "^6.4|^7.0",
-    "tempest/highlight": "^1.2",
+    "tempest/highlight": "^2.3",
     "twig/twig": "^3.8"
   },
   "require-dev": {
