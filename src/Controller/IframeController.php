@@ -39,7 +39,7 @@ final readonly class IframeController
             throw new NotFoundHttpException();
         }
 
-        $content = $view->getCurrentVariant()->getHtmlContent();
+        $content = $view->getHtmlContent();
 
         $pos = strripos((string) $content, '</body>');
         if (false !== $pos) {

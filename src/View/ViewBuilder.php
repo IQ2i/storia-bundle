@@ -34,73 +34,58 @@ readonly class ViewBuilder
 
     public function createFromRequest(Request $request): ?View
     {
-        $viewPath = $request->attributes->get('view');
-        if (null === $viewPath) {
+        $path = $request->attributes->get('view');
+        if (null === $path || !file_exists($this->defaultPath.'/'.$path.'.yaml')) {
             return null;
         }
 
-        if (!file_exists($this->defaultPath.'/'.$viewPath.'.yaml')) {
-            return null;
+        $config = (new Processor())->processConfiguration(
+            new ViewConfiguration(),
+            [Yaml::parse(file_get_contents($this->defaultPath.'/'.$path.'.yaml'))]
+        );
+
+        $name = $config['name'] ?? null;
+        if (null === $name) {
+            $name = pathinfo(str_replace('.yaml', '', (string) $path), \PATHINFO_FILENAME);
+            $name = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name))));
         }
 
-        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/'.$viewPath.'.yaml'));
-        $viewConfiguration = new ViewConfiguration();
-        $config = (new Processor())->processConfiguration($viewConfiguration, [$yaml]);
-
-        $viewName = $config['name'] ?? null;
-        if (null === $viewName) {
-            $viewName = pathinfo(str_replace('.yaml', '', (string) $viewPath), \PATHINFO_FILENAME);
-            $viewName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $viewName))));
+        $isPage = false;
+        $template = $config['template'] ?? null;
+        if (null === $template && @file_exists($this->defaultPath.'/'.$path.'.html.twig')) {
+            $isPage = true;
+            $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 
         $isComponent = false;
-        $isLocal = false;
-        $viewTemplate = $config['template'] ?? null;
-        if (null === $viewTemplate && @file_exists($this->defaultPath.'/'.$viewPath.'.html.twig')) {
-            $isLocal = true;
-            $viewTemplate = $this->defaultPath.'/'.$viewPath.'.html.twig';
-        }
-
-        if (null === $viewTemplate && null !== $config['component']) {
+        if (null === $template && null !== $config['component']) {
             $isComponent = true;
-            $viewTemplate = $config['component'];
+            $template = $config['component'];
         }
 
-        if (null === $viewTemplate) {
-            throw new \LogicException(sprintf('Missing template for component "%s"', $viewPath));
+        if (null === $template) {
+            throw new \LogicException(sprintf('Missing template for component "%s"', $path));
         }
 
-        $view = new View($viewPath, $viewName, $viewTemplate, $request->query->get('variant'));
-
-        $markdownPath = $view->getPath().'.md';
-        $markdownContent = @file_get_contents($this->defaultPath.'/'.$markdownPath);
-        if (false !== $markdownContent) {
-            $markdownContent = MarkdownExtra::defaultTransform($markdownContent);
-        }
-
-        foreach ($config['variants'] as $variantPath => $variantConfig) {
-            $variantName = $variantConfig['name'] ?? null;
-            if (null === $variantName) {
-                $variantName = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], (string) $variantPath))));
-            }
-
-            $variant = new Variant($variantPath, $variantName);
+        $variantPath = $request->query->get('variant');
+        if (isset($config['variants'][$variantPath])) {
+            $variantConfig = $config['variants'][$variantPath];
 
             $skeletonPath = $isComponent
                 ? __DIR__.'/../../skeleton/component.tpl.php'
                 : __DIR__.'/../../skeleton/template.tpl.php';
 
             $variantArgs = [];
-            foreach ($variantConfig['args'] as $name => $value) {
-                if (\is_array($value)) {
-                    $variantArgs[':'.$name] = str_replace('"', "'", json_encode($value, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
+            foreach ($variantConfig['args'] as $argName => $argValue) {
+                if (\is_array($argValue)) {
+                    $variantArgs[':'.$argName] = str_replace('"', "'", json_encode($argValue, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
                 } else {
-                    $variantArgs[$name] = $value;
+                    $variantArgs[$argName] = $argValue;
                 }
             }
 
             $parameters = [
-                'template' => $view->getTemplate(),
+                'template' => $template,
                 'args' => $variantArgs,
                 'blocks' => $variantConfig['blocks'],
             ];
@@ -110,18 +95,38 @@ readonly class ViewBuilder
                 unset($parameters['blocks']['content']);
             }
 
-            if (!$isLocal) {
-                $variant->setIncludeContent($this->generateInclude($skeletonPath, $parameters));
+            $includeContent = null;
+            if (!$isPage) {
+                $includeContent = $this->generateInclude($skeletonPath, $parameters);
             }
 
-            $variant->setTwigContent($this->getTwigContent($view->getTemplate(), $isComponent));
-            $variant->setHtmlContent($this->generateHtml($isLocal ? $variant->getTwigContent() : $variant->getIncludeContent(), $parameters['args']));
-            $variant->setMarkdownContent($markdownContent ?: null);
+            $twigContent = $this->getTwigContent($template, $isComponent);
+            $htmlContent = $this->generateHtml($isPage ? $twigContent : $includeContent, $parameters['args']);
 
-            $view->addVariant($variant);
+            $markdownContent = null;
+            if (file_exists($this->defaultPath.'/'.$path.'.md')) {
+                $markdownContent = MarkdownExtra::defaultTransform(@file_get_contents($this->defaultPath.'/'.$path.'.md'));
+            }
         }
 
-        return $view;
+        $variants = array_map(static fn (string $name): Variant => new Variant(
+            $name,
+            ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name)))),
+            $variantPath === $name
+        ), array_keys($config['variants']));
+
+        return new View(
+            $path,
+            $name,
+            $template,
+            $isComponent,
+            $isPage,
+            $twigContent ?? null,
+            $htmlContent ?? null,
+            $includeContent ?? null,
+            $markdownContent ?? null,
+            $variants
+        );
     }
 
     private function generateInclude(string $skeletonPath, array $parameters): string

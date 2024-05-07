@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controller;
 
+use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,10 +34,13 @@ final readonly class ViewController
     {
         $view = $this->viewBuilder->createFromRequest($request);
 
-        if (null !== $view && null === $view->getCurrentVariant()) {
+        if (null !== $view && null === $request->query->get('variant')) {
+            /** @var Variant $variant */
+            $variant = current($view->getVariants());
+
             return new RedirectResponse($this->router->generate('iq2i_storia_view', [
-                'view' => $view,
-                'variant' => $view->getFirstVariant(),
+                'view' => $view->getPath(),
+                'variant' => $variant->getPath(),
             ]));
         }
 

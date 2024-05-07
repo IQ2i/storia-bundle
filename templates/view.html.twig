@@ -50,7 +50,7 @@
                             <ul class="tabs">
                                 {% for variant in view.variants %}
                                     <li class="tabs__item">
-                                        <a href="{{ path('iq2i_storia_view', {view, variant}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
+                                        <a href="{{ path('iq2i_storia_view', {view: view.path, variant: variant.path}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
                                             {{ variant.name }}
                                         </a>
                                     </li>
@@ -78,7 +78,7 @@
 
                             <div class="actions_separator"></div>
 
-                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { view, variant: view.currentVariant }) }}" target="_blank" title="Open in new tab">
+                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { view: view.path, variant: view.currentVariant.path }) }}" target="_blank" title="Open in new tab">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                 <span>Iframe</span>
                             </a>
@@ -95,7 +95,7 @@
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ path('iq2i_storia_iframe', {view, variant: view.currentVariant}) }}" data-controls-target="iframe"></iframe>
+                                    <iframe src="{{ path('iq2i_storia_iframe', {view: view.path, variant: view.currentVariant.path}) }}" data-controls-target="iframe"></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
@@ -120,7 +120,7 @@
                                         </a>
                                     </li>
 
-                                    {% if view.currentVariant.includeContent is not null %}
+                                    {% if view.includeContent is not null %}
                                         <li class="tabs__item">
                                             <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
                                                 Include
@@ -128,7 +128,7 @@
                                         </li>
                                     {% endif %}
 
-                                    {% if view.currentVariant.markdownContent is not null %}
+                                    {% if view.markdownContent is not null %}
                                         <li class="tabs__item">
                                             <a href="#notes" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
                                                 Notes
@@ -139,9 +139,9 @@
                             </div>
 
                             <div>
-                                <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.twigContent }}" data-tab-target="tabPanel">
+                                <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.twigContent }}" data-tab-target="tabPanel">
                                     <div class="code"><pre>
-                                        {{- view.currentVariant.twigContent|iq2i_storia_highlight('twig') -}}
+                                        {{- view.twigContent|iq2i_storia_highlight('twig') -}}
                                     </pre></div>
 
                                     <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
@@ -150,12 +150,12 @@
                                     </button>
                                 </div>
 
-                                <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.htmlContent }}" data-tab-target="tabPanel">
+                                <div id="html" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.htmlContent }}" data-tab-target="tabPanel">
                                     <div class="code"><pre>
-                                        {% if view.currentVariant.htmlContent|length <= 5000 %}
-                                            {{- view.currentVariant.htmlContent|iq2i_storia_highlight('html') -}}
+                                        {% if view.htmlContent|length <= 5000 %}
+                                            {{- view.htmlContent|iq2i_storia_highlight('html') -}}
                                         {% else %}
-                                            {{- view.currentVariant.htmlContent -}}
+                                            {{- view.htmlContent -}}
                                         {% endif %}
                                     </pre></div>
 
@@ -165,10 +165,10 @@
                                     </button>
                                 </div>
 
-                                {% if view.currentVariant.includeContent is not null %}
-                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.currentVariant.includeContent }}" data-tab-target="tabPanel">
+                                {% if view.includeContent is not null %}
+                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.includeContent }}" data-tab-target="tabPanel">
                                         <div class="code"><pre>
-                                            {{- view.currentVariant.includeContent|iq2i_storia_highlight('twig')|raw -}}
+                                            {{- view.includeContent|iq2i_storia_highlight('twig')|raw -}}
                                         </pre></div>
 
                                         <button type="button" class="copy--link" data-action="copy-to-clipboard#copy">
@@ -178,10 +178,10 @@
                                     </div>
                                 {% endif %}
 
-                                {% if view.currentVariant.markdownContent is not null %}
+                                {% if view.markdownContent is not null %}
                                     <div id="notes" class="group hidden" data-tab-target="tabPanel">
                                         <div class="prose dark:prose-invert">
-                                            {{ view.currentVariant.markdownContent|raw }}
+                                            {{ view.markdownContent|raw }}
                                         </div>
                                     </div>
                                 {% endif %}

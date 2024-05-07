@@ -13,15 +13,19 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Dto;
 
-class View implements \Stringable
+readonly class View
 {
-    private array $variants = [];
-
     public function __construct(
-        private readonly string $path,
-        private readonly string $name,
-        private readonly string $template,
-        private readonly ?string $currentVariantPath = null,
+        private string $path,
+        private string $name,
+        private string $template,
+        private bool $isComponent = false,
+        private bool $isPage = false,
+        private ?string $twigContent = null,
+        private ?string $htmlContent = null,
+        private ?string $includeContent = null,
+        private ?string $markdownContent = null,
+        private array $variants = [],
     ) {
     }
 
@@ -40,53 +44,48 @@ class View implements \Stringable
         return $this->template;
     }
 
-    public function getCurrentVariantPath(): ?string
+    public function isComponent(): bool
     {
-        return $this->currentVariantPath;
+        return $this->isComponent;
     }
 
-    public function getCurrentVariant(): ?Variant
+    public function isPage(): bool
     {
-        $variant = current(array_filter($this->variants, fn (Variant $variant): bool => $this->currentVariantPath === $variant->getPath()));
-
-        return $variant ?: null;
+        return $this->isPage;
     }
 
-    public function getFirstVariant(): ?Variant
+    public function getTwigContent(): ?string
     {
-        $variant = current($this->variants);
-
-        return $variant ?: null;
+        return $this->twigContent;
     }
 
+    public function getHtmlContent(): ?string
+    {
+        return $this->htmlContent;
+    }
+
+    public function getIncludeContent(): ?string
+    {
+        return $this->includeContent;
+    }
+
+    public function getMarkdownContent(): ?string
+    {
+        return $this->markdownContent;
+    }
+
+    /**
+     * @return Variant[]
+     */
     public function getVariants(): array
     {
         return $this->variants;
     }
 
-    public function addVariant(Variant $variant): static
+    public function getCurrentVariant(): ?Variant
     {
-        if (!\in_array($variant, $this->variants, true)) {
-            $this->variants[] = $variant;
-        }
+        $variants = array_filter($this->variants, static fn (Variant $variant) => $variant->isCurrent());
 
-        return $this;
-    }
-
-    public function removeVariant(Variant $variant): static
-    {
-        $key = array_search($variant, $this->variants, true);
-        if (false === $key) {
-            return $this;
-        }
-
-        unset($this->variants[$key]);
-
-        return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->path;
+        return current($variants);
     }
 }
