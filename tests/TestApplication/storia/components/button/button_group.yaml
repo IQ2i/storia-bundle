@@ -2,3 +2,7 @@ component: ButtonGroup
 variants:
     default:
         args:
+            items:
+                - Profile
+                - Settings
+                - Messages

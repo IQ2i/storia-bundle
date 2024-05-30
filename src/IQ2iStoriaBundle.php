@@ -73,6 +73,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 '%iq2i_storia.default_path%',
                 new Reference('twig'),
                 new Reference('ux.twig_component.component_template_finder'),
+                new Reference('ux.twig_component.component_factory'),
             ]);
 
         $builder->register(HighlightExtension::class)

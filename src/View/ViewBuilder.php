@@ -20,6 +20,8 @@ use Michelf\MarkdownExtra;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
+use Symfony\UX\TwigComponent\ComponentFactory;
 use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 use Twig\Environment;
 
@@ -29,6 +31,7 @@ readonly class ViewBuilder
         private string $defaultPath,
         private Environment $twig,
         private ComponentTemplateFinder $componentTemplateFinder,
+        private ComponentFactory $componentFactory,
     ) {
     }
 
@@ -75,8 +78,17 @@ readonly class ViewBuilder
                 ? __DIR__.'/../../skeleton/component.tpl.php'
                 : __DIR__.'/../../skeleton/template.tpl.php';
 
+            $componentProperties = [];
+            if ($isComponent) {
+                $componentProperties = array_values($this->getComponentProperties($template));
+            }
+
             $variantArgs = [];
             foreach ($variantConfig['args'] as $argName => $argValue) {
+                if (\in_array($argName, $componentProperties)) {
+                    continue;
+                }
+
                 if (\is_array($argValue)) {
                     $variantArgs[':'.$argName] = str_replace('"', "'", json_encode($argValue, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
                 } else {
@@ -158,5 +170,44 @@ readonly class ViewBuilder
         $template = $this->twig->createTemplate($content);
 
         return $template->render($parameters);
+    }
+
+    private function getComponentProperties(string $template): array
+    {
+        $metadata = $this->componentFactory->metadataFor($template);
+        if (!$metadata->get('class')) {
+            return [];
+        }
+
+        $properties = [];
+        $reflectionClass = new \ReflectionClass($metadata->getClass());
+        foreach ($reflectionClass->getProperties() as $property) {
+            $propertyName = $property->getName();
+
+            if ($metadata->isPublicPropsExposed() && $property->isPublic()) {
+                $type = $property->getType();
+                $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : (string) $type;
+
+                $value = $property->getDefaultValue();
+                $propertyDisplay = $typeName.' $'.$propertyName.(null !== $value ? ' = '.json_encode($value) : '');
+                $properties[$property->name] = $propertyDisplay;
+            }
+
+            foreach ($property->getAttributes(ExposeInTemplate::class) as $exposeAttribute) {
+                /** @var ExposeInTemplate $attribute */
+                $attribute = $exposeAttribute->newInstance();
+                $properties[$property->name] = $attribute->name ?? $property->name;
+            }
+        }
+
+        foreach ($reflectionClass->getMethods() as $method) {
+            foreach ($method->getAttributes(ExposeInTemplate::class) as $exposeAttribute) {
+                /** @var ExposeInTemplate $attribute */
+                $attribute = $exposeAttribute->newInstance();
+                $properties[$method->getName()] = $attribute->name ?? lcfirst(str_replace('get', '', $method->getName()));
+            }
+        }
+
+        return $properties;
     }
 }
