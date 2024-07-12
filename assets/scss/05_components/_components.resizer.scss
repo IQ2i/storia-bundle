@@ -66,10 +66,13 @@
 }
 
 .resizer__large {
+  background: var(--color-primary-10);
+
   [data-resize-orientation-value="horizontal"] > & {
     &:before {
-      width: 10px;
-      margin-left: -5px;
+      width: 20px;
+      margin-left: -10px;
+      background: var(--color-primary-10);
     }
 
     &:after {
