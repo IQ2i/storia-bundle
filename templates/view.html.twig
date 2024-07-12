@@ -107,7 +107,7 @@
                         <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
                         <div class="resize__panel" data-resize-target="panelB">
-                            <div>
+                            <div class="main__inner_header">
                                 <ul class="tabs">
                                     <li class="tabs__item">
                                         <a href="#twig" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
@@ -138,7 +138,7 @@
                                 </ul>
                             </div>
 
-                            <div>
+                            <div class="main__inner_content">
                                 <div id="twig" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.twigContent }}" data-tab-target="tabPanel">
                                     <div class="code"><pre>
                                         {{- view.twigContent|iq2i_storia_highlight('twig') -}}

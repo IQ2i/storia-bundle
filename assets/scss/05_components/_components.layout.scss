@@ -18,3 +18,13 @@ header {
 .main__inner {
     flex: 1;
 }
+
+[data-resize-target="panelB"] {
+    display: flex;
+    flex-direction: column;
+}
+
+.main__inner_content {
+    flex-grow: 1;
+    overflow: auto;
+}

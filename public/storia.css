@@ -369,6 +369,16 @@ header {
   flex: 1;
 }
 
+[data-resize-target=panelB] {
+  display: flex;
+  flex-direction: column;
+}
+
+.main__inner_content {
+  flex-grow: 1;
+  overflow: auto;
+}
+
 .main__sidebar {
   flex-shrink: 0;
   background: var(--color-bg);
@@ -694,6 +704,14 @@ pre, code {
   color: #032f62;
 }
 
+.hl-literal {
+  color: #032f62;
+}
+
+.hl-number {
+  color: #032f62;
+}
+
 .hl-variable {
   color: #e36209;
 }
@@ -731,6 +749,7 @@ pre, code {
   font-size: 0.9em;
   color: #555;
   padding: 0 1ch;
+  user-select: none;
 }
 
 .hl-gutter-addition {
