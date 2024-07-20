@@ -89,7 +89,7 @@ readonly class ViewBuilder
                     continue;
                 }
 
-                if (\is_array($argValue)) {
+                if ($isComponent && \is_array($argValue)) {
                     $variantArgs[':'.$argName] = str_replace('"', "'", json_encode($argValue, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
                 } else {
                     $variantArgs[$argName] = $argValue;
