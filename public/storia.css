@@ -637,7 +637,6 @@ header {
 }
 
 .group {
-  position: relative;
   padding: 2rem;
 }
 .group:hover .copy--link {
@@ -647,7 +646,7 @@ header {
 .copy--link {
   position: absolute;
   right: 1rem;
-  top: 1rem;
+  top: 6rem;
   padding: 0.4rem 0.6rem;
   border-radius: 0.4rem;
   background-color: var(--color-primary);
@@ -705,14 +704,6 @@ pre, code {
 }
 
 .hl-value {
-  color: #032f62;
-}
-
-.hl-literal {
-  color: #032f62;
-}
-
-.hl-number {
   color: #032f62;
 }
 

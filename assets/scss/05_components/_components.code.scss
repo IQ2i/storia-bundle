@@ -26,7 +26,6 @@
 }
 
 .group {
-  position: relative;
   padding: 2rem;
 
   &:hover {
@@ -40,7 +39,7 @@
 .copy--link {
   position: absolute;
   right: 1rem;
-  top: 1rem;
+  top: 6rem;
   padding: .4rem .6rem;
   border-radius: .4rem;
   background-color: var(--color-primary);
