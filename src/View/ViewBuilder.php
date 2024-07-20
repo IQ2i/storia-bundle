@@ -102,9 +102,12 @@ readonly class ViewBuilder
                 'blocks' => $variantConfig['blocks'],
             ];
 
-            if ($isComponent && isset($parameters['blocks']['content'])) {
-                $parameters['content'] = $parameters['blocks']['content'];
-                unset($parameters['blocks']['content']);
+            if ($isComponent) {
+                $parameters['template'] = str_replace('/', ':', (string) $template);
+                if (isset($parameters['blocks']['content'])) {
+                    $parameters['content'] = $parameters['blocks']['content'];
+                    unset($parameters['blocks']['content']);
+                }
             }
 
             $includeContent = null;

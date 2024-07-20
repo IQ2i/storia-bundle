@@ -1,4 +1,4 @@
-component: ButtonGroup
+component: Folder/ButtonGroup
 variants:
     default:
         args:
