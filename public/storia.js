@@ -1,4 +1,7 @@
 import { Controller, Application } from '@hotwired/stimulus';
+import hljs from 'highlight.js/lib/core';
+import hljs_twig from 'highlight.js/lib/languages/twig';
+import hljs_xml from 'highlight.js/lib/languages/xml';
 
 class CopyToClipboardController extends Controller  {
     static targets = ['svg', 'text'];
@@ -19,6 +22,15 @@ class CopyToClipboardController extends Controller  {
     copiedValueChanged() {
         this.svgTarget.classList.toggle('hidden', this.copiedValue);
         this.textTarget.classList.toggle('hidden', !this.copiedValue);
+    }
+}
+
+hljs.registerLanguage('xml', hljs_xml);
+hljs.registerLanguage('twig', hljs_twig);
+
+class HighlightController extends Controller {
+    connect() {
+        hljs.highlightElement(this.element);
     }
 }
 
@@ -176,6 +188,7 @@ class TabController extends Controller {
 
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
+app.register('highlight', HighlightController);
 app.register('controls', ControlsController);
 app.register('menu', MenuController);
 app.register('resize', ResizeController);

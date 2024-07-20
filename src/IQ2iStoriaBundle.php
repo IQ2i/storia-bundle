@@ -17,7 +17,6 @@ use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
-use IQ2i\StoriaBundle\Twig\HighlightExtension;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\View\ViewBuilder;
@@ -76,8 +75,6 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 new Reference('ux.twig_component.component_factory'),
             ]);
 
-        $builder->register(HighlightExtension::class)
-            ->addTag('twig.extension');
         $builder->register(MenuExtension::class)
             ->addTag('twig.extension')
             ->setArguments([
