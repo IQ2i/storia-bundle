@@ -44,6 +44,8 @@ final class IQ2iStoriaBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        $container->import('../config/services.php');
+
         $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
         $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
 
@@ -65,14 +67,6 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->setArguments([
                 '%iq2i_storia.default_path%',
                 new Reference('router'),
-            ]);
-
-        $builder->register(ViewBuilder::class)
-            ->setArguments([
-                '%iq2i_storia.default_path%',
-                new Reference('twig'),
-                new Reference('ux.twig_component.component_template_finder'),
-                new Reference('ux.twig_component.component_factory'),
             ]);
 
         $builder->register(MenuExtension::class)
