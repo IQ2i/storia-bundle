@@ -52,6 +52,7 @@ readonly class MenuBuilder
         /** @var SplFileInfo $file */
         foreach ((new Finder())->in($this->defaultPath.'/'.$folder)->depth('== 0')->sortByName(true)->sortByType() as $file) {
             $label = u($file->getFilenameWithoutExtension())->title()->toString();
+            $label = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $label))));
 
             if ($file->isDir()) {
                 $child = new Menu($label);
