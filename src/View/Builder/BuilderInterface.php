@@ -20,5 +20,5 @@ interface BuilderInterface
 {
     public function supports(string $path, array $config): bool;
 
-    public function build(Request $request, string $path, string $name, array $config): ?View;
+    public function build(Request $request, string $path, array $config): ?View;
 }

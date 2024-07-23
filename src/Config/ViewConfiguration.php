@@ -24,7 +24,6 @@ class ViewConfiguration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('component');
         $treeBuilder->getRootNode()
             ->children()
-                ->scalarNode('name')->end()
                 ->scalarNode('template')
                     ->cannotBeEmpty()
                 ->end()

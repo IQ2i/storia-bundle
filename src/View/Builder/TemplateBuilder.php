@@ -25,7 +25,7 @@ class TemplateBuilder extends AbstractBuilder
         return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
     }
 
-    public function build(Request $request, string $path, string $name, array $config): ?View
+    public function build(Request $request, string $path, array $config): ?View
     {
         $template = $config['template'] ?? null;
 
@@ -74,10 +74,6 @@ class TemplateBuilder extends AbstractBuilder
 
         return new View(
             $path,
-            $name,
-            $template,
-            false,
-            $isPage,
             $twigContent ?? null,
             $htmlContent ?? null,
             $includeContent ?? null,

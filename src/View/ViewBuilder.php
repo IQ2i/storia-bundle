@@ -40,16 +40,10 @@ readonly class ViewBuilder
             [Yaml::parse(file_get_contents($this->defaultPath.'/'.$path.'.yaml'))]
         );
 
-        $name = $config['name'] ?? null;
-        if (null === $name) {
-            $name = pathinfo(str_replace('.yaml', '', $path), \PATHINFO_FILENAME);
-            $name = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name))));
-        }
-
         /** @var BuilderInterface $builder */
         foreach ($this->builders as $builder) {
             if ($builder->supports($path, $config)) {
-                return $builder->build($request, $path, $name, $config);
+                return $builder->build($request, $path, $config);
             }
         }
 

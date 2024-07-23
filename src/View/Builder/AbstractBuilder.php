@@ -13,21 +13,15 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
-use IQ2i\StoriaBundle\View\Dto\View;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-abstract class AbstractBuilder
+abstract class AbstractBuilder implements BuilderInterface
 {
     public function __construct(
         protected string $defaultPath,
         protected Environment $twig,
     ) {
     }
-
-    abstract public function supports(string $path, array $config): bool;
-
-    abstract public function build(Request $request, string $path, string $name, array $config): ?View;
 
     protected function generateInclude(string $skeletonPath, array $parameters): string
     {

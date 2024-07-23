@@ -38,7 +38,7 @@ class ComponentBuilder extends AbstractBuilder
         return \array_key_exists('component', $config);
     }
 
-    public function build(Request $request, string $path, string $name, array $config): ?View
+    public function build(Request $request, string $path, array $config): ?View
     {
         $template = $config['component'];
 
@@ -92,10 +92,6 @@ class ComponentBuilder extends AbstractBuilder
 
         return new View(
             $path,
-            $name,
-            $template,
-            true,
-            false,
             $twigContent ?? null,
             $htmlContent ?? null,
             $includeContent ?? null,
