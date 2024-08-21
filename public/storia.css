@@ -470,6 +470,10 @@ body {
 
 header {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--color-primary-10);
 }
 
 .main__content {
@@ -486,6 +490,11 @@ header {
 [data-resize-target=panelB] {
   display: flex;
   flex-direction: column;
+}
+
+.main__inner_header {
+  border-bottom: 0.1rem solid var(--color-primary-10);
+  border-top: 0.1rem solid var(--color-primary-10);
 }
 
 .main__inner_content {
@@ -656,42 +665,50 @@ header {
 .tabs {
   display: flex;
   align-items: center;
-  gap: 2.4rem;
-  padding: 0 2rem;
-  border-bottom: 0.1rem solid var(--color-primary-10);
-  border-top: 0.1rem solid var(--color-primary-10);
+  padding: 0.6rem 2rem 0.4rem 2rem;
+  overflow-x: scroll;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.tabs::-webkit-scrollbar {
+  height: 0.2rem;
+  width: 2rem;
+  background-color: var(--color-primary-20);
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
 }
 
 .tabs__item {
   display: flex;
+  flex-shrink: 0;
 }
 
 .tabs__item_link {
   align-self: stretch;
-  padding: 1rem 0;
+  padding: 0.4rem 2rem;
+  border-radius: 99rem;
 }
 
-.tab-is-unactive {
-  border-bottom: 0.1rem solid transparent;
-}
 .tab-is-unactive:hover {
   color: var(--color-primary);
 }
 
 .tab-is-active {
   color: var(--color-primary);
-  border-bottom: 0.1rem solid var(--color-primary);
+  background-color: var(--color-bg);
 }
 
 .actions {
   display: flex;
   gap: 1rem;
   padding: 0 3rem;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   align-items: center;
+  flex-shrink: 0;
 }
 
 .actions_item {

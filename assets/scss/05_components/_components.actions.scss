@@ -2,11 +2,8 @@
   display: flex;
   gap: 1rem;
   padding: 0 3rem;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   align-items: center;
+  flex-shrink: 0;
 }
 
 .actions_item {

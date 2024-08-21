@@ -6,6 +6,10 @@
 
 header {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: .1rem solid var(--color-primary-10);
 }
 
 .main__content {
@@ -22,6 +26,11 @@ header {
 [data-resize-target="panelB"] {
     display: flex;
     flex-direction: column;
+}
+
+.main__inner_header {
+    border-bottom: .1rem solid var(--color-primary-10);
+    border-top: .1rem solid var(--color-primary-10);
 }
 
 .main__inner_content {
