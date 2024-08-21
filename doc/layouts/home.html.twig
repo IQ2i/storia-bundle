@@ -1,0 +1,43 @@
+{% extends '_base.html.twig' %}
+
+{% block content %}
+    <section class="hero-header">
+        <div class="hero-header__text">
+            <div class="hero-header__text-header">
+                <h1>Simplify Frontend UI Building</h1>
+                <p>Designed to simplify and speed up the development process of UI by providing a visual and modular development environment in your Symfony application.</p>
+            </div>
+            <a class="btn btn--primary btn--large" href="#integration">Learn more</a>
+        </div>
+
+        <div class="hero-header__image">
+            <img src="{{ asset('img/home-ui-example.png') }}" alt="Screenshot of UI Storia">
+        </div>
+
+        <div class="hero-header__blur"></div>
+    </section>
+
+    <section id="integration" class="integration">
+        <div class="integration__content">
+            <div class="integration__content_text">
+                <h2>Direct integration in your Symfony project</h2>
+                <p>Unlike Fractal or StoryBook, which rely on a port of Twig to JS for Symfony projects, UI Storia allows direct work on project templates, thus enabling the safe use of the latest Twig features available.</p>
+            </div>
+
+            <div class="integration__content_image">
+                <img src="{{ asset('img/home-integration.png') }}" alt="Integration of UI Storia in your Symfony application" loading="lazy">
+            </div>
+            <div class="integration__blur"></div>
+        </div>
+    </section>
+
+    <div id="documentation" class="documentation">
+        <div class="documentation__header">
+            <h2>Documentation</h2>
+        </div>
+
+        <div class="documentation__content markdown-body">
+            {{ page.content }}
+        </div>
+    </div>
+{% endblock %}

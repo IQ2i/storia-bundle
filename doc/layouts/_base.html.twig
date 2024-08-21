@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ site.language }}">
+    <head>
+        {% block head ~%}
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+            <link rel="manifest" href="/site.webmanifest">
+            <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+            <meta name="msapplication-TileColor" content="#da532c">
+            <meta name="theme-color" content="#ffffff">
+
+            {%- include 'partials/metatags.html.twig' with {page, site} only ~%}
+
+            <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/github.min.css">
+            <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy-ts/dist/highlightjs-copy.min.css"/>
+            <link rel="stylesheet" href="{{ asset('app.scss') }}">
+
+            <script src="https://unpkg.com/@highlightjs/cdn-assets@11.10.0/highlight.min.js" defer></script>
+            <script src="https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/php.min.js" defer></script>
+            <script src="https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/yaml.min.js" defer></script>
+            <script src="https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/twig.min.js" defer></script>
+            <script src="https://unpkg.com/highlightjs-copy-ts/dist/highlightjs-copy.min.js" defer></script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    hljs.addPlugin(new CopyButtonPlugin());
+                    hljs.highlightAll();
+                });
+            </script>
+        {% endblock head ~%}
+    </head>
+
+    <body>
+        <header>
+            <div class="logo">
+                <img src="{{ asset('img/ui-storia.svg') }}" alt="UI Storia logo">
+            </div>
+            <div class="buttons">
+                <a class="btn btn--primary btn--small btn-documentation" href="#documentation">Documentation</a>
+                <a class="btn btn--secondary btn--small" target="_blank" href="https://github.com/IQ2i/storia-bundle">
+                    <img src="{{ asset('img/github.svg') }}" alt="GitHub logo">
+                    Fork on Github
+                </a>
+            </div>
+        </header>
+
+        {% block content %}{% endblock %}
+
+        <footer>
+            <p>Sponsored by</p>
+            <a href="https://www.mezcalito.fr/" target="_blank">
+                <img src="{{ asset('img/mezcalito.svg') }}" width="180" alt="Mezcalito logo">
+            </a>
+        </footer>
+    </body>
+</html>

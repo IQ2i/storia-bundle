@@ -1,0 +1,225 @@
+.hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20rem;
+    gap: 6rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+    @include tablet-xs {
+        padding-top: 16rem;
+    }
+}
+
+.hero-header__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4.8rem;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-header__text-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+
+    h1 {
+        font-size: 7rem;
+        font-weight: 600;
+        letter-spacing: -.15rem;
+
+        @include tablet {
+            font-size: 5rem;
+        }
+    }
+
+    p {
+        color: var(--text);
+        font-size: 1.8rem;
+        font-style: normal;
+        font-weight: 450;
+        line-height: 2.8rem;
+        max-width: 70rem;
+    }
+}
+
+.hero-header__image {
+    max-width: 117rem;
+    position: relative;
+    z-index: 2;
+
+    img {
+        border-radius: 1.3rem;
+        box-shadow: 0 0 9rem 0 rgba(0, 0, 0, 0.20);
+    }
+}
+
+.hero-header__blur {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 80rem;
+    height: 80rem;
+    flex-shrink: 0;
+    border-radius: 80rem;
+    background: linear-gradient(180deg, rgba(15, 83, 212, 0.00) 0%, rgba(15, 83, 212, 0.20) 100%);
+    filter: blur(5rem);
+
+    @include tablet-xs {
+        width: 60rem;
+        height: 60rem;
+    }
+
+    @include mobile {
+        width: 40rem;
+        height: 40rem;
+    }
+}
+
+.integration {
+    padding: 0 10rem;
+    margin-top: 12rem;
+    margin-bottom: 12rem;
+
+    @include desktop-xs {
+        padding: 0 2rem;
+    }
+
+    @include mobile {
+        padding: 0 2rem;
+        margin-top: 6rem;
+        margin-bottom: 6rem;
+    }
+}
+
+.integration__content {
+    display: flex;
+    align-items: center;
+    padding: 10rem 2rem 10rem 8rem;
+    border-radius: 2rem;
+    background: #F0F2F6;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+
+    @include tablet {
+        padding: 6rem 2rem 6rem 4rem;
+    }
+
+    @include mobile {
+        padding: 4rem 3.2rem 4rem 3.2rem;
+        flex-direction: column;
+    }
+}
+
+.integration__content_text {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    width: 50%;
+    padding-right: 6.4rem;
+
+    @include mobile {
+        width: 100%;
+        padding-right: 0;
+        order: 2;
+    }
+
+    h2 {
+        font-size: 4.4rem;
+        font-weight: 600;
+        line-height: 5.4rem;
+        letter-spacing: -.09rem;
+
+        @include mobile {
+            font-size: 2.8rem;
+            line-height: 3.2rem;
+        }
+    }
+
+    p {
+        color: var(--text);
+        font-size: 1.8rem;
+        font-style: normal;
+        font-weight: 450;
+        line-height: 2.8rem;
+        max-width: 70rem;
+    }
+}
+
+.integration__content_image {
+    width: 50%;
+
+    @include mobile {
+        width: 100%;
+        order: 1;
+        padding-bottom: 4rem;
+    }
+
+    img {
+        @include mobile {
+            transform: scale(1.2);
+        }
+    }
+}
+
+.integration__blur {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    width: 80rem;
+    height: 80rem;
+    flex-shrink: 0;
+    border-radius: 80rem;
+    background: linear-gradient(180deg, rgba(15, 83, 212, 0.00) 0%, rgba(15, 83, 212, 0.20) 100%);
+    filter: blur(5rem);
+    opacity: .3;
+}
+
+.documentation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 14.5rem;
+    padding: 0 2rem;
+}
+
+.documentation__header {
+
+    h2 {
+        font-size: 5.8rem;
+        font-weight: 600;
+        letter-spacing: -.12rem;
+
+        @include mobile {
+            font-size: 3.2rem;
+        }
+    }
+}
+
+.documentation__content {
+    margin-top: 6.4rem;
+    max-width: 94rem;
+    width: 100%;
+    background: #F0F2F6;
+    border-radius: 2rem;
+    padding: 4rem;
+
+    @include mobile {
+        margin-top: 3.2rem;
+        padding: 2.4rem;
+    }
+
+    code {
+        border-radius: .8rem;
+    }
+}

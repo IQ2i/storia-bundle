@@ -1,0 +1,60 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    padding: 1.2rem 10rem;
+    z-index: 99;
+
+    @include tablet {
+        padding: 1.2rem 6rem;
+    }
+
+    @include tablet-xs {
+        padding: 1.2rem 2rem;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        width: 100%;
+        height: 20rem;
+        z-index: -1;
+        background: linear-gradient(180deg, #FFF 0%, #FFF 30%, rgba(255, 255, 255, 0.00) 100%);
+    }
+
+
+    .logo {
+
+        @include mobile {
+
+            svg {
+                height: 2.4rem;
+            }
+        }
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+
+        a {
+            align-self: stretch;
+        }
+    }
+
+    .btn-documentation {
+        
+        @include mobile {
+            display: none;
+        }
+    }
+}

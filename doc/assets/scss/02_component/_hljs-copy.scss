@@ -1,0 +1,9 @@
+.hljs-copy-button {
+  border-radius: .5rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.hljs-copy-button:not([data-copied="true"])::before {
+  mask-size: 1.5rem;
+}

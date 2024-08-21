@@ -1,0 +1,12 @@
+@mixin container {
+    max-width: var(--grid-width);
+    margin: 0 auto;
+}
+
+@function width($width, $padding: 0) {
+    @return calc($width, (--grid-width - $padding)) * 100%;
+}
+
+.container {
+    @include container;
+}

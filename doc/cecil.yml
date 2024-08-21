@@ -1,0 +1,12 @@
+title: 'UI Storia'
+baseline: 'UI Storia is a powerful tool designed to simplify and speed up the development process of user interfaces in your Symfony application.'
+baseurl: 'https://ui-storia.com/'
+description: 'Designed to simplify and speed up the development process of UI by providing a visual and modular development environment in your Symfony application.'
+author:
+  name: 'Loïc Sapone'
+  url: 'https://loic-sapone.fr/'
+image: og.png
+menus:
+  main:
+    - id: index
+      enabled: false

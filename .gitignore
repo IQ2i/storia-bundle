@@ -22,3 +22,10 @@
 /node_modules/
 yarn-error.log
 /tests/TestApplication/public/bundles
+
+# ======================================================================
+# CECIL
+# ======================================================================
+doc/.cache
+doc/.cecil
+doc/_site

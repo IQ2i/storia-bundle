@@ -1,0 +1,22 @@
+html {
+    font-size: 62.5%;
+}
+
+body {
+    color: var(--title);
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    text-size-adjust: 100%;
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+
+    &.menu--is-open {
+        overflow: hidden;
+    }
+}
+
