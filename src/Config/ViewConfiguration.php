@@ -52,7 +52,7 @@ class ViewConfiguration implements ConfigurationInterface
                 ->end()
             ->end()
             ->validate()
-                ->ifTrue(static fn ($v) => count(array_filter([$v['template'] ?? null, $v['component'] ?? null, $v['form'] ?? null])) > 1)
+                ->ifTrue(static fn ($v) => \count(array_filter([$v['template'] ?? null, $v['component'] ?? null, $v['form'] ?? null])) > 1)
                 ->thenInvalid('"template", "component" and "form" cannot be used together.')
             ->end()
             ->validate()

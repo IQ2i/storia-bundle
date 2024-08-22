@@ -15,13 +15,9 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
-use Michelf\MarkdownExtra;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\UX\TwigComponent\ComponentFactory;
-use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 use Twig\Environment;
 
 class FormBuilder extends AbstractBuilder
@@ -36,7 +32,7 @@ class FormBuilder extends AbstractBuilder
 
     public function supports(string $path, array $config): bool
     {
-        return \array_key_exists('form', $config) || class_exists($config['form']);
+        return \array_key_exists('form', $config) && class_exists($config['form']);
     }
 
     public function build(Request $request, string $path, array $config): ?View
