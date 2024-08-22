@@ -16,6 +16,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 return static function (ContainerConfigurator $container): void {
     $container->extension('twig', [
         'default_path' => '%kernel.project_dir%/templates',
+        'form_themes' => ['form/theme.html.twig']
     ]);
 
     if ('test' === $container->env()) {
