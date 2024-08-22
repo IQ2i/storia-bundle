@@ -43,17 +43,17 @@ class FormBuilder extends AbstractBuilder
     {
         $config['variants'] = [
             'default' => [
-                'args' => [],
+                'options' => [],
                 'with_errors' => false,
             ],
             'disabled' => [
-                'args' => [
+                'options' => [
                     'disabled' => true,
                 ],
                 'with_errors' => false,
             ],
             'error' => [
-                'args' => [],
+                'options' => [],
                 'with_errors' => true,
             ],
         ];
@@ -65,7 +65,7 @@ class FormBuilder extends AbstractBuilder
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $variantConfig['args']));
+            ], $variantConfig['options'], $config['options']));
 
             if ($variantConfig['with_errors']) {
                 $form->addError(new FormError('Error message'));

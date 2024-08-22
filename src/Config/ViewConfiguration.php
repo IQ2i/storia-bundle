@@ -34,6 +34,9 @@ class ViewConfiguration implements ConfigurationInterface
                 ->scalarNode('form')
                     ->cannotBeEmpty()
                 ->end()
+                ->arrayNode('options')
+                    ->variablePrototype()->end()
+                ->end()
                 ->arrayNode('variants')
                     ->arrayPrototype()
                         ->children()
@@ -62,7 +65,11 @@ class ViewConfiguration implements ConfigurationInterface
             ->end()
             ->validate()
                 ->ifTrue(static fn ($v) => isset($v['form']) && !empty($v['variants']))
-                ->thenInvalid('You can not define variants for the form rendering.')
+                ->thenInvalid('You can not define variants for the form view.')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => (isset($v['template']) || isset($v['component'])) && !empty($v['options']))
+                ->thenInvalid('Options is allowed for the form view.')
             ->end()
         ;
 
