@@ -1,0 +1,28 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+{%- block widget_attributes -%}
+    {%- set widget_class = widget_class|default('shadow-sm focus:ring-slate-700 focus:border-slate-700 block w-full sm:text-sm border-gray-300 rounded-md') -%}
+    {%- set widget_disabled_class = widget_disabled_class|default('border-gray-300 text-gray-500') -%}
+    {%- set widget_errors_class = widget_errors_class|default('border-red-700') -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{%- block form_label -%}
+    {%- set label_class = label_class|default('block text-sm font-medium text-gray-700') -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_help -%}
+    {%- set help_class = help_class|default('mt-2 text-sm text-gray-500') -%}
+    {{- parent() -}}
+{%- endblock form_help -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul>
+            {%- for error in errors -%}
+                <li data-error-count="{{ errors|length }}" class="{{ error_item_class|default('text-sm text-red-600') }}">{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}

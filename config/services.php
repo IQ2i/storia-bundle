@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
+use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\Builder\TemplateBuilder;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 
@@ -32,6 +33,14 @@ return static function (ContainerConfigurator $container) {
                 service('twig'),
                 service('ux.twig_component.component_template_finder'),
                 service('ux.twig_component.component_factory'),
+            ])
+
+        ->set(FormBuilder::class)
+            ->tag('iq2i_storia.builder')
+            ->args([
+                '%iq2i_storia.default_path%',
+                service('twig'),
+                service('form.factory'),
             ])
 
         ->set(TemplateBuilder::class)

@@ -1,0 +1,5 @@
+form: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+options:
+    choices:
+        'In Stock': true
+        'Out of Stock': false
