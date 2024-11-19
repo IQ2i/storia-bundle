@@ -1,5 +1,5 @@
 import copy from 'rollup-plugin-copy';
-import scss from 'rollup-plugin-scss';
+import sass from 'rollup-plugin-sass';
 
 export default [
     {
@@ -15,9 +15,12 @@ export default [
             'highlight.js/lib/languages/xml',
         ],
         plugins: [
-            scss({
-                fileName: 'storia.css',
-                watch: 'assets/scss',
+            sass({
+                output: 'public/storia.css',
+                options: {
+                    outputStyle: 'compressed',
+                    silenceDeprecations: ['legacy-js-api'],
+                },
             }),
             copy({
                 targets: [

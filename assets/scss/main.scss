@@ -1,33 +1,27 @@
 // ------------------ //
 // SETTINGS
 // ------------------ //
-@import
-"01_settings/settings.breakpoints",
-"01_settings/settings.colors",
-"01_settings/settings.spacing",
-"01_settings/settings.fonts"
-;
+@use "01_settings/settings.breakpoints" as breakpoints;
+@use "01_settings/settings.colors" as colors;
+@use "01_settings/settings.spacing" as spacing;
+@use "01_settings/settings.fonts" as fonts;
 
 // ------------------ //
 // GENERICS
 // ------------------ //
-@import
-"02_generics/generics.box-sizing",
-"02_generics/generics.reset",
-"02_generics/generics.reduced-motion",
-"02_generics/generics.misc"
-;
+@use "02_generics/generics.box-sizing" as box-sizing;
+@use "02_generics/generics.reset" as reset;
+@use "02_generics/generics.reduced-motion" as reduced-motion;
+@use "02_generics/generics.misc" as misc;
 
 // ------------------ //
 // COMPONENTS
 // ------------------ //
-@import
-"05_components/components.layout",
-"05_components/components.sidebar",
-"05_components/components.resize",
-"05_components/components.resizer",
-"05_components/components.tabs",
-"05_components/components.actions",
-"05_components/components.code",
-"05_components/components.view"
-;
+@use "05_components/components.layout" as layout;
+@use "05_components/components.sidebar" as sidebar;
+@use "05_components/components.resize" as resize;
+@use "05_components/components.resizer" as resizer;
+@use "05_components/components.tabs" as tabs;
+@use "05_components/components.actions" as actions;
+@use "05_components/components.code" as code;
+@use "05_components/components.view" as view;
