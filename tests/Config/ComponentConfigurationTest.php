@@ -40,13 +40,14 @@ class ComponentConfigurationTest extends TestCase
                     'blocks' => [],
                 ],
             ],
+            'options' => [],
         ], $config);
     }
 
     public function testWithTemplateAndComponentTogether(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('"template" and "component" cannot be used together.');
+        $this->expectExceptionMessage('"template", "component" and "form" cannot be used together.');
 
         $yaml = Yaml::parse(<<<EOF
             template: some_template.html.twig

@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle\Config;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Form\Form;
 use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 
 class ViewConfiguration implements ConfigurationInterface
@@ -43,14 +44,37 @@ class ViewConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('form')
+                    ->cannotBeEmpty()
+                ->end()
+                ->arrayNode('options')
+                    ->variablePrototype()->end()
+                ->end()
+                ->scalarNode('form_theme')->end()
             ->end()
             ->validate()
-                ->ifTrue(static fn ($v) => isset($v['template']) && isset($v['component']))
-                ->thenInvalid('"template" and "component" cannot be used together.')
+                ->ifTrue(static fn ($v) => \count(array_filter([$v['template'] ?? null, $v['component'] ?? null, $v['form'] ?? null])) > 1)
+                ->thenInvalid('"template", "component" and "form" cannot be used together.')
             ->end()
             ->validate()
                 ->ifTrue(static fn ($v) => isset($v['component']) && !class_exists(ComponentTemplateFinder::class))
                 ->thenInvalid('TwigComponent support cannot be enabled as the Symfony UX TwigComponent package is not installed. Try running "composer require symfony/ux-twig-component".')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => isset($v['form']) && !class_exists(Form::class))
+                ->thenInvalid('Form support cannot be enabled as the Symfony Form package is not installed. Try running "composer require symfony/form".')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => isset($v['form']) && !empty($v['variants']))
+                ->thenInvalid('You can not define variants for the form view.')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => (isset($v['template']) || isset($v['component'])) && !empty($v['options']))
+                ->thenInvalid('Options is allowed for the form view only.')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => (isset($v['template']) || isset($v['component'])) && !empty($v['form_theme']))
+                ->thenInvalid('"form_theme" is allowed for the form view only.')
             ->end()
         ;
 

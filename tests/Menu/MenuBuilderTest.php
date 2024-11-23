@@ -33,7 +33,7 @@ class MenuBuilderTest extends TestCase
         $this->assertCount(2, $menu->getChildren());
 
         $components = $menu->getChildren()[0];
-        $this->assertCount(4, $components->getChildren());
+        $this->assertCount(5, $components->getChildren());
 
         $avatar = $components->getChildren()[0];
         $this->assertEquals('Avatar', $avatar->getLabel());
