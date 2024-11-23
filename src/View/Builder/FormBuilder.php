@@ -69,7 +69,10 @@ class FormBuilder extends AbstractBuilder
             }
 
             $twigContent = $this->getTwigContent('@IQ2iStoria/components/form.html.twig');
-            $htmlContent = $this->generateHtml($twigContent, ['form' => $form->createView()]);
+            $htmlContent = $this->generateHtml($twigContent, [
+                'form' => $form->createView(),
+                'form_theme' => $config['form_theme'] ?? null,
+            ]);
         }
 
         $variants = array_map(static fn (string $name): Variant => new Variant(
