@@ -47,6 +47,6 @@ readonly class ViewBuilder
             }
         }
 
-        throw new \LogicException(sprintf('Missing template for component "%s"', $path));
+        throw new \LogicException(\sprintf('Missing template for component "%s"', $path));
     }
 }
