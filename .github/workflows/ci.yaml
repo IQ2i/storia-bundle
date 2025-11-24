@@ -13,7 +13,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -27,18 +27,18 @@ jobs:
                   dependency-versions: ${{ matrix.dependencies }}
 
             - name: PHP-CS-Fixer
-              run: PHP_CS_FIXER_IGNORE_ENV=1 php vendor/bin/php-cs-fixer fix --dry-run --diff --no-ansi
+              run: php vendor/bin/php-cs-fixer fix --dry-run --diff --no-ansi
 
     phpstan:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.4
+                  php-version: 8.5
                   coverage: none
 
             - name: Install dependencies
@@ -53,12 +53,12 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.4
+                  php-version: 8.5
                   coverage: none
 
             - name: Install dependencies
@@ -77,12 +77,12 @@ jobs:
                     # Latest Symfony version support
                     -   os: ubuntu-latest
                         php_version: "8.4"
-                        symfony_version: "7.1"
+                        symfony_version: "8.0"
                         stability: "stable"
                     # LTS Symfony version support
                     -   os: ubuntu-latest
                         php_version: "8.4"
-                        symfony_version: "6.4"
+                        symfony_version: "7.4"
                         stability: "stable"
                     # Lowest deps support
                     -   os: ubuntu-latest
@@ -92,14 +92,14 @@ jobs:
                         stability: "stable"
                     # Upcoming Symfony versions
                     -   os: ubuntu-latest
-                        php_version: "8.4"
-                        symfony_version: "7.2.x-dev"
+                        php_version: "8.5"
+                        symfony_version: "8.0.x-dev"
                         stability: "dev"
 
         runs-on: ${{ matrix.os }}
 
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v6
 
             -   name: Setup PHP, with composer and extensions
                 uses: shivammathur/setup-php@v2
