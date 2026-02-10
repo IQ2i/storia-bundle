@@ -151,6 +151,76 @@ variants:
             label: Outline button
 ```
 
+### Form Types
+
+UI Storia provides native support for [Symfony Form Types](https://symfony.com/doc/current/forms.html), allowing you to preview and test form fields in isolation.
+
+To work with a Form Type, use the `form` key instead of `template` or `component`:
+
+```yaml
+# storia/components/form/text.yaml
+
+form: Symfony\Component\Form\Extension\Core\Type\TextType
+```
+
+```yaml
+# storia/components/form/choice.yaml
+
+form: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+options:
+    choices:
+        'In Stock': true
+        'Out of Stock': false
+```
+
+#### Automatic Variants
+
+When using the `form` key, UI Storia automatically generates **three variants** for you:
+
+1. **default**: The form field in its normal state
+2. **disabled**: The form field with `disabled: true` option
+3. **error**: The form field with a validation error displayed
+
+You cannot define custom variants for form types - these three variants are provided automatically.
+
+#### Options
+
+The `options` key allows you to pass options to your Form Type constructor, just like you would when creating a form in Symfony:
+
+```yaml
+# storia/components/form/email.yaml
+
+form: Symfony\Component\Form\Extension\Core\Type\EmailType
+options:
+    required: false
+    attr:
+        placeholder: 'Enter your email'
+```
+
+#### Form Theme
+
+You can also specify a custom form theme for rendering your form field using the `form_theme` key:
+
+```yaml
+# storia/components/form/custom.yaml
+
+form: App\Form\CustomType
+form_theme: 'forms/custom_theme.html.twig'
+options:
+    label: 'Custom Field'
+```
+
+:::important markdown-alert markdown-alert-important
+<p class="markdown-alert-title">
+    <svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>
+    Important
+</p>
+
+The `form` key cannot be used together with `template` or `component`. Choose one approach per YAML file.
+
+The `options` and `form_theme` keys are only allowed when using the `form` key - they cannot be used with templates or components.
+:::
+
 ### Variants
 
 The `variants` key lists the different variations of your interface, passing different arguments to your template.
@@ -187,3 +257,94 @@ variants:
 
 Note here that the `content` block is the default block for Twig Component according to the documentation ([see here](https://symfony.com/bundles/ux-twig-component/current/index.html#passing-html-to-components)), so it will have a different behavior that we will detail later.
 :::
+
+### Argument Resolver
+
+UI Storia provides an **Argument Resolver** feature that allows you to dynamically generate arguments by calling PHP methods directly from your YAML configuration files.
+
+Instead of hardcoding values in your variant arguments, you can reference a PHP class method using the syntax `ClassName::methodName`. UI Storia will automatically detect this pattern and call the method to generate the argument value.
+
+#### How it works
+
+The Argument Resolver supports both:
+- **Static methods**: Called directly on the class
+- **Instance methods**: If the class is registered as a service in the Symfony container, UI Storia will retrieve the service and call the method on it
+
+#### Example
+
+```yaml
+# storia/components/product.yaml
+
+component: Product
+variants:
+    default:
+        args:
+            product: App\Factory\ProductFactory::createDefault
+        blocks:
+            content: ''
+
+    expensive:
+        args:
+            product: App\Factory\ProductFactory::createExpensive
+        blocks:
+            content: ''
+
+    outOfStock:
+        args:
+            product: App\Factory\ProductFactory::createOutOfStock
+        blocks:
+            content: ''
+
+    static:
+        args:
+            product:
+                id: 99
+                name: Static Product
+                price: 19.99
+                inStock: true
+        blocks:
+            content: ''
+```
+
+In this example, the first three variants use the Argument Resolver to call methods from `ProductFactory`, while the `static` variant uses hardcoded values.
+
+The `ProductFactory` class could look like this:
+
+```php
+<?php
+
+namespace App\Factory;
+
+class ProductFactory
+{
+    public static function createDefault(): array
+    {
+        return [
+            'id' => 1,
+            'name' => 'Default Product',
+            'price' => 29.99,
+            'inStock' => true,
+        ];
+    }
+
+    public static function createExpensive(): array
+    {
+        return [
+            'id' => 2,
+            'name' => 'Premium Product',
+            'price' => 199.99,
+            'inStock' => true,
+        ];
+    }
+
+    public static function createOutOfStock(): array
+    {
+        return [
+            'id' => 3,
+            'name' => 'Sold Out Product',
+            'price' => 49.99,
+            'inStock' => false,
+        ];
+    }
+}
+```
