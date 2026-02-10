@@ -1,0 +1,6 @@
+<div {{ attributes.defaults({ class: 'product' }) }}>
+    <h3>{{ product.name }}</h3>
+    <p class="price">${{ product.price }}</p>
+    <p class="stock">{{ product.inStock ? 'In Stock' : 'Out of Stock' }}</p>
+    {% block content %}{% endblock %}
+</div>

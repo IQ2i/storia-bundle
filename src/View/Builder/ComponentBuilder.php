@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
+use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
@@ -29,6 +30,7 @@ class ComponentBuilder extends AbstractBuilder
         Environment $twig,
         private readonly ComponentTemplateFinder $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
+        private readonly ArgResolver $argResolver,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -50,8 +52,11 @@ class ComponentBuilder extends AbstractBuilder
 
             $componentProperties = array_values($this->getComponentProperties($template));
 
+            // Resolve args with ArgResolver
+            $resolvedArgs = $this->argResolver->resolve($variantConfig['args']);
+
             $variantArgs = [];
-            foreach ($variantConfig['args'] as $argName => $argValue) {
+            foreach ($resolvedArgs as $argName => $argValue) {
                 if (\in_array($argName, $componentProperties)) {
                     continue;
                 }

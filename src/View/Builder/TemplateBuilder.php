@@ -15,11 +15,21 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
+use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 class TemplateBuilder extends AbstractBuilder
 {
+    public function __construct(
+        string $defaultPath,
+        Environment $twig,
+        private readonly ArgResolver $argResolver,
+    ) {
+        parent::__construct($defaultPath, $twig);
+    }
+
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
@@ -41,8 +51,11 @@ class TemplateBuilder extends AbstractBuilder
 
             $skeletonPath = __DIR__.'/../../../skeleton/template.tpl.php';
 
+            // Resolve args with ArgResolver
+            $resolvedArgs = $this->argResolver->resolve($variantConfig['args']);
+
             $variantArgs = [];
-            foreach ($variantConfig['args'] as $argName => $argValue) {
+            foreach ($resolvedArgs as $argName => $argValue) {
                 $variantArgs[$argName] = $argValue;
             }
 

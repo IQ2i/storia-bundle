@@ -1,0 +1,30 @@
+component: Product
+
+variants:
+  default:
+    args:
+      product: IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createDefault
+    blocks:
+      content: ''
+
+  expensive:
+    args:
+      product: IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createExpensive
+    blocks:
+      content: ''
+
+  outOfStock:
+    args:
+      product: IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createOutOfStock
+    blocks:
+      content: ''
+
+  static:
+    args:
+      product:
+        id: 99
+        name: Static Product
+        price: 19.99
+        inStock: true
+    blocks:
+      content: ''

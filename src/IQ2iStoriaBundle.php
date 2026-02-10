@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
+use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
@@ -85,6 +86,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new ArgResolverPass());
         $container->addCompilerPass(new ProfilerPass());
     }
 }

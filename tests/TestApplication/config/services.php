@@ -20,6 +20,7 @@ return static function (ContainerConfigurator $container) {
         ->defaults()
         ->autowire()
         ->autoconfigure()
+        ->public()
     ;
 
     $services->load('IQ2i\\StoriaBundle\\Tests\\TestApplication\\', '../src/*')
