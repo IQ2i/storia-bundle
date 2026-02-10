@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:latest-php8.4-alpine
+FROM dunglas/frankenphp:php8.4-alpine
 
 # persistent / runtime deps
 RUN apk add --no-cache \
@@ -17,7 +17,7 @@ RUN set -eux; \
 	;
 
 COPY --link ./conf.d/symfony.ini $PHP_INI_DIR/conf.d/
-COPY --link ./Caddyfile /etc/caddy/Caddyfile
+COPY --link ./Caddyfile /etc/frankenphp/Caddyfile
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
