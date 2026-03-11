@@ -20,7 +20,7 @@ use Michelf\MarkdownExtra;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\ComponentFactory;
-use Symfony\UX\TwigComponent\ComponentTemplateFinder;
+use Symfony\UX\TwigComponent\ComponentTemplateFinderInterface;
 use Twig\Environment;
 
 class ComponentBuilder extends AbstractBuilder
@@ -28,7 +28,7 @@ class ComponentBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
-        private readonly ComponentTemplateFinder $componentTemplateFinder,
+        private readonly ComponentTemplateFinderInterface $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
         private readonly ArgResolver $argResolver,
     ) {
