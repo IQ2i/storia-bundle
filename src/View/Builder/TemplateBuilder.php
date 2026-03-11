@@ -39,17 +39,13 @@ class TemplateBuilder extends AbstractBuilder
     {
         $template = $config['template'] ?? null;
 
-        $isPage = false;
         if (null === $template && @file_exists($this->defaultPath.'/'.$path.'.html.twig')) {
-            $isPage = true;
             $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 
         $variantPath = $request->query->get('variant');
         if (isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
-
-            $skeletonPath = __DIR__.'/../../../skeleton/template.tpl.php';
 
             // Resolve args with ArgResolver
             $resolvedArgs = $this->argResolver->resolve($variantConfig['args']);
@@ -59,19 +55,8 @@ class TemplateBuilder extends AbstractBuilder
                 $variantArgs[$argName] = $argValue;
             }
 
-            $parameters = [
-                'template' => $template,
-                'args' => $variantArgs,
-                'blocks' => $variantConfig['blocks'],
-            ];
-
-            $includeContent = null;
-            if (!$isPage) {
-                $includeContent = $this->generateInclude($skeletonPath, $parameters);
-            }
-
             $twigContent = $this->getTwigContent($template);
-            $htmlContent = $this->generateHtml($isPage ? $twigContent : $includeContent, $parameters['args']);
+            $htmlContent = $this->generateHtml($twigContent, $variantArgs);
 
             $markdownContent = null;
             if (file_exists($this->defaultPath.'/'.$path.'.md')) {
@@ -89,7 +74,7 @@ class TemplateBuilder extends AbstractBuilder
             $path,
             $twigContent ?? null,
             $htmlContent ?? null,
-            $includeContent ?? null,
+            null,
             $markdownContent ?? null,
             $variants
         );

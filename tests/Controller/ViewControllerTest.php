@@ -24,7 +24,7 @@ class ViewControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertCount(4, $crawler->filter('header > .tabs > .tabs__item'));
-        $this->assertCount(3, $crawler->filter('main > div > div > .tabs > .tabs__item'));
+        $this->assertCount(2, $crawler->filter('main > div > div > .tabs > .tabs__item'));
     }
 
     public function testUnknownView(): void
