@@ -23,6 +23,6 @@ return static function (ContainerConfigurator $container) {
         ->public()
     ;
 
-    $services->load('IQ2i\\StoriaBundle\\Tests\\TestApplication\\', '../src/*')
-        ->exclude('../{Entity,Tests,Kernel.php}');
+    $services->load('IQ2i\\StoriaBundle\\Tests\\TestApplication\\', '../src/')
+        ->exclude('../src/Kernel.php');
 };
