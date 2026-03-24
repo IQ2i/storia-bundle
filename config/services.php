@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
 use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\Builder\TemplateBuilder;
@@ -21,6 +22,8 @@ use IQ2i\StoriaBundle\View\ViewBuilder;
 
 return static function (ContainerConfigurator $container) {
     $container->services()
+        ->set(YamlPreProcessor::class)
+
         ->set(ArgResolver::class)
             ->args([
                 service_locator([]), // Will be populated by ArgResolverPass
@@ -30,6 +33,7 @@ return static function (ContainerConfigurator $container) {
             ->args([
                 '%iq2i_storia.default_path%',
                 tagged_iterator('iq2i_storia.builder'),
+                service(YamlPreProcessor::class),
             ])
 
         ->set(ComponentBuilder::class)

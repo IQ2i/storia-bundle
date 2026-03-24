@@ -14,30 +14,31 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View;
 
 use IQ2i\StoriaBundle\Config\ViewConfiguration;
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\View\Builder\BuilderInterface;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Yaml\Yaml;
 
 readonly class ViewBuilder
 {
     public function __construct(
         private string $defaultPath,
         private iterable $builders,
+        private YamlPreProcessor $yamlPreProcessor,
     ) {
     }
 
     public function createFromRequest(Request $request): ?View
     {
         $path = $request->attributes->get('view');
-        if (null === $path || !file_exists($this->defaultPath.'/'.$path.'.yaml')) {
+        if (null === $path || null === $this->yamlPreProcessor->resolveFilePath($this->defaultPath, $path)) {
             return null;
         }
 
         $config = (new Processor())->processConfiguration(
             new ViewConfiguration(),
-            [Yaml::parse(file_get_contents($this->defaultPath.'/'.$path.'.yaml'))]
+            [$this->yamlPreProcessor->process($this->defaultPath, $path)]
         );
 
         /** @var BuilderInterface $builder */
