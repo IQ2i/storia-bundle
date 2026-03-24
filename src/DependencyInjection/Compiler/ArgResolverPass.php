@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\DependencyInjection\Compiler;
 
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 
 class ArgResolverPass implements CompilerPassInterface
 {
@@ -60,10 +60,16 @@ class ArgResolverPass implements CompilerPassInterface
 
         $classNames = [];
 
-        $finder = (new Finder())->files()->name('*.yaml')->in($storiaPath);
+        $preProcessor = new YamlPreProcessor();
+
+        $finder = (new Finder())->files()->name(['*.yaml', '*.yml'])->in($storiaPath);
         foreach ($finder as $file) {
+            // Compute the path relative to $storiaPath (without extension) to use with the pre-processor.
+            $relativeName = $file->getRelativePathname();
+            $relativePath = substr($relativeName, 0, -(\strlen($file->getExtension()) + 1));
+
             try {
-                $data = Yaml::parseFile($file->getPathname());
+                $data = $preProcessor->process($storiaPath, $relativePath);
             } catch (\Throwable) {
                 continue;
             }

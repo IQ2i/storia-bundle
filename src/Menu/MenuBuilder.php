@@ -69,12 +69,12 @@ readonly class MenuBuilder
                     $child = new MenuItem($label, $menuItem->getUrl(), $menuItem->isActive());
                 }
             } else {
-                if ('yaml' !== $file->getExtension()) {
+                if (!\in_array($file->getExtension(), ['yaml', 'yml'], true)) {
                     continue;
                 }
 
                 $path = $this->router->generate('iq2i_storia_view', [
-                    'view' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.yaml')->toString(),
+                    'view' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.'.$file->getExtension())->toString(),
                 ]);
 
                 $urlParts = parse_url($request->getRequestUri());

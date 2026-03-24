@@ -1,0 +1,11 @@
+include: _shared
+
+template: ui/badge.html.twig
+variants:
+    default:
+        args:
+            <<: *default_badge_args
+
+    large:
+        args:
+            <<: *large_badge_args

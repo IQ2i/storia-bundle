@@ -348,3 +348,111 @@ class ProductFactory
     }
 }
 ```
+
+### YAML Composition
+
+UI Storia supports two directives to avoid duplication across your YAML files: `include:` for sharing anchor definitions, and `extends:` for inheriting and overriding a complete configuration.
+
+#### `include:` — Shared anchor definitions
+
+The `include:` directive lets you define YAML anchors in a shared file and reuse them across multiple configuration files.
+
+Create a shared file anywhere in your `storia/` folder (conventionally prefixed with `_` to indicate it is not a standalone view):
+
+```yaml
+# storia/_shared.yaml
+
+_definitions:
+    default_badge: &default_badge
+        class: bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded
+
+    large_badge: &large_badge
+        class: bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded
+```
+
+Then include it from any configuration file using `include:` and reference the anchors with the standard YAML `*` syntax:
+
+```yaml
+# storia/components/badge.yaml
+
+include: _shared
+
+template: ui/badge.html.twig
+variants:
+    default:
+        args:
+            <<: *default_badge
+
+    large:
+        args:
+            <<: *large_badge
+```
+
+You can include multiple files using a list:
+
+```yaml
+include: [_colors, _sizes]
+
+# or equivalently:
+include:
+    - _colors
+    - _sizes
+```
+
+:::tip markdown-alert markdown-alert-tip
+<p class="markdown-alert-title">
+    <svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>
+    Tip
+</p>
+
+The `_definitions:` key is reserved for anchor definitions and is automatically stripped before the configuration is processed. It will never appear as a variant or option in the UI.
+:::
+
+#### `extends:` — Configuration inheritance
+
+The `extends:` directive allows a configuration file to inherit all settings from a parent file and selectively override only the parts that differ.
+
+```yaml
+# storia/components/badge.yaml
+
+template: ui/badge.html.twig
+variants:
+    default:
+        args:
+            class: bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded
+    large:
+        args:
+            class: bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded
+    bordered:
+        args:
+            class: bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-400
+```
+
+```yaml
+# storia/components/badge-red.yaml
+
+extends: components/badge
+
+variants:
+    default:
+        args:
+            class: bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded
+    large:
+        args:
+            class: bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded
+```
+
+In this example, `badge-red.yaml` inherits the `template` key and the `bordered` variant from the parent, and only overrides `default` and `large`.
+
+The merge is **deep**: nested keys (like `args` within a variant) are merged individually, so you can override a single argument without redefining all the others.
+
+Extensions can be chained — a file that uses `extends:` can itself be extended by another file.
+
+:::important markdown-alert markdown-alert-important
+<p class="markdown-alert-title">
+    <svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>
+    Important
+</p>
+
+Circular references (file A extending file B which extends file A) are detected at runtime and will throw an explicit error.
+:::
