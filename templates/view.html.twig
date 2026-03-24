@@ -125,7 +125,7 @@
 
                                     {% if view.includeContent is not null %}
                                         <li class="tabs__item">
-                                            <a href="#include" class="tabs__item_link tab-is-active" data-tab-target="tab" data-action="click->tab#change">
+                                            <a href="#include" class="tabs__item_link tab-is-unactive" data-tab-target="tab" data-action="click->tab#change">
                                                 Include
                                             </a>
                                         </li>
@@ -169,7 +169,7 @@
                                 </div>
 
                                 {% if view.includeContent is not null %}
-                                    <div id="include" class="group" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.includeContent }}" data-tab-target="tabPanel">
+                                    <div id="include" class="group hidden" data-controller="copy-to-clipboard" data-copy-to-clipboard-content-value="{{ view.includeContent }}" data-tab-target="tabPanel">
                                         <div class="code">
                                             <pre><code class="language-twig" data-controller="highlight">
                                                 {{- view.includeContent|escape -}}

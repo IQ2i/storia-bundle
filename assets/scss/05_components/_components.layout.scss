@@ -21,6 +21,7 @@ header {
 
 .main__inner {
     flex: 1;
+    overflow: hidden;
 }
 
 [data-resize-target="panelB"] {
