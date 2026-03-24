@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
-use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
 use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\Builder\TemplateBuilder;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
@@ -34,16 +33,6 @@ return static function (ContainerConfigurator $container) {
                 '%iq2i_storia.default_path%',
                 tagged_iterator('iq2i_storia.builder'),
                 service(YamlPreProcessor::class),
-            ])
-
-        ->set(ComponentBuilder::class)
-            ->tag('iq2i_storia.builder')
-            ->args([
-                '%iq2i_storia.default_path%',
-                service('twig'),
-                service('ux.twig_component.component_template_finder'),
-                service('ux.twig_component.component_factory'),
-                service(ArgResolver::class),
             ])
 
         ->set(FormBuilder::class)
