@@ -20,6 +20,8 @@ use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\MenuExtension;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
+use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
+use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -65,6 +67,18 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 new Reference('twig'),
                 new Reference('router'),
             ]);
+
+        if (class_exists(\Symfony\UX\TwigComponent\ComponentFactory::class)) {
+            $builder->register(ComponentBuilder::class)
+                ->addTag('iq2i_storia.builder')
+                ->setArguments([
+                    '%iq2i_storia.default_path%',
+                    new Reference('twig'),
+                    new Reference('ux.twig_component.component_template_finder'),
+                    new Reference('ux.twig_component.component_factory'),
+                    new Reference(ArgResolver::class),
+                ]);
+        }
 
         $builder->register(MenuBuilder::class)
             ->setArguments([
