@@ -6,12 +6,14 @@ import HighlightController from './controllers/highlight_controller.js';
 import ControlsController from './controllers/controls_controller.js';
 import MenuController from './controllers/menu_controller.js';
 import ResizeController from './controllers/resize_controller.js';
+import LiveReloadController from './controllers/live_reload_controller.js';
 import TabController from './controllers/tab_controller.js';
 
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
 app.register('controls', ControlsController);
+app.register('live-reload', LiveReloadController);
 app.register('menu', MenuController);
 app.register('resize', ResizeController);
 app.register('tab', TabController);

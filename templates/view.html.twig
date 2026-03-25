@@ -46,7 +46,7 @@
 
             <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
-            <div class="main__content resize__panel" data-controller="controls" data-resize-target="panelB">
+            <div class="main__content resize__panel" data-controller="controls live-reload" data-live-reload-url-value="{{ path('iq2i_storia_changes') }}" data-resize-target="panelB">
                 {% if view is not null %}
                     <header>
                         {% if view.variants is not empty %}
@@ -98,7 +98,7 @@
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ path('iq2i_storia_iframe', {view: view.path, variant: view.currentVariant.path}) }}" data-controls-target="iframe"></iframe>
+                                    <iframe src="{{ path('iq2i_storia_iframe', {view: view.path, variant: view.currentVariant.path}) }}" data-controls-target="iframe" data-live-reload-target="iframe"></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>

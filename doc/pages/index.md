@@ -60,6 +60,54 @@ iq2i_storia:
     enabled: '%env(IQ2I_STORIA_ENABLED)%'
 ```
 
+## Live Reload
+
+UI Storia comes with a live reload feature that automatically refreshes the preview when you modify your files.
+
+### Starting the watcher
+
+Run the following command to start watching for file changes:
+
+```bash
+bin/console storia:watch
+```
+
+The watcher will display which directories it is monitoring and log every detected change:
+
+```
+Watching [page]: /path/to/project/storia
+Watching [iframe]: /path/to/project/templates
+Watching [iframe]: /path/to/project/assets
+Watching for changes… (Ctrl+C to stop)
+[14:23:07] Change detected: /path/to/project/storia/components/badge.yaml (write) → page reload
+[14:23:41] Change detected: /path/to/project/templates/ui/badge.html.twig (write) → iframe reload
+```
+
+Press `Ctrl+C` to stop the watcher. The browser will automatically disconnect from the live reload stream.
+
+### Reload behaviour
+
+UI Storia distinguishes between two types of changes:
+
+- **Changes in the `storia/` folder** (YAML files) trigger a **full page reload** — the menu and component metadata are refreshed.
+- **Changes in templates or assets** trigger an **iframe-only reload** — the preview is refreshed without touching the page shell.
+
+### Configuring watched paths
+
+By default, UI Storia watches `templates/` and `assets/` for iframe reloads. You can customise this list in your configuration file:
+
+```yaml
+# config/packages/iq2i_storia.yaml
+
+iq2i_storia:
+    watch:
+        - '%kernel.project_dir%/templates'
+        - '%kernel.project_dir%/assets'
+        - '%kernel.project_dir%/src/Twig'
+```
+
+The `storia/` folder (defined by `default_path`) is always watched for page reloads and does not need to be listed here.
+
 UI Storia will render your interfaces without CSS or JavaScript.  
 To instruct UI Storia to use your styles and scripts, simply override the `iframe.html.twig` template following the [Symfony documentation](https://symfony.com/doc/current/bundles/override.html#templates):
 
