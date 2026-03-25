@@ -11,11 +11,16 @@
 
 declare(strict_types=1);
 
+use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
+    $routes->add('iq2i_storia_changes', '/changes')
+        ->controller(ChangesController::class)
+        ->condition('"%iq2i_storia.enabled%"');
+
     $routes->add('iq2i_storia_iframe', '/iframe/{view<.+>?}')
         ->controller(IframeController::class)
         ->condition('"%iq2i_storia.enabled%"');

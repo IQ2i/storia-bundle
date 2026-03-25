@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
+use IQ2i\StoriaBundle\Command\WatchCommand;
+use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
@@ -44,6 +46,10 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     ->defaultValue('%kernel.project_dir%/storia')
                 ->end()
                 ->booleanNode('enabled')->defaultTrue()->end()
+                ->arrayNode('watch')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(['%kernel.project_dir%/assets', '%kernel.project_dir%/templates'])
+                ->end()
             ->end();
     }
 
@@ -53,6 +59,21 @@ final class IQ2iStoriaBundle extends AbstractBundle
 
         $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
         $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
+        $builder->setParameter('iq2i_storia.watch', $config['watch']);
+
+        $builder->register(ChangesController::class)
+            ->addTag('controller.service_arguments')
+            ->setArguments([
+                '%kernel.project_dir%',
+            ]);
+
+        $builder->register(WatchCommand::class)
+            ->addTag('console.command')
+            ->setArguments([
+                '%iq2i_storia.default_path%',
+                '%iq2i_storia.watch%',
+                '%kernel.project_dir%',
+            ]);
 
         $builder->register(IframeController::class)
             ->addTag('controller.service_arguments')
