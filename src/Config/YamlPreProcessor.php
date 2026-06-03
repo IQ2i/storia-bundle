@@ -39,14 +39,22 @@ readonly class YamlPreProcessor
 
     /**
      * Returns the absolute path of a Storia YAML file, trying `.yaml` then `.yml`.
-     * Returns null if neither extension exists.
+     * Returns null if neither extension exists or if the resolved path escapes $basePath.
      */
     public function resolveFilePath(string $basePath, string $path): ?string
     {
+        $realBasePath = realpath($basePath);
+        if (false === $realBasePath) {
+            return null;
+        }
+
         foreach (['yaml', 'yml'] as $extension) {
             $filePath = $basePath.'/'.$path.'.'.$extension;
             if (file_exists($filePath)) {
-                return $filePath;
+                $realFilePath = realpath($filePath);
+                if (false !== $realFilePath && str_starts_with($realFilePath, $realBasePath.\DIRECTORY_SEPARATOR)) {
+                    return $filePath;
+                }
             }
         }
 
