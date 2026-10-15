@@ -7,7 +7,12 @@ export default class extends Controller {
     };
 
     refreshIframe() {
-        this.iframeTarget.contentWindow.location.reload();
+        try {
+            this.iframeTarget.contentWindow.location.reload();
+        } catch {
+            // cross-origin under file://
+            this.iframeTarget.src = this.iframeTarget.src;
+        }
     }
 
     zoomIn() {

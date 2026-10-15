@@ -15,10 +15,10 @@ namespace IQ2i\StoriaBundle\Menu;
 
 use IQ2i\StoriaBundle\Menu\Dto\Menu;
 use IQ2i\StoriaBundle\Menu\Dto\MenuItem;
+use IQ2i\StoriaBundle\Url\UrlGeneratorInterface;
+use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 use function Symfony\Component\String\u;
 
@@ -26,26 +26,29 @@ readonly class MenuBuilder
 {
     public function __construct(
         private string $defaultPath,
-        private RouterInterface $router,
+        private ViewBuilder $viewBuilder,
     ) {
     }
 
-    public function createSidebarMenu(Request $request): Menu
+    /**
+     * @param ?array<string, ?string> $firstVariants
+     */
+    public function createSidebarMenu(UrlGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants = null): Menu
     {
         $menu = new Menu();
 
         $components = new Menu('Components');
-        $this->getChildren($request, $components, 'components');
+        $this->getChildren($urls, $currentPath, $firstVariants, $components, 'components');
         $menu->addChild($components);
 
         $pages = new Menu('Pages');
-        $this->getChildren($request, $pages, 'pages');
+        $this->getChildren($urls, $currentPath, $firstVariants, $pages, 'pages');
         $menu->addChild($pages);
 
         return $menu;
     }
 
-    private function getChildren(Request $request, Menu $menu, string $folder): void
+    private function getChildren(UrlGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants, Menu $menu, string $folder): void
     {
         $opened = false;
 
@@ -56,7 +59,7 @@ readonly class MenuBuilder
 
             if ($file->isDir()) {
                 $child = new Menu($label);
-                $this->getChildren($request, $child, $folder.'/'.$file->getBasename());
+                $this->getChildren($urls, $currentPath, $firstVariants, $child, $folder.'/'.$file->getBasename());
                 if ([] === $child->getChildren()) {
                     continue;
                 }
@@ -73,14 +76,11 @@ readonly class MenuBuilder
                     continue;
                 }
 
-                $path = $this->router->generate('iq2i_storia_view', [
-                    'view' => u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.'.$file->getExtension())->toString(),
-                ]);
-
-                $urlParts = parse_url($request->getRequestUri());
-                $isActive = isset($urlParts['path']) && str_ends_with($path, $urlParts['path']);
+                $viewPath = u($file->getPathname())->replace($this->defaultPath.'/', '')->trimSuffix('.'.$file->getExtension())->toString();
+                $isActive = $viewPath === $currentPath;
                 $opened = $opened || $isActive;
 
+                $path = $urls->view($viewPath, $this->firstVariant($viewPath, $firstVariants));
                 $child = new MenuItem($label, $path, $isActive);
             }
 
@@ -89,5 +89,24 @@ readonly class MenuBuilder
 
         $menu->setOpened($opened);
         $menu->reorderChildren();
+    }
+
+    /**
+     * @param ?array<string, ?string> $firstVariants
+     */
+    private function firstVariant(string $viewPath, ?array $firstVariants): ?string
+    {
+        if (null !== $firstVariants) {
+            return $firstVariants[$viewPath] ?? null;
+        }
+
+        // A broken view must not take the whole menu down: the link then targets the view without variant.
+        try {
+            $variants = $this->viewBuilder->create($viewPath, null)?->getVariants() ?? [];
+        } catch (\Throwable) {
+            return null;
+        }
+
+        return [] === $variants ? null : current($variants)->getPath();
     }
 }

@@ -20,11 +20,13 @@ use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
-use IQ2i\StoriaBundle\Twig\MenuExtension;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
+use IQ2i\StoriaBundle\Url\RouterUrlGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use IQ2i\StoriaBundle\View\ViewBuilder;
+use IQ2i\StoriaBundle\View\ViewFinder;
+use IQ2i\StoriaBundle\View\ViewRenderer;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -78,14 +80,29 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->addTag('controller.service_arguments')
             ->setArguments([
                 new Reference(ViewBuilder::class),
-                new Reference('twig'),
+                new Reference(ViewRenderer::class),
             ]);
         $builder->register(ViewController::class)
             ->addTag('controller.service_arguments')
             ->setArguments([
                 new Reference(ViewBuilder::class),
+                new Reference(ViewRenderer::class),
+                new Reference(MenuBuilder::class),
+                new Reference(RouterUrlGenerator::class),
+            ]);
+
+        $builder->register(ViewRenderer::class)
+            ->setArguments([
                 new Reference('twig'),
+            ]);
+        $builder->register(ViewFinder::class)
+            ->setArguments([
+                '%iq2i_storia.default_path%',
+            ]);
+        $builder->register(RouterUrlGenerator::class)
+            ->setArguments([
                 new Reference('router'),
+                new Reference('assets.packages'),
             ]);
 
         if (class_exists(\Symfony\UX\TwigComponent\ComponentFactory::class)) {
@@ -103,14 +120,9 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $builder->register(MenuBuilder::class)
             ->setArguments([
                 '%iq2i_storia.default_path%',
-                new Reference('router'),
+                new Reference(ViewBuilder::class),
             ]);
 
-        $builder->register(MenuExtension::class)
-            ->addTag('twig.extension')
-            ->setArguments([
-                new Reference(MenuBuilder::class),
-            ]);
         $builder->register(ViewExtension::class)
             ->addTag('twig.extension')
             ->setArguments([
