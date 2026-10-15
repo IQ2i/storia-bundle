@@ -79,6 +79,17 @@ class MenuBuilderTest extends TestCase
         $this->assertEquals('/components/avatar?', $menu->getChildren()[0]->getChildren()[0]->getUrl());
     }
 
+    public function testToleratesMissingFolders(): void
+    {
+        $defaultPath = __DIR__.'/../TestApplication/storia_broken';
+        $builder = new MenuBuilder($defaultPath, new ViewBuilder($defaultPath, [], new YamlPreProcessor()));
+
+        $menu = $builder->createSidebarMenu($this->createUrls(), null, ['components/broken' => 'default']);
+
+        $this->assertSame('/components/broken?default', $menu->getChildren()[0]->getChildren()[0]->getUrl());
+        $this->assertSame([], $menu->getChildren()[1]->getChildren());
+    }
+
     /**
      * @param ?\Closure(string): View $build
      */
@@ -89,8 +100,8 @@ class MenuBuilderTest extends TestCase
             new Variant('second', 'Second'),
         ]);
 
-        $builder = new class($build) implements BuilderInterface {
-            public function __construct(private readonly \Closure $build)
+        $builder = new readonly class($build) implements BuilderInterface {
+            public function __construct(private \Closure $build)
             {
             }
 
@@ -105,7 +116,7 @@ class MenuBuilderTest extends TestCase
             }
         };
 
-        $defaultPath = \dirname(__DIR__).'/TestApplication/storia';
+        $defaultPath = __DIR__.'/../TestApplication/storia';
 
         return new MenuBuilder($defaultPath, new ViewBuilder($defaultPath, [$builder], new YamlPreProcessor()));
     }

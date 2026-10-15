@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
+use IQ2i\StoriaBundle\Command\ExportCommand;
 use IQ2i\StoriaBundle\Command\WatchCommand;
 use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
+use IQ2i\StoriaBundle\Export\AssetCollector;
+use IQ2i\StoriaBundle\Export\StaticExporter;
+use IQ2i\StoriaBundle\Export\UrlRewriter;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterUrlGenerator;
@@ -30,8 +34,10 @@ use IQ2i\StoriaBundle\View\ViewRenderer;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 final class IQ2iStoriaBundle extends AbstractBundle
@@ -51,6 +57,21 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     ->scalarPrototype()->end()
                     ->defaultValue(['%kernel.project_dir%/assets', '%kernel.project_dir%/templates'])
                 ->end()
+                ->arrayNode('export')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('output_dir')
+                            ->defaultValue('%kernel.project_dir%/var/storia/export')
+                        ->end()
+                        ->scalarNode('public_dir')
+                            ->defaultValue('%kernel.project_dir%/public')
+                        ->end()
+                        ->arrayNode('assets')
+                            ->scalarPrototype()->end()
+                            ->defaultValue([])
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
     }
 
@@ -61,6 +82,9 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
         $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
         $builder->setParameter('iq2i_storia.watch', $config['watch']);
+        $builder->setParameter('iq2i_storia.export.output_dir', $config['export']['output_dir']);
+        $builder->setParameter('iq2i_storia.export.public_dir', $config['export']['public_dir']);
+        $builder->setParameter('iq2i_storia.export.assets', $config['export']['assets']);
 
         $builder->register(ChangesController::class)
             ->addTag('controller.service_arguments')
@@ -74,6 +98,35 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 '%iq2i_storia.default_path%',
                 '%iq2i_storia.watch%',
                 '%kernel.project_dir%',
+            ]);
+
+        $builder->register(UrlRewriter::class);
+        $builder->register(AssetCollector::class)
+            ->setArguments([
+                '%iq2i_storia.export.public_dir%',
+                '%iq2i_storia.export.assets%',
+                new Reference('http_kernel'),
+                new Reference(UrlRewriter::class),
+                new Reference('iq2i_storia.filesystem'),
+                new Reference('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+            ]);
+        $builder->register('iq2i_storia.filesystem', Filesystem::class);
+        $builder->register(StaticExporter::class)
+            ->setArguments([
+                new Reference(ViewFinder::class),
+                new Reference(ViewBuilder::class),
+                new Reference(MenuBuilder::class),
+                new Reference(ViewRenderer::class),
+                new Reference(UrlRewriter::class),
+                new Reference(AssetCollector::class),
+                new Reference('iq2i_storia.filesystem'),
+                __DIR__.'/../public',
+            ]);
+        $builder->register(ExportCommand::class)
+            ->addTag('console.command')
+            ->setArguments([
+                new Reference(StaticExporter::class),
+                '%iq2i_storia.export.output_dir%',
             ]);
 
         $builder->register(IframeController::class)

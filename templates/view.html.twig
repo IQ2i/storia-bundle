@@ -91,7 +91,7 @@
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ urls.iframe(view.path, view.currentVariant.path) }}" data-controls-target="iframe" data-live-reload-target="iframe"></iframe>
+                                    <iframe src="{{ urls.iframe(view.path, view.currentVariant.path) }}" data-controls-target="iframe"{% if not static %} data-live-reload-target="iframe"{% endif %}></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>

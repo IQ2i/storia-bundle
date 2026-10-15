@@ -50,6 +50,10 @@ readonly class MenuBuilder
 
     private function getChildren(UrlGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants, Menu $menu, string $folder): void
     {
+        if (!is_dir($this->defaultPath.'/'.$folder)) {
+            return;
+        }
+
         $opened = false;
 
         /** @var SplFileInfo $file */

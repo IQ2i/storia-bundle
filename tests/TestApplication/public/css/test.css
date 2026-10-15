@@ -1,0 +1,9 @@
+@import "/css/imported.css";
+
+.storia-test {
+    background: url(/img/pixel.svg) no-repeat;
+}
+
+.storia-test-relative {
+    background: url("../img/relative.svg");
+}
