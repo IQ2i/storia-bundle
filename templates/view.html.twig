@@ -11,22 +11,7 @@
 
         <link rel="stylesheet" href="{{ urls.asset('storia.css') }}"/>
 
-        {% if static %}
-            <script src="{{ urls.asset('storia-static.js') }}"></script>
-        {% else %}
-            <script type="importmap">
-                {
-                    "imports": {
-                        "storia": "{{ urls.asset('storia.js') }}",
-                        "@hotwired/stimulus": "{{ urls.asset('vendor/stimulus/stimulus.js') }}",
-                        "highlight.js/lib/core": "{{ urls.asset('vendor/highlight.js/lib/core.js') }}",
-                        "highlight.js/lib/languages/twig": "{{ urls.asset('vendor/highlight.js/lib/languages/twig.js') }}",
-                        "highlight.js/lib/languages/xml": "{{ urls.asset('vendor/highlight.js/lib/languages/xml.js') }}"
-                    }
-                }
-            </script>
-            <script type="module">import 'storia';</script>
-        {% endif %}
+        <script src="{{ urls.asset('storia.js') }}" defer></script>
     </head>
 
     <body>

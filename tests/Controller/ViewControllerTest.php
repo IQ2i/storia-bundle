@@ -47,7 +47,7 @@ class ViewControllerTest extends WebTestCase
         $this->assertSame('/storia/components/avatar?variant=rounded', $crawler->filter('.menu_item a')->first()->attr('href'));
         $this->assertSelectorExists('.menu_item.active a[href="/storia/components/badge?variant=default"]');
         $this->assertSelectorExists('[data-controller~="live-reload"]');
-        $this->assertSelectorExists('script[type="importmap"]');
+        $this->assertSelectorExists('script[src="/bundles/iq2istoria/storia.js"]');
         $this->assertSelectorNotExists('.main__sidebar_notice');
     }
 

@@ -26,6 +26,16 @@
   }
 }
 
+.main__sidebar_notice {
+  margin-top: auto;
+  padding: 1rem 1.2rem;
+  border-radius: .6rem;
+  background: var(--color-primary-10);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
 .logo {
   display: flex;
   align-items: center;
