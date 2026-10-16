@@ -18,7 +18,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Shared data**: named data files in `storia/data`, with the `!data`, `!repeat` and `!lorem` tags, and PHP data providers with `!data Class::method`.
 - **Controls**: a tab to edit the arguments of the current variant and see the result, deduced from the component props, its PHP class or the `{% types %}` of a page.
 - **Variants as tests**: `storia:test` renders every variant and compares it with an HTML snapshot, `StoriaVariants` and `StoriaTestCaseTrait` bring it to PHPUnit.
-- **AI agents**: `storia:list` and `storia:render` commands, and a Claude Code skill in `skills/ui-storia`.
+- **AI agents**: `storia:list` and `storia:render` commands, and an agent skill in `skills/ui-storia`, discovered by Symfony Mate.
 - Custom variants for form views, with `options` and `with_errors`.
 - Documentation split into pages, comparison with Storybook and Fractal, getting started guide, YAML reference, compatibility policy.
 - Public demo built from the test application.
