@@ -22,6 +22,24 @@ use Twig\Environment;
 
 class FormBuilder extends AbstractBuilder
 {
+    /** A form always has these three variants, whatever its YAML file says. */
+    public const array VARIANTS = [
+        'default' => [
+            'options' => [],
+            'with_errors' => false,
+        ],
+        'disabled' => [
+            'options' => [
+                'disabled' => true,
+            ],
+            'with_errors' => false,
+        ],
+        'error' => [
+            'options' => [],
+            'with_errors' => true,
+        ],
+    ];
+
     public function __construct(
         string $defaultPath,
         Environment $twig,
@@ -38,22 +56,7 @@ class FormBuilder extends AbstractBuilder
 
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
-        $config['variants'] = [
-            'default' => [
-                'options' => [],
-                'with_errors' => false,
-            ],
-            'disabled' => [
-                'options' => [
-                    'disabled' => true,
-                ],
-                'with_errors' => false,
-            ],
-            'error' => [
-                'options' => [],
-                'with_errors' => true,
-            ],
-        ];
+        $config['variants'] = self::VARIANTS;
 
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];

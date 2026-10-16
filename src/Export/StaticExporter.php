@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Export;
 
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
+use IQ2i\StoriaBundle\Test\VariantRunner;
 use IQ2i\StoriaBundle\Url\StaticLinkGenerator;
-use IQ2i\StoriaBundle\View\Dto\Variant;
-use IQ2i\StoriaBundle\View\ViewBuilder;
-use IQ2i\StoriaBundle\View\ViewFinder;
+use IQ2i\StoriaBundle\View\Dto\View;
 use IQ2i\StoriaBundle\View\ViewRenderer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -27,8 +26,7 @@ readonly class StaticExporter
     public const string MARKER_FILE = '.storia-export';
 
     public function __construct(
-        private ViewFinder $viewFinder,
-        private ViewBuilder $viewBuilder,
+        private VariantRunner $variantRunner,
         private MenuBuilder $menuBuilder,
         private ViewRenderer $viewRenderer,
         private UrlRewriter $urlRewriter,
@@ -52,21 +50,21 @@ readonly class StaticExporter
         $exportedAt = new \DateTimeImmutable();
 
         $references = [];
-        $variantCount = 0;
-        foreach ($variantsByView as $path => $variants) {
-            foreach ($variants as $variant) {
-                try {
-                    $references[$path.':'.$variant] = $this->exportVariant($outputDir, $path, $variant, $firstVariants, $exportedAt);
-                } catch (\Throwable $e) {
-                    throw $e instanceof ExportException ? $e : ExportException::forView($path, $variant, $e);
-                }
-
-                ++$variantCount;
-                if (null !== $onProgress) {
-                    $onProgress($path, $variant);
-                }
+        $this->variantRunner->run($variantsByView, function (string $path, ?string $variant, ?View $view, ?\Throwable $error) use ($outputDir, $firstVariants, $exportedAt, $onProgress, &$references): void {
+            if (null !== $error || null === $view || null === $variant) {
+                throw $error instanceof ExportException ? $error : ExportException::forView($path, $variant, $error ?? new \LogicException('No view was built.'));
             }
-        }
+
+            try {
+                $references[$path.':'.$variant] = $this->exportVariant($outputDir, $view, $variant, $firstVariants, $exportedAt);
+            } catch (\Throwable $throwable) {
+                throw $throwable instanceof ExportException ? $throwable : ExportException::forView($path, $variant, $throwable);
+            }
+
+            if (null !== $onProgress) {
+                $onProgress($path, $variant);
+            }
+        });
 
         $this->writeIndex($outputDir, $firstVariants, $exportedAt);
 
@@ -78,7 +76,7 @@ readonly class StaticExporter
             throw new ExportException(\sprintf('Assets cannot be exported: %s', $e->getMessage()), 0, $e);
         }
 
-        return new ExportResult(\count($variantsByView), $variantCount, $assetCount);
+        return new ExportResult(\count($variantsByView), \count($references), $assetCount);
     }
 
     private function prepareOutputDirectory(string $outputDir): void
@@ -117,20 +115,17 @@ readonly class StaticExporter
     private function findVariants(): array
     {
         $variantsByView = [];
-        foreach ($this->viewFinder->findPaths() as $path) {
-            try {
-                $view = $this->viewBuilder->create($path, null);
-            } catch (\Throwable $e) {
-                throw ExportException::forView($path, null, $e);
+        foreach ($this->variantRunner->findVariants() as $path => $variants) {
+            if ($variants instanceof \Throwable) {
+                throw ExportException::forView($path, null, $variants);
             }
 
-            $variants = array_map(static fn (Variant $variant): string => $variant->getPath(), $view?->getVariants() ?? []);
             if ([] === $variants) {
                 throw new ExportException(\sprintf('View "%s" defines no variant, there is nothing to export.', $path));
             }
 
             foreach ($variants as $variant) {
-                if (!preg_match('/^[^\/\\\\\0.][^\/\\\\\0]*$/', $variant)) {
+                if (!preg_match(VariantRunner::SAFE_NAME, $variant)) {
                     throw new ExportException(\sprintf('Variant "%s:%s" cannot be exported, its name is not a valid file name.', $path, $variant));
                 }
             }
@@ -146,10 +141,9 @@ readonly class StaticExporter
      *
      * @return list<string>
      */
-    private function exportVariant(string $outputDir, string $path, string $variant, array $firstVariants, \DateTimeImmutable $exportedAt): array
+    private function exportVariant(string $outputDir, View $view, string $variant, array $firstVariants, \DateTimeImmutable $exportedAt): array
     {
-        $view = $this->viewBuilder->create($path, $variant) ?? throw new ExportException(\sprintf('View "%s" disappeared during the export.', $path));
-
+        $path = $view->getPath();
         $file = $path.'/'.$variant.'.html';
         $menu = $this->menuBuilder->createSidebarMenu(new StaticLinkGenerator($file), $path, $firstVariants);
         $this->filesystem->dumpFile(
