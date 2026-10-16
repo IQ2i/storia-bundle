@@ -81,7 +81,7 @@ class FormBuilder extends AbstractBuilder
 
         $variants = array_map(static fn (string $name): Variant => new Variant(
             $name,
-            Label::humanize($name),
+            $variantConfigs[$name]['name'] ?? Label::humanize($name),
             $variantPath === $name
         ), array_keys($variantConfigs));
 

@@ -1,6 +1,7 @@
 template: ui/progress.html.twig
 variants:
     small:
+        name: Tiny
         args:
             height: 1.5
 

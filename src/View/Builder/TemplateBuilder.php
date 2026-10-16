@@ -69,7 +69,7 @@ class TemplateBuilder extends AbstractBuilder
 
         $variants = array_map(static fn (string $name): Variant => new Variant(
             $name,
-            Label::humanize($name),
+            $config['variants'][$name]['name'] ?? Label::humanize($name),
             $variantPath === $name
         ), array_keys($config['variants']));
 
