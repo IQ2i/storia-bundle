@@ -524,9 +524,11 @@ Tags are resolved in the `args` and `blocks` of a variant, and in the `options` 
 
 UI Storia provides an **Argument Resolver** feature that allows you to dynamically generate arguments by calling PHP methods directly from your YAML configuration files.
 
-Instead of hardcoding values in your variant arguments, you can reference a PHP class method using the syntax `ClassName::methodName`. UI Storia will automatically detect this pattern and call the method to generate the argument value.
+Instead of hardcoding values in your variant arguments, you can reference a PHP class method with `!data ClassName::methodName`. UI Storia will call the method to generate the argument value.
 
-The bare `ClassName::methodName` string is the legacy syntax and is still accepted; `!data ClassName::methodName` is the recommended equivalent.
+:::important markdown-alert markdown-alert-important
+A bare `ClassName::methodName` string (without the `!data` tag) is still resolved, but this is deprecated since 0.6 and triggers a deprecation: any string matching the pattern was called, which is surprising for plain text. Add the `!data` tag.
+:::
 
 ##### How it works
 

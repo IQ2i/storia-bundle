@@ -9,13 +9,13 @@ variants:
 
   expensive:
     args:
-      product: IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createExpensive
+      product: !data IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createExpensive
     blocks:
       content: ''
 
   outOfStock:
     args:
-      product: IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createOutOfStock
+      product: !data IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createOutOfStock
     blocks:
       content: ''
 

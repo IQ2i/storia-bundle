@@ -148,6 +148,25 @@ class DataResolverTest extends TestCase
         $this->assertSame(ProductFactory::createStatic(), $this->resolver->resolve(['p' => ProductFactory::class.'::createStatic'])['p']);
     }
 
+    public function testBareClassMethodIsDeprecated(): void
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $errno, string $message) use (&$deprecations): bool {
+            $deprecations[] = $message;
+
+            return true;
+        }, \E_USER_DEPRECATED);
+
+        try {
+            $this->resolver->resolve(['p' => ProductFactory::class.'::createStatic']);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertCount(1, $deprecations);
+        $this->assertStringContainsString('use "!data '.ProductFactory::class.'::createStatic" instead', $deprecations[0]);
+    }
+
     public function testUnknownTag(): void
     {
         $this->expectException(\InvalidArgumentException::class);

@@ -56,6 +56,8 @@ readonly class DataResolver
         }
 
         if (\is_string($value) && preg_match(self::METHOD_PATTERN, $value)) {
+            trigger_deprecation('iq2i/storia-bundle', '0.6', 'Resolving the bare string "%s" as a PHP method reference is deprecated, use "!data %1$s" instead.', $value);
+
             return $this->argResolver->resolveReference($value);
         }
 
