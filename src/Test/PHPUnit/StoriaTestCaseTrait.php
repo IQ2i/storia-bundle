@@ -48,6 +48,7 @@ trait StoriaTestCaseTrait
 
     /**
      * A missing snapshot is written and the test is marked incomplete, so that it is reviewed and committed.
+     * On a CI runner (the CI environment variable is set) the written file would be lost, so the test fails instead.
      */
     protected function assertVariantMatchesSnapshot(string $path, string $variant): void
     {
@@ -55,6 +56,10 @@ trait StoriaTestCaseTrait
 
         $store = static::getContainer()->get(SnapshotStore::class);
         if (!$store->exists($path, $variant)) {
+            if (filter_var(getenv('CI'), \FILTER_VALIDATE_BOOL)) {
+                self::fail(\sprintf('Snapshot of "%s:%s" does not exist: run the test locally and commit the file.', $path, $variant));
+            }
+
             $store->write($path, $variant, $html);
             self::markTestIncomplete(\sprintf('Snapshot of "%s:%s" did not exist, it was written.', $path, $variant));
         }

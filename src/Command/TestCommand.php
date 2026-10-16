@@ -42,7 +42,8 @@ final class TestCommand extends Command
             ->addOption('filter', null, InputOption::VALUE_REQUIRED, 'Only test the views or variants whose "view:variant" name contains this text')
             ->addOption('update', null, InputOption::VALUE_NONE, 'Rewrite the snapshots that differ')
             ->addOption('no-snapshots', null, InputOption::VALUE_NONE, 'Only check that every variant renders')
-            ->addOption('snapshot-path', null, InputOption::VALUE_REQUIRED, 'Directory of the snapshots (default: iq2i_storia.test.snapshot_path)');
+            ->addOption('snapshot-path', null, InputOption::VALUE_REQUIRED, 'Directory of the snapshots (default: iq2i_storia.test.snapshot_path)')
+            ->addOption('ci', null, InputOption::VALUE_NONE, 'Fail on a missing snapshot instead of writing it (default when the CI environment variable is set)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,14 +53,22 @@ final class TestCommand extends Command
 
         $update = (bool) $input->getOption('update');
         $useSnapshots = !$input->getOption('no-snapshots');
+        $ci = $input->getOption('ci') || filter_var(getenv('CI'), \FILTER_VALIDATE_BOOL);
 
         $snapshotPath = $input->getOption('snapshot-path');
         $store = \is_string($snapshotPath) && '' !== $snapshotPath ? $this->snapshots->withPath($snapshotPath) : $this->snapshots;
 
         $variantsByView = $this->runner->findVariants($filter);
-        $counts = ['passed' => 0, 'new' => 0, 'updated' => 0, 'mismatched' => 0];
+        $counts = ['passed' => 0, 'new' => 0, 'updated' => 0, 'mismatched' => 0, 'missing' => 0, 'empty' => 0];
 
-        $result = $this->runner->run($variantsByView, function (string $path, ?string $variant, ?View $view, ?\Throwable $error) use ($output, $store, $update, $useSnapshots, &$counts): void {
+        foreach ($variantsByView as $path => $variants) {
+            if ([] === $variants) {
+                ++$counts['empty'];
+                $output->writeln(\sprintf('<comment>? %s (no variant, nothing to test)</comment>', $path));
+            }
+        }
+
+        $result = $this->runner->run($variantsByView, function (string $path, ?string $variant, ?View $view, ?\Throwable $error) use ($output, $store, $update, $useSnapshots, $ci, &$counts): void {
             $name = $path.(null === $variant ? '' : ':'.$variant);
 
             if (null !== $error) {
@@ -81,6 +90,15 @@ final class TestCommand extends Command
 
             $html = SnapshotNormalizer::normalize((string) $view->getHtmlContent());
             if (!$store->exists($path, $variant)) {
+                // A snapshot written on a CI runner is lost, the variant would never be compared
+                if ($ci) {
+                    ++$counts['missing'];
+                    $output->writeln(\sprintf('<error>✗ %s</error>', $name));
+                    $output->writeln('    No snapshot: run storia:test locally and commit the file.');
+
+                    return;
+                }
+
                 $store->write($path, $variant, $html);
                 ++$counts['new'];
                 $output->writeln(\sprintf('<comment>+ %s (new snapshot)</comment>', $name));
@@ -124,7 +142,7 @@ final class TestCommand extends Command
             }
         }
 
-        $failed = \count($result->failures) + $counts['mismatched'];
+        $failed = \count($result->failures) + $counts['mismatched'] + $counts['missing'] + ($ci ? $counts['empty'] : 0);
         $output->writeln('');
         $output->writeln(\sprintf(
             '%d variants, %d passed, %d new, %d updated, %d failed',
