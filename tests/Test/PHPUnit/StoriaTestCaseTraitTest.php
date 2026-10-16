@@ -82,8 +82,8 @@ class StoriaTestCaseTraitTest extends KernelTestCase
         try {
             $this->assertVariantMatchesSnapshot('components/badge', 'default');
             self::fail('The test should be incomplete.');
-        } catch (IncompleteTestError $e) {
-            self::assertStringContainsString('did not exist, it was written', $e->getMessage());
+        } catch (IncompleteTestError $incompleteTestError) {
+            self::assertStringContainsString('did not exist, it was written', $incompleteTestError->getMessage());
         }
 
         self::assertTrue($store->exists('components/badge', 'default'));
@@ -97,8 +97,8 @@ class StoriaTestCaseTraitTest extends KernelTestCase
         try {
             $this->assertVariantMatchesSnapshot('components/badge', 'default');
             self::fail('The test should fail.');
-        } catch (AssertionFailedError $e) {
-            self::assertStringContainsString('run the test locally and commit the file', $e->getMessage());
+        } catch (AssertionFailedError $assertionFailedError) {
+            self::assertStringContainsString('run the test locally and commit the file', $assertionFailedError->getMessage());
         }
 
         self::assertFalse($store->exists('components/badge', 'default'));
