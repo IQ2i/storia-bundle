@@ -40,7 +40,8 @@
             <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
             <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %} data-resize-target="panelB">
-                {% if view is not null %}
+                {% set previewable = view is not null and view.currentVariant is not null %}
+                {% if previewable %}
                     {% set iframe_url = urls.iframe(view.path, view.currentVariant.path) %}
                     {% if view.overrides is not empty %}
                         {% set iframe_url = iframe_url ~ '&overrides=' ~ (view.overrides|json_encode|url_encode) %}
@@ -93,7 +94,7 @@
                 {% endif %}
 
                 <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
-                    {% if view is not null %}
+                    {% if previewable %}
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">

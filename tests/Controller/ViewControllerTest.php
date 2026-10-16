@@ -28,6 +28,15 @@ class ViewControllerTest extends WebTestCase
         $this->assertCount(3, $crawler->filter('main > div > div > .tabs > .tabs__item'));
     }
 
+    public function testViewWithoutAnyVariantIsRenderedWithoutPreview(): void
+    {
+        $client = static::createClient(['environment' => 'empty_view']);
+        $crawler = $client->request('GET', '/storia/components/empty');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(0, $crawler->filter('iframe'));
+    }
+
     public function testViewWithoutVariantRedirectsToTheFirstOne(): void
     {
         $client = static::createClient();
