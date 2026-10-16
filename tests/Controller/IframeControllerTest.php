@@ -54,6 +54,15 @@ class IframeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('ul.products', 'Product 4');
     }
 
+    public function testBlockUsingLoremTag(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/button/button?variant=lorem');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('button', 'lorem ipsum dolor');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

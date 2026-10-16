@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Command\ExportCommand;
 use IQ2i\StoriaBundle\Command\WatchCommand;
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
@@ -180,6 +181,8 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->addTag('twig.extension')
             ->setArguments([
                 '%iq2i_storia.default_path%',
+                new Reference(YamlPreProcessor::class),
+                new Reference(DataResolver::class),
             ]);
     }
 

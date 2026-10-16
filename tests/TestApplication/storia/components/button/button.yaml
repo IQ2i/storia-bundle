@@ -28,3 +28,7 @@ variants:
                 position: right
         blocks:
             content: Choose plan
+
+    lorem:
+        blocks:
+            content: !lorem 3
