@@ -1,3 +1,8 @@
 form: Symfony\Component\Form\Extension\Core\Type\ChoiceType
 options:
     choices: !data stock_choices
+
+variants:
+    preselected:
+        options:
+            data: true

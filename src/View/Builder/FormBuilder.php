@@ -56,17 +56,17 @@ class FormBuilder extends AbstractBuilder
 
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
-        $config['variants'] = self::VARIANTS;
+        $variantConfigs = array_replace(self::VARIANTS, $config['variants'] ?? []);
 
-        if (null !== $variantPath && isset($config['variants'][$variantPath])) {
-            $variantConfig = $config['variants'][$variantPath];
+        if (null !== $variantPath && isset($variantConfigs[$variantPath])) {
+            $variantConfig = $variantConfigs[$variantPath];
 
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $variantConfig['options'], $this->dataResolver->resolve($config['options'])));
+            ], $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
 
-            if ($variantConfig['with_errors']) {
+            if ($variantConfig['with_errors'] ?? false) {
                 $form->addError(new FormError('Error message'));
                 $form->submit([]);
             }
@@ -82,7 +82,7 @@ class FormBuilder extends AbstractBuilder
             $name,
             ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name)))),
             $variantPath === $name
-        ), array_keys($config['variants']));
+        ), array_keys($variantConfigs));
 
         return new View(
             $path,

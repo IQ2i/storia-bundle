@@ -78,6 +78,25 @@ class IframeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('select', 'Out of Stock');
     }
 
+    public function testCustomFormVariantOverridesTheOptions(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/form/choice?variant=preselected');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('option[selected]', 'In Stock');
+    }
+
+    public function testCustomFormVariantsKeepTheAutomaticOnes(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/form/choice?variant=preselected');
+
+        $this->assertResponseIsSuccessful();
+        $labels = $crawler->filter('header > .tabs > .tabs__item')->each(static fn ($node) => trim($node->text()));
+        $this->assertSame(['Default', 'Disabled', 'Error', 'Preselected'], $labels);
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

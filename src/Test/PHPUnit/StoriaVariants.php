@@ -45,7 +45,8 @@ final class StoriaVariants
         $dataSets = [];
         foreach ((new ViewFinder($storiaPath))->findPaths() as $path) {
             $config = $preProcessor->process($storiaPath, $path);
-            $variants = \array_key_exists('form', $config) ? array_keys(FormBuilder::VARIANTS) : array_map(self::normalizeName(...), array_keys($config['variants'] ?? []));
+            $declared = array_map(self::normalizeName(...), array_keys($config['variants'] ?? []));
+            $variants = \array_key_exists('form', $config) ? array_unique([...array_keys(FormBuilder::VARIANTS), ...$declared]) : $declared;
 
             foreach ($variants as $variant) {
                 $name = $path.':'.$variant;

@@ -46,6 +46,13 @@ class ViewConfiguration implements ConfigurationInterface
                             ->arrayNode('blocks')
                                 ->variablePrototype()->end()
                             ->end()
+                            ->variableNode('options')
+                                ->validate()
+                                    ->ifTrue(static fn ($v) => !\is_array($v))
+                                    ->thenInvalid('"options" must be a map of form options.')
+                                ->end()
+                            ->end()
+                            ->booleanNode('with_errors')->end()
                         ->end()
                     ->end()
                 ->end()
@@ -70,8 +77,12 @@ class ViewConfiguration implements ConfigurationInterface
                 ->thenInvalid('Form support cannot be enabled as the Symfony Form package is not installed. Try running "composer require symfony/form".')
             ->end()
             ->validate()
-                ->ifTrue(static fn ($v) => isset($v['form']) && !empty($v['variants']))
-                ->thenInvalid('You can not define variants for the form view.')
+                ->ifTrue(static fn ($v) => isset($v['form']) && self::anyVariantHas($v['variants'] ?? [], ['args', 'blocks']))
+                ->thenInvalid('"args" and "blocks" are not allowed in the variants of a form view, use "options" and "with_errors".')
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v) => !isset($v['form']) && self::anyVariantHas($v['variants'] ?? [], ['options', 'with_errors']))
+                ->thenInvalid('"options" and "with_errors" are allowed in the variants of a form view only.')
             ->end()
             ->validate()
                 ->ifTrue(static fn ($v) => (isset($v['template']) || isset($v['component'])) && !empty($v['options']))
@@ -93,6 +104,25 @@ class ViewConfiguration implements ConfigurationInterface
         ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * "args" and "blocks" always exist in a normalized variant, so only a non-empty value counts as set.
+     *
+     * @param array<array-key, array<string, mixed>> $variants
+     * @param list<string>                           $keys
+     */
+    private static function anyVariantHas(array $variants, array $keys): bool
+    {
+        foreach ($variants as $variant) {
+            foreach ($keys as $key) {
+                if (!empty($variant[$key]) || (\in_array($key, ['options', 'with_errors'], true) && \array_key_exists($key, $variant))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private function findUnknownTag(mixed $value): ?string
