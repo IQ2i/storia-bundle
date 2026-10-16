@@ -28,6 +28,7 @@ use IQ2i\StoriaBundle\Export\AssetCollector;
 use IQ2i\StoriaBundle\Export\StaticExporter;
 use IQ2i\StoriaBundle\Export\UrlRewriter;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
+use IQ2i\StoriaBundle\Test\VariantRunner;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
@@ -114,10 +115,14 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 new Reference('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE),
             ]);
         $builder->register('iq2i_storia.filesystem', Filesystem::class);
-        $builder->register(StaticExporter::class)
+        $builder->register(VariantRunner::class)
             ->setArguments([
                 new Reference(ViewFinder::class),
                 new Reference(ViewBuilder::class),
+            ]);
+        $builder->register(StaticExporter::class)
+            ->setArguments([
+                new Reference(VariantRunner::class),
                 new Reference(MenuBuilder::class),
                 new Reference(ViewRenderer::class),
                 new Reference(UrlRewriter::class),
