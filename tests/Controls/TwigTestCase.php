@@ -19,12 +19,22 @@ use Symfony\UX\TwigComponent\Twig\PropsTokenParser;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Loader\ArrayLoader;
+use Twig\Node\Node;
 use Twig\TokenParser\TokenParserInterface;
 
 abstract class TwigTestCase extends TestCase
 {
+    public static function requireDocumentationComments(): void
+    {
+        if (!method_exists(Node::class, 'getDocumentation')) {
+            self::markTestSkipped('Documentation comments need Twig 3.29.');
+        }
+    }
+
     public static function requirePropDocumentation(): void
     {
+        self::requireDocumentationComments();
+
         if (!method_exists(PropsNode::class, 'getPropDocumentation')) {
             self::markTestSkipped('Prop documentation needs ux-twig-component 3.5.');
         }

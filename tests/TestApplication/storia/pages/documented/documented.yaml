@@ -1,0 +1,6 @@
+template: pages/documented.html.twig
+
+variants:
+    default:
+        args:
+            message: A documented page

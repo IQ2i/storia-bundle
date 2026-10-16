@@ -34,7 +34,7 @@ readonly class ComponentIntrospector
     public function props(ComponentMetadata $metadata): array
     {
         $props = $this->propsExtractor->extract($metadata->getTemplate());
-        if ($metadata->isAnonymous()) {
+        if (null === $metadata->get('class')) {
             return $props;
         }
 
@@ -80,7 +80,7 @@ readonly class ComponentIntrospector
      */
     public function exposedNames(ComponentMetadata $metadata): array
     {
-        if ($metadata->isAnonymous()) {
+        if (null === $metadata->get('class')) {
             return [];
         }
 

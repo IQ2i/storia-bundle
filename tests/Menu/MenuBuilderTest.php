@@ -44,7 +44,7 @@ class MenuBuilderTest extends TestCase
         $this->assertFalse($badge->isActive());
 
         $pages = $menu->getChildren()[1];
-        $this->assertCount(2, $pages->getChildren());
+        $this->assertCount(3, $pages->getChildren());
     }
 
     public function testActiveItemOpensItsParents(): void

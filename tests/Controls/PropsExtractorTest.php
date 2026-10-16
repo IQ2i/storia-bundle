@@ -96,6 +96,8 @@ class PropsExtractorTest extends TwigTestCase
 
     public function testTypesOfATemplate(): void
     {
+        self::requireDocumentationComments();
+
         $extractor = new PropsExtractor($this->createTwig([]));
 
         $types = $extractor->types("{% types {\n ## The message @control textarea\n message: 'string',\n columns?: 'number',\n} %}<p>{{ message }}</p>");
@@ -114,6 +116,8 @@ class PropsExtractorTest extends TwigTestCase
 
     public function testTypesOfAChildTemplate(): void
     {
+        self::requireDocumentationComments();
+
         $extractor = new PropsExtractor($this->createTwig(['base.html.twig' => '{% block body %}{% endblock %}']));
 
         $types = $extractor->types("{% extends 'base.html.twig' %}{% types { message: 'string' } %}{% block body %}{{ message }}{% endblock %}");

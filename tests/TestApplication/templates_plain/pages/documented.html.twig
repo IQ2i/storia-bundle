@@ -1,0 +1,5 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <p data-columns="{{ columns|default(1) }}">{{ message }}</p>
+{% endblock %}

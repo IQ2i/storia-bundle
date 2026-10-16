@@ -512,7 +512,7 @@ public function mount(string $message, int $delay = 5): void
 A widget that does not fit the value, such as a `range` on a string, is ignored and the control says so.
 For an enum, `select` and `radio` only pick the widget: the choices stay the cases of the enum.
 
-Documentation comments in `{% props %}` need Twig 3.29 and symfony/ux-twig-component 3.5; in `{% types %}` they only need Twig 3.29. Below these versions the controls are still deduced, without description nor `@control`.
+Documentation comments need Twig 3.29: before that version, a `##` comment inside a tag is a syntax error, so only write them once your project runs Twig 3.29 or later. Reading them from `{% props %}` also needs symfony/ux-twig-component 3.5; with an older version the controls are still deduced, without description nor `@control`.
 
 Changes are **never written to disk**. They are kept in the `overrides` query parameter of the URL, so reloading the page or sharing the link keeps them, and the **Reset** button removes them.
 To keep a state, click **Copy variant YAML** and paste the result in your YAML file. Values coming from `!data` or from a PHP data provider are copied once resolved, as literal values.

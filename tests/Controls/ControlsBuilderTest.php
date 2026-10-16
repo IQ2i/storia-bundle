@@ -69,6 +69,8 @@ class ControlsBuilderTest extends TwigTestCase
 
     public function testTemplateTypesDeclareAndDocumentTheArgs(): void
     {
+        self::requireDocumentationComments();
+
         $code = "{% types {\n ## The message @control textarea\n message: 'string',\n ## Columns @control range min=1 max=4\n columns?: 'number',\n flag: 'boolean',\n} %}<p>{{ message }}</p>";
 
         $controls = $this->byName($this->builder->forTemplate(['message' => 'Hi', 'extra' => 1], $code));

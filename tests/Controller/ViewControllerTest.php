@@ -109,8 +109,14 @@ class ViewControllerTest extends WebTestCase
         $this->assertSame('Saved', $crawler->filter('#control-message')->attr('value'));
         $this->assertSelectorExists('#control-delay[type="range"][min="1"][max="30"][value="5"]');
         $this->assertSelectorTextContains('.controls__badge--class', 'class');
+    }
 
-        $crawler = $client->request('GET', '/storia/pages/homepage/homepage?variant=default');
+    public function testControlsOfTheTypesOfAPage(): void
+    {
+        TwigTestCase::requireDocumentationComments();
+
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/pages/documented/documented?variant=default');
 
         $this->assertSame(['message', 'columns'], $crawler->filter('#controls [data-variant-controls-target="field"]')->each(static fn ($field): string => $field->attr('data-name')));
         $this->assertSame('textarea', $crawler->filter('#control-message')->attr('data-type'));

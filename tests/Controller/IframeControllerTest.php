@@ -98,6 +98,8 @@ class IframeControllerTest extends WebTestCase
 
     public function testOverridesApplyToAnAnonymousComponent(): void
     {
+        TwigTestCase::requirePropDocumentation();
+
         $crawler = $this->requestWithOverrides('card', ['title' => 'Hello', 'count' => 7, 'highlighted' => true, 'accent' => '#FF0000', 'align' => 'center']);
 
         $this->assertResponseIsSuccessful();
@@ -128,8 +130,10 @@ class IframeControllerTest extends WebTestCase
 
     public function testOverridesApplyToTheTypesOfAPage(): void
     {
+        TwigTestCase::requirePropDocumentation();
+
         $this->client ??= static::createClient();
-        $crawler = $this->client->request('GET', '/storia/iframe/pages/homepage/homepage?variant=default&overrides='.rawurlencode((string) json_encode(['message' => "Two\nlines", 'columns' => 3])));
+        $crawler = $this->client->request('GET', '/storia/iframe/pages/documented/documented?variant=default&overrides='.rawurlencode((string) json_encode(['message' => "Two\nlines", 'columns' => 3])));
 
         $this->assertResponseIsSuccessful();
         $this->assertSame("Two\nlines", $crawler->filter('p[data-columns="3"]')->text(normalizeWhitespace: false));
