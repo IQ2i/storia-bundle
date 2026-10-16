@@ -37,6 +37,23 @@ class IframeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('body > p', 'This is the homepage hero');
     }
 
+    public function testSharedMenuFeedsComponentAndPage(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/storia/iframe/components/header?variant=default');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav', 'Home');
+        $this->assertSelectorTextContains('nav', 'Shop');
+
+        $client->request('GET', '/storia/iframe/pages/home/home?variant=default');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav', 'Home');
+        $this->assertSelectorTextContains('nav', 'Shop');
+        $this->assertCount(4, $client->getCrawler()->filter('ul.products li'));
+        $this->assertSelectorTextContains('ul.products', 'Product 4');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

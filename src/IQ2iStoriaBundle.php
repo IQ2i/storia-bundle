@@ -18,6 +18,7 @@ use IQ2i\StoriaBundle\Command\WatchCommand;
 use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
+use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
 use IQ2i\StoriaBundle\Export\AssetCollector;
@@ -27,7 +28,6 @@ use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
-use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use IQ2i\StoriaBundle\View\ViewFinder;
 use IQ2i\StoriaBundle\View\ViewRenderer;
@@ -166,7 +166,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     new Reference('twig'),
                     new Reference('ux.twig_component.component_template_finder'),
                     new Reference('ux.twig_component.component_factory'),
-                    new Reference(ArgResolver::class),
+                    new Reference(DataResolver::class),
                 ]);
         }
 

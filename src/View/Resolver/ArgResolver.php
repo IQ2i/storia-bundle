@@ -42,6 +42,20 @@ readonly class ArgResolver
     }
 
     /**
+     * Calls a single "ClassName::methodName" reference.
+     *
+     * @throws \InvalidArgumentException If the reference is malformed
+     */
+    public function resolveReference(string $reference): mixed
+    {
+        if (!preg_match(self::METHOD_PATTERN, $reference, $matches)) {
+            throw new \InvalidArgumentException(\sprintf('Invalid reference "%s": expected "ClassName::methodName".', $reference));
+        }
+
+        return $this->callMethod($matches[1], $matches[2], $reference);
+    }
+
+    /**
      * Recursively resolves a value, handling arrays and method references.
      */
     private function resolveValue(mixed $value): mixed

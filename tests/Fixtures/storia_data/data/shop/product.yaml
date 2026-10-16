@@ -1,0 +1,3 @@
+default: { name: Chair, price: 49, inStock: true }
+expensive: !data { ref: shop/product.default, with: { price: 999 } }
+nested: !data shop/product.expensive

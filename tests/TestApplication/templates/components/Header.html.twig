@@ -1,0 +1,9 @@
+{% props menu %}
+
+<nav {{ attributes }}>
+    <ul>
+        {% for item in menu.items %}
+            <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>

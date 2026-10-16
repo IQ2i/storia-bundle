@@ -1,0 +1,6 @@
+products: !repeat
+  count: 4
+  item:
+    name: 'Product {i}'
+    price: 19.99
+    description: !lorem 6

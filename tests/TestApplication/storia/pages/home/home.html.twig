@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <nav>
+        {% for item in menu.items %}
+            <a href="{{ item.url }}">{{ item.label }}</a>
+        {% endfor %}
+    </nav>
+
+    <ul class="products">
+        {% for product in products %}
+            <li>{{ product.name }} - {{ product.price }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

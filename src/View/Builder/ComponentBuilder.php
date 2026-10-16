@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
+use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
-use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\ComponentFactory;
@@ -29,7 +29,7 @@ class ComponentBuilder extends AbstractBuilder
         Environment $twig,
         private readonly ComponentTemplateFinderInterface $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
-        private readonly ArgResolver $argResolver,
+        private readonly DataResolver $dataResolver,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -50,8 +50,13 @@ class ComponentBuilder extends AbstractBuilder
 
             $componentProperties = array_values($this->getComponentProperties($template));
 
-            // Resolve args with ArgResolver
-            $resolvedArgs = $this->argResolver->resolve($variantConfig['args']);
+            $resolvedArgs = $this->dataResolver->resolve($variantConfig['args']);
+            $resolvedBlocks = $this->dataResolver->resolve($variantConfig['blocks']);
+            foreach ($resolvedBlocks as $blockName => $block) {
+                if (!\is_string($block)) {
+                    throw new \LogicException(\sprintf('Block "%s" of component "%s" must resolve to a string, got %s.', $blockName, $path, get_debug_type($block)));
+                }
+            }
 
             $variantArgs = [];
             foreach ($resolvedArgs as $argName => $argValue) {
@@ -69,7 +74,7 @@ class ComponentBuilder extends AbstractBuilder
             $parameters = [
                 'template' => str_replace('/', ':', (string) $template),
                 'args' => $variantArgs,
-                'blocks' => $variantConfig['blocks'],
+                'blocks' => $resolvedBlocks,
             ];
 
             if (isset($parameters['blocks']['content'])) {

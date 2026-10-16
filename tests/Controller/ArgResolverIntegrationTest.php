@@ -53,6 +53,28 @@ class ArgResolverIntegrationTest extends WebTestCase
         $this->assertStringContainsString('Out of Stock', $content);
     }
 
+    public function testComponentWithDataTagFromFile(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/components/product?variant=from_data');
+
+        $this->assertResponseIsSuccessful();
+        $content = $client->getResponse()->getContent();
+        $this->assertStringContainsString('Chair', $content);
+        $this->assertStringContainsString('999', $content);
+    }
+
+    public function testComponentWithPhpDataTag(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/components/product?variant=php_tag');
+
+        $this->assertResponseIsSuccessful();
+        $content = $client->getResponse()->getContent();
+        $this->assertStringContainsString('Test Product', $content);
+        $this->assertStringContainsString('29.99', $content);
+    }
+
     public function testComponentWithStaticArgsStillWorks(): void
     {
         $client = static::createClient();
