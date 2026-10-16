@@ -15,6 +15,8 @@ namespace IQ2i\StoriaBundle\Data;
 
 /**
  * Deterministic filler text: the same spec always yields the same output.
+ *
+ * @internal
  */
 final class LoremIpsum
 {

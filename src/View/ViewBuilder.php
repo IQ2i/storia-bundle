@@ -21,6 +21,9 @@ use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @internal
+ */
 readonly class ViewBuilder
 {
     public function __construct(

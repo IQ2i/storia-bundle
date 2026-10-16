@@ -26,6 +26,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @internal
+ */
 #[AsCommand(name: 'storia:test', description: 'Render every variant and compare it with its HTML snapshot')]
 final class TestCommand extends Command
 {

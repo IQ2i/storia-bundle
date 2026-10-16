@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Data\Exception;
 
+/**
+ * @internal
+ */
 class DataNotFoundException extends \RuntimeException
 {
 }

@@ -15,6 +15,8 @@ namespace IQ2i\StoriaBundle\Test\Snapshot;
 
 /**
  * Only line endings and trailing whitespace are normalized: reformatting the HTML would hide real regressions.
+ *
+ * @internal
  */
 final class SnapshotNormalizer
 {

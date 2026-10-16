@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\View\Dto\View;
 
+/**
+ * @internal
+ */
 interface BuilderInterface
 {
     public function supports(string $path, array $config): bool;

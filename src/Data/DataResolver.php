@@ -20,6 +20,8 @@ use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
  * Resolves the "!data", "!repeat" and "!lorem" tags, and legacy bare "Class::method" strings.
+ *
+ * @internal
  */
 readonly class DataResolver
 {

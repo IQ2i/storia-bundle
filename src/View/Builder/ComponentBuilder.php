@@ -23,6 +23,9 @@ use Symfony\UX\TwigComponent\ComponentFactory;
 use Symfony\UX\TwigComponent\ComponentTemplateFinderInterface;
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 class ComponentBuilder extends AbstractBuilder
 {
     public function __construct(

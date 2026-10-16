@@ -16,6 +16,9 @@ namespace IQ2i\StoriaBundle\Url;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @internal
+ */
 readonly class RouterLinkGenerator implements LinkGeneratorInterface
 {
     public function __construct(

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Menu\Dto;
 
+/**
+ * @internal
+ */
 class Menu
 {
     public function __construct(

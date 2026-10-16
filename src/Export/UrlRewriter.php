@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Export;
 
+/**
+ * @internal
+ */
 readonly class UrlRewriter
 {
     private const string ASSET_TAGS = 'link|script|img|source|video|audio|track|embed|input|object';

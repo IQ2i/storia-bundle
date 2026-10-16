@@ -19,6 +19,9 @@ use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 readonly class ViewRenderer
 {
     public function __construct(

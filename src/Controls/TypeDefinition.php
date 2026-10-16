@@ -15,6 +15,8 @@ namespace IQ2i\StoriaBundle\Controls;
 
 /**
  * A variable declared by the {% types %} tag of a template.
+ *
+ * @internal
  */
 final readonly class TypeDefinition
 {

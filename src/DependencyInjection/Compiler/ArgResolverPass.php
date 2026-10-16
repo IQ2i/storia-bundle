@@ -22,6 +22,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 
+/**
+ * @internal
+ */
 class ArgResolverPass implements CompilerPassInterface
 {
     private const string METHOD_PATTERN = '/^([a-zA-Z_\\\\][a-zA-Z0-9_\\\\]*)::[\w]+$/';

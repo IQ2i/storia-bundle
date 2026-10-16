@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\Controls;
 
 use Symfony\UX\TwigComponent\ComponentMetadata;
 
+/**
+ * @internal
+ */
 readonly class ControlsBuilder
 {
     private const string NAME_PATTERN = '/^[A-Za-z_][A-Za-z0-9_-]*$/';

@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
+/**
+ * @internal
+ */
 readonly class AssetCollector
 {
     private const string BUNDLE_URL_PREFIX = '/bundles/iq2istoria/';

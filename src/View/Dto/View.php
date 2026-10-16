@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\View\Dto;
 
 use IQ2i\StoriaBundle\Controls\Control;
 
+/**
+ * @internal
+ */
 readonly class View
 {
     public function __construct(

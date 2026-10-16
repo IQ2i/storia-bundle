@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controls;
 
+/**
+ * @internal
+ */
 final class ControlFactory
 {
     /** Above this JSON size an array is displayed but not edited: it is data, not a prop to play with. */

@@ -18,6 +18,8 @@ use Symfony\UX\TwigComponent\ComponentMetadata;
 
 /**
  * Everything a component declares, read from its template and its PHP class without instantiating it.
+ *
+ * @internal
  */
 readonly class ComponentIntrospector
 {

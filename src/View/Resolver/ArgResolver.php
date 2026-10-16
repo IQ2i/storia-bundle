@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\View\Resolver;
 
 use Psr\Container\ContainerInterface;
 
+/**
+ * @internal
+ */
 readonly class ArgResolver
 {
     private const string METHOD_PATTERN = '/^([a-zA-Z_\\\\][a-zA-Z0-9_\\\\]*)::([\w]+)$/';
