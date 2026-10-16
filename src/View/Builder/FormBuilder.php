@@ -36,7 +36,7 @@ class FormBuilder extends AbstractBuilder
         return \array_key_exists('form', $config) && class_exists($config['form']);
     }
 
-    public function build(string $path, ?string $variantPath, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $config['variants'] = [
             'default' => [

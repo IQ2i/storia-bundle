@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['iframe'];
+    static targets = ['iframe', 'iframeLink'];
     static values = {
         scale: { type: Number, default: 1 },
     };
@@ -12,6 +12,16 @@ export default class extends Controller {
         } catch {
             // cross-origin under file://
             this.iframeTarget.src = this.iframeTarget.src;
+        }
+    }
+
+    preview(url) {
+        if (this.hasIframeTarget) {
+            this.iframeTarget.src = url;
+        }
+
+        if (this.hasIframeLinkTarget) {
+            this.iframeLinkTarget.href = url;
         }
     }
 

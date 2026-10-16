@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle\View;
 
 use IQ2i\StoriaBundle\Config\ViewConfiguration;
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
+use IQ2i\StoriaBundle\Controls\OverridesParser;
 use IQ2i\StoriaBundle\View\Builder\BuilderInterface;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Config\Definition\Processor;
@@ -36,10 +37,13 @@ readonly class ViewBuilder
             return null;
         }
 
-        return $this->create($path, $request->query->get('variant'));
+        return $this->create($path, $request->query->get('variant'), OverridesParser::fromRequest($request));
     }
 
-    public function create(string $path, ?string $variant): ?View
+    /**
+     * @param array<string, mixed> $overrides
+     */
+    public function create(string $path, ?string $variant, array $overrides = []): ?View
     {
         if (null === $this->yamlPreProcessor->resolveFilePath($this->defaultPath, $path)) {
             return null;
@@ -53,7 +57,7 @@ readonly class ViewBuilder
         /** @var BuilderInterface $builder */
         foreach ($this->builders as $builder) {
             if ($builder->supports($path, $config)) {
-                return $builder->build($path, $variant, $config);
+                return $builder->build($path, $variant, $config, $overrides);
             }
         }
 

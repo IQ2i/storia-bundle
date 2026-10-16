@@ -19,5 +19,8 @@ interface BuilderInterface
 {
     public function supports(string $path, array $config): bool;
 
-    public function build(string $path, ?string $variantPath, array $config): ?View;
+    /**
+     * @param array<string, mixed> $overrides literal values replacing the resolved args of the variant
+     */
+    public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View;
 }

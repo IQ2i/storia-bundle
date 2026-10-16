@@ -31,7 +31,7 @@ class MenuBuilderTest extends TestCase
         $this->assertCount(2, $menu->getChildren());
 
         $components = $menu->getChildren()[0];
-        $this->assertCount(9, $components->getChildren());
+        $this->assertCount(13, $components->getChildren());
 
         $avatar = $components->getChildren()[0];
         $this->assertEquals('Avatar', $avatar->getLabel());
@@ -44,7 +44,7 @@ class MenuBuilderTest extends TestCase
         $this->assertFalse($badge->isActive());
 
         $pages = $menu->getChildren()[1];
-        $this->assertCount(2, $pages->getChildren());
+        $this->assertCount(3, $pages->getChildren());
     }
 
     public function testActiveItemOpensItsParents(): void
@@ -110,7 +110,7 @@ class MenuBuilderTest extends TestCase
                 return true;
             }
 
-            public function build(string $path, ?string $variantPath, array $config): ?View
+            public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
             {
                 return ($this->build)($path);
             }

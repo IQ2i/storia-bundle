@@ -1,0 +1,7 @@
+{% props items = ['a', 'b'], shouted = 'x'|upper %}
+
+<ul class="teaser" data-shouted="{{ shouted }}">
+    {% for item in items %}
+        <li>{{ item }}</li>
+    {% endfor %}
+</ul>

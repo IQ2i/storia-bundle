@@ -1,0 +1,6 @@
+{% props title = 'Card title', count = 3, highlighted = false %}
+
+<article class="card{{ highlighted ? ' card--highlighted' : '' }}">
+    <h2>{{ title }}</h2>
+    <p class="count">{{ count }}</p>
+</article>

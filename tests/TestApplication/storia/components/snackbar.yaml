@@ -1,0 +1,6 @@
+component: Snackbar
+
+variants:
+  default:
+    args:
+      message: Saved

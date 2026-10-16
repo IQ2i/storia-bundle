@@ -1,0 +1,91 @@
+{# @var view \IQ2i\StoriaBundle\View\Dto\View #}
+{% set json_flags = constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE') %}
+
+{% macro field_attributes(control) %}
+    id="control-{{ control.name }}" name="{{ control.name }}" data-variant-controls-target="field" data-name="{{ control.name }}" data-type="{{ control.type }}" data-in-yaml="{{ control.inYaml ? '1' : '0' }}"
+    {%- if control.editable %} data-initial-value="{{ control.value|json_encode }}"{% else %} disabled{% endif %}
+{% endmacro %}
+
+<div id="controls" class="group" data-tab-target="tabPanel">
+    {% if static %}
+        <p class="controls__notice">Interactive controls are not available in the static export.</p>
+    {% else %}
+        <form class="controls"
+              data-controller="variant-controls"
+              data-variant-controls-iframe-url-value="{{ urls.iframe(view.path, view.currentVariant.path) }}"
+              data-variant-controls-variant-value="{{ view.currentVariant.path }}"
+              data-variant-controls-controls-outlet=".main__content"
+              data-action="input->variant-controls#schedule change->variant-controls#schedule submit->variant-controls#schedule:prevent">
+            <ul class="controls__list">
+                {% for control in view.controls %}
+                    <li class="controls__row">
+                        <div class="controls__heading">
+                            <label class="controls__label" for="control-{{ control.name }}">{{ control.name }}</label>
+                            {% if control.description %}
+                                <p class="controls__help">{{ control.description }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="controls__field">
+                            {% if control.type == 'checkbox' %}
+                                <input type="checkbox" {{ _self.field_attributes(control) }}{% if control.current %} checked{% endif %}>
+                            {% elseif control.type == 'number' %}
+                                <input type="number" step="any" {{ _self.field_attributes(control) }} value="{{ control.current }}">
+                            {% elseif control.type == 'range' %}
+                                <div class="controls__range">
+                                    <input type="range" min="{{ control.min }}" max="{{ control.max }}" step="{{ control.step }}" {{ _self.field_attributes(control) }} value="{{ control.current }}">
+                                    <output for="control-{{ control.name }}">{{ control.current }}</output>
+                                </div>
+                            {% elseif control.type == 'color' %}
+                                <input type="color" {{ _self.field_attributes(control) }} value="{{ control.current }}">
+                            {% elseif control.type == 'date' %}
+                                <input type="date" {{ _self.field_attributes(control) }} value="{{ control.current }}">
+                            {% elseif control.type == 'select' %}
+                                <select {{ _self.field_attributes(control) }}>
+                                    {% for choice in control.choices %}
+                                        <option value="{{ choice }}"{% if (choice ~ '') == (control.current ~ '') %} selected{% endif %}>{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elseif control.type == 'radio' %}
+                                <fieldset class="controls__radios" {{ _self.field_attributes(control) }}>
+                                    {% for choice in control.choices %}
+                                        <label class="controls__radio">
+                                            <input type="radio" name="control-{{ control.name }}" value="{{ choice }}"{% if (choice ~ '') == (control.current ~ '') %} checked{% endif %}>
+                                            {{ choice }}
+                                        </label>
+                                    {% endfor %}
+                                </fieldset>
+                            {% elseif control.type == 'json' %}
+                                <textarea class="controls__json" rows="4" spellcheck="false" {{ _self.field_attributes(control) }}>
+{{ control.current|json_encode(json_flags) }}</textarea>
+                            {% elseif control.type == 'textarea' %}
+                                <textarea rows="3" {{ _self.field_attributes(control) }}>
+{{ control.current }}</textarea>
+                            {% else %}
+                                <input type="text" {{ _self.field_attributes(control) }} value="{{ control.current }}">
+                            {% endif %}
+
+                            <p class="controls__error hidden"></p>
+                        </div>
+
+                        <span class="controls__badges">
+                            {% if control.note %}
+                                <span class="controls__badge controls__badge--note">{{ control.note }}</span>
+                            {% elseif not control.editable %}
+                                <span class="controls__badge controls__badge--note">read-only</span>
+                            {% endif %}
+                            <span class="controls__badge controls__badge--{{ control.source }}">{{ control.source }}</span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="controls__actions">
+                <button type="button" class="controls__button" data-action="variant-controls#reset">Reset</button>
+                <button type="button" class="controls__button controls__button--primary" data-action="variant-controls#copyYaml">
+                    <span data-variant-controls-target="copyLabel">Copy variant YAML</span>
+                </button>
+            </div>
+        </form>
+    {% endif %}
+</div>

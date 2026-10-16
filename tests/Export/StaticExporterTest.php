@@ -43,9 +43,9 @@ class StaticExporterTest extends KernelTestCase
             $progress[] = $view.':'.$variant;
         });
 
-        $this->assertSame(14, $result->views);
-        $this->assertSame(41, $result->variants);
-        $this->assertCount(41, $progress);
+        $this->assertSame(19, $result->views);
+        $this->assertSame(47, $result->variants);
+        $this->assertCount(47, $progress);
         $this->assertContains('components/badge:default', $progress);
         $this->assertSame(6, $result->assets);
 
@@ -94,6 +94,20 @@ class StaticExporterTest extends KernelTestCase
         $this->assertStringContainsString('href="../../../css/test.css"', $iframe);
         $this->assertStringContainsString('href="../../../dynamic/app.css"', $iframe);
         $this->assertStringContainsString('Default', $iframe);
+    }
+
+    public function testControlsAreReplacedByANoteInTheExport(): void
+    {
+        $this->createExporter()->export($this->outputDir);
+
+        $page = $this->read('components/card/default.html');
+        $this->assertStringContainsString('Interactive controls are not available in the static export.', $page);
+        $this->assertStringContainsString('href="#controls"', $page);
+        $this->assertStringNotContainsString('variant-controls', $page);
+        $this->assertStringNotContainsString('<form', $page);
+        $this->assertStringNotContainsString('control-title', $page);
+
+        $this->assertStringNotContainsString('href="#controls"', $this->read('components/form/text/default.html'));
     }
 
     public function testResolvesArgsOfComponents(): void
