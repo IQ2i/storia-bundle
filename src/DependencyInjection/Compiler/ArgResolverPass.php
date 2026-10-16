@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 
 class ArgResolverPass implements CompilerPassInterface
 {
@@ -87,6 +88,12 @@ class ArgResolverPass implements CompilerPassInterface
      */
     private function extractClassNames(mixed $value, array &$classNames): void
     {
+        if ($value instanceof TaggedValue) {
+            $this->extractClassNames($value->getValue(), $classNames);
+
+            return;
+        }
+
         if (\is_array($value)) {
             foreach ($value as $item) {
                 $this->extractClassNames($item, $classNames);

@@ -43,9 +43,9 @@ class StaticExporterTest extends KernelTestCase
             $progress[] = $view.':'.$variant;
         });
 
-        $this->assertSame(12, $result->views);
-        $this->assertSame(36, $result->variants);
-        $this->assertCount(36, $progress);
+        $this->assertSame(14, $result->views);
+        $this->assertSame(41, $result->variants);
+        $this->assertCount(41, $progress);
         $this->assertContains('components/badge:default', $progress);
         $this->assertSame(6, $result->assets);
 

@@ -1,0 +1,6 @@
+component: Header
+
+variants:
+  default:
+    args:
+      menu: !data menu

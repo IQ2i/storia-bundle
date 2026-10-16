@@ -1,0 +1,1 @@
+product: !data IQ2i\StoriaBundle\Tests\Fixtures\ProductFactory::createStatic

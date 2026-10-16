@@ -37,6 +37,42 @@ class IframeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('body > p', 'This is the homepage hero');
     }
 
+    public function testSharedMenuFeedsComponentAndPage(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/storia/iframe/components/header?variant=default');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav', 'Home');
+        $this->assertSelectorTextContains('nav', 'Shop');
+
+        $client->request('GET', '/storia/iframe/pages/home/home?variant=default');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('nav', 'Home');
+        $this->assertSelectorTextContains('nav', 'Shop');
+        $this->assertCount(4, $client->getCrawler()->filter('ul.products li'));
+        $this->assertSelectorTextContains('ul.products', 'Product 4');
+    }
+
+    public function testBlockUsingLoremTag(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/button/button?variant=lorem');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('button', 'lorem ipsum dolor');
+    }
+
+    public function testFormOptionsUsingDataTag(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/form/choice?variant=default');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('select', 'In Stock');
+        $this->assertSelectorTextContains('select', 'Out of Stock');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

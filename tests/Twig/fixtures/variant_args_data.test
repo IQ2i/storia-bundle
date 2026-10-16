@@ -1,0 +1,14 @@
+--TEST--
+"iq2i_storia_variant_args" and "iq2i_storia_variant_blocks" resolve data tags and include/extends
+--TEMPLATE--
+{{ iq2i_storia_variant_args('header', 'default').menu.items[1].label }}
+{{ iq2i_storia_variant_args('product', 'from_data').product.price }}
+{{ iq2i_storia_variant_blocks('button/button', 'lorem').content }}
+{{ iq2i_storia_variant_args('badge_with_include', 'default')|length > 0 ? 'include ok' : 'empty' }}
+--DATA--
+return []
+--EXPECT--
+Shop
+999
+lorem ipsum dolor
+include ok

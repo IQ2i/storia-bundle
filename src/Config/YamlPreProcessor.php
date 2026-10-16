@@ -116,7 +116,7 @@ readonly class YamlPreProcessor
         $yamlParts[] = $rawContent;
 
         /** @var array<string, mixed> $data */
-        $data = Yaml::parse(implode("\n", $yamlParts)) ?? [];
+        $data = Yaml::parse(implode("\n", $yamlParts), Yaml::PARSE_CUSTOM_TAGS) ?? [];
 
         // Save extends path before stripping meta keys.
         $extendsPath = isset($data[self::EXTENDS_KEY]) ? (string) $data[self::EXTENDS_KEY] : null;
@@ -127,7 +127,7 @@ readonly class YamlPreProcessor
         // Handle extends: deep-merge the parent config first, then apply this file on top.
         if (null !== $extendsPath) {
             $parentData = $this->processFile($basePath, $extendsPath, $resolvedPaths);
-            $data = $this->deepMerge($parentData, $data);
+            $data = self::deepMerge($parentData, $data);
         }
 
         return $data;
@@ -182,7 +182,7 @@ readonly class YamlPreProcessor
         }
 
         /** @var array<string, mixed> $parsed */
-        $parsed = Yaml::parse(implode("\n", $includeLines)) ?? [];
+        $parsed = Yaml::parse(implode("\n", $includeLines), Yaml::PARSE_CUSTOM_TAGS) ?? [];
         $value = $parsed[self::INCLUDE_KEY] ?? null;
 
         if (null === $value) {
@@ -256,11 +256,11 @@ readonly class YamlPreProcessor
      *
      * @return array<string, mixed>
      */
-    private function deepMerge(array $base, array $override): array
+    public static function deepMerge(array $base, array $override): array
     {
         foreach ($override as $key => $value) {
-            if (\is_array($value) && isset($base[$key]) && \is_array($base[$key]) && $this->isAssoc($base[$key])) {
-                $base[$key] = $this->deepMerge($base[$key], $value);
+            if (\is_array($value) && isset($base[$key]) && \is_array($base[$key]) && self::isAssoc($base[$key])) {
+                $base[$key] = self::deepMerge($base[$key], $value);
             } else {
                 $base[$key] = $value;
             }
@@ -274,7 +274,7 @@ readonly class YamlPreProcessor
      *
      * @param array<mixed> $array
      */
-    private function isAssoc(array $array): bool
+    private static function isAssoc(array $array): bool
     {
         return [] !== $array && array_keys($array) !== range(0, \count($array) - 1);
     }

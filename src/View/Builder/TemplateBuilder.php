@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
+use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
-use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
 use Twig\Environment;
 
@@ -24,7 +24,7 @@ class TemplateBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
-        private readonly ArgResolver $argResolver,
+        private readonly DataResolver $dataResolver,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -45,8 +45,7 @@ class TemplateBuilder extends AbstractBuilder
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
-            // Resolve args with ArgResolver
-            $resolvedArgs = $this->argResolver->resolve($variantConfig['args']);
+            $resolvedArgs = $this->dataResolver->resolve($variantConfig['args']);
 
             $variantArgs = [];
             foreach ($resolvedArgs as $argName => $argValue) {

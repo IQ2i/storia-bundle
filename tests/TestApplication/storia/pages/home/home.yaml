@@ -1,0 +1,5 @@
+variants:
+  default:
+    args:
+      menu: !data menu
+      products: !data shop/catalog.products

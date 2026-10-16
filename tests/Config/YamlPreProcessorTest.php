@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle\Tests\Config;
 
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 
 class YamlPreProcessorTest extends TestCase
 {
@@ -52,6 +53,33 @@ class YamlPreProcessorTest extends TestCase
 
         $this->assertSame('ui/badge.html.twig', $result['template']);
         $this->assertSame('bg-blue-100', $result['variants']['default']['args']['class']);
+    }
+
+    public function testCustomTagsSurviveIncludeAndExtends(): void
+    {
+        $this->writeYaml('parent', <<<YAML
+            template: ui/badge.html.twig
+            variants:
+                default:
+                    args:
+                        menu: !data menu
+                        label: parent
+            YAML);
+        $this->writeYaml('child', <<<YAML
+            extends: parent
+            variants:
+                default:
+                    args:
+                        label: !lorem 2
+            YAML);
+
+        $args = $this->processor->process($this->tmpDir, 'child')['variants']['default']['args'];
+
+        $this->assertInstanceOf(TaggedValue::class, $args['menu']);
+        $this->assertSame('data', $args['menu']->getTag());
+        $this->assertSame('menu', $args['menu']->getValue());
+        $this->assertInstanceOf(TaggedValue::class, $args['label']);
+        $this->assertSame('lorem', $args['label']->getTag());
     }
 
     public function testDefinitionsKeyIsStripped(): void

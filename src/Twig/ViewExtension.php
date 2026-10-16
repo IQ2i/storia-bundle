@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Twig;
 
 use IQ2i\StoriaBundle\Config\ViewConfiguration;
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
+use IQ2i\StoriaBundle\Data\DataResolver;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Yaml\Yaml;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -23,6 +24,8 @@ class ViewExtension extends AbstractExtension
 {
     public function __construct(
         private readonly string $defaultPath,
+        private readonly YamlPreProcessor $yamlPreProcessor,
+        private readonly DataResolver $dataResolver,
     ) {
     }
 
@@ -36,25 +39,30 @@ class ViewExtension extends AbstractExtension
 
     public function getVariantArgs(string $view, string $variant): array
     {
-        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/components/'.$view.'.yaml'));
-        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
-
-        if (!\array_key_exists($variant, $config['variants'])) {
-            throw new \InvalidArgumentException('Unknown variant: '.$variant);
-        }
-
-        return $config['variants'][$variant]['args'];
+        return $this->resolveVariant($view, $variant, 'args');
     }
 
     public function getVariantBlocks(string $view, string $variant): array
     {
-        $yaml = Yaml::parse(file_get_contents($this->defaultPath.'/components/'.$view.'.yaml'));
-        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+        return $this->resolveVariant($view, $variant, 'blocks');
+    }
+
+    /**
+     * @param 'args'|'blocks' $key
+     *
+     * @return array<string, mixed>
+     */
+    private function resolveVariant(string $view, string $variant, string $key): array
+    {
+        $config = (new Processor())->processConfiguration(
+            new ViewConfiguration(),
+            [$this->yamlPreProcessor->process($this->defaultPath, 'components/'.$view)]
+        );
 
         if (!\array_key_exists($variant, $config['variants'])) {
             throw new \InvalidArgumentException('Unknown variant: '.$variant);
         }
 
-        return $config['variants'][$variant]['blocks'];
+        return $this->dataResolver->resolve($config['variants'][$variant][$key]);
     }
 }

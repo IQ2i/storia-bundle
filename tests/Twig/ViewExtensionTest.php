@@ -13,7 +13,12 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Twig;
 
+use IQ2i\StoriaBundle\Config\YamlPreProcessor;
+use IQ2i\StoriaBundle\Data\DataRepository;
+use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
+use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Twig\Test\IntegrationTestCase;
 
 class ViewExtensionTest extends IntegrationTestCase
@@ -31,6 +36,13 @@ class ViewExtensionTest extends IntegrationTestCase
 
     protected function getExtensions(): iterable
     {
-        yield new ViewExtension(__DIR__.'/../TestApplication/storia');
+        $path = __DIR__.'/../TestApplication/storia';
+        $preProcessor = new YamlPreProcessor();
+
+        yield new ViewExtension(
+            $path,
+            $preProcessor,
+            new DataResolver(new DataRepository($path, $preProcessor), new ArgResolver(new ServiceLocator([]))),
+        );
     }
 }

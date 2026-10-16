@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
+use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
@@ -25,6 +26,7 @@ class FormBuilder extends AbstractBuilder
         string $defaultPath,
         Environment $twig,
         private readonly FormFactoryInterface $formFactory,
+        private readonly DataResolver $dataResolver,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -59,7 +61,7 @@ class FormBuilder extends AbstractBuilder
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $variantConfig['options'], $config['options']));
+            ], $variantConfig['options'], $this->dataResolver->resolve($config['options'])));
 
             if ($variantConfig['with_errors']) {
                 $form->addError(new FormError('Error message'));
