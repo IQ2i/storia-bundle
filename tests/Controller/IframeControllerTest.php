@@ -63,6 +63,16 @@ class IframeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'lorem ipsum dolor');
     }
 
+    public function testFormOptionsUsingDataTag(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/form/choice?variant=default');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('select', 'In Stock');
+        $this->assertSelectorTextContains('select', 'Out of Stock');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

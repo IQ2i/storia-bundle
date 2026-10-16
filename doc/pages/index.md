@@ -518,6 +518,8 @@ articles: !repeat
 
 When the data needs logic (relative dates, computed values, business objects), use the same tag with a PHP method: `!data App\Factory\ProductFactory::createDefault`.
 
+Tags are resolved in the `args` and `blocks` of a variant, and in the `options` of a form view.
+
 #### Argument Resolver
 
 UI Storia provides an **Argument Resolver** feature that allows you to dynamically generate arguments by calling PHP methods directly from your YAML configuration files.

@@ -55,6 +55,7 @@ return static function (ContainerConfigurator $container) {
                 '%iq2i_storia.default_path%',
                 service('twig'),
                 service('form.factory'),
+                service(DataResolver::class),
             ])
 
         ->set(TemplateBuilder::class)
