@@ -114,6 +114,7 @@ readonly class AssetCollector
             return;
         }
 
+        // A main request: there is no parent request in CLI, and Symfony only sets Content-Type on main responses.
         $response = $this->httpKernel->handle(Request::create(implode('/', array_map(rawurlencode(...), explode('/', $path)))));
         $this->assertValid($response, $path, $source);
 

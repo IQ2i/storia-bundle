@@ -267,8 +267,9 @@ The export is not written to `public/`, which is the default publish directory o
 ### Limitations
 
 - URLs built in JavaScript, and absolute URLs to a development server (`http://localhost:5173`), are not rewritten.
+- Assets served from an absolute base URL (a CDN, `asset()` configured with `base_urls`) are neither rewritten nor copied: the exported pages keep pointing to that host.
 - Browsers block ES modules on `file://` pages: a project that loads its own modules must serve the folder over HTTP, or be opened with Firefox.
-- The static export has no live reload and no interactive controls.
+- The static export has no live reload.
 
 ## Interfaces
 
