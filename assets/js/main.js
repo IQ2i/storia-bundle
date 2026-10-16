@@ -8,6 +8,7 @@ import MenuController from './controllers/menu_controller.js';
 import ResizeController from './controllers/resize_controller.js';
 import LiveReloadController from './controllers/live_reload_controller.js';
 import TabController from './controllers/tab_controller.js';
+import VariantControlsController from './controllers/variant_controls_controller.js';
 
 const app = Application.start();
 app.register('copy-to-clipboard', CopyToClipboardController);
@@ -17,3 +18,4 @@ app.register('live-reload', LiveReloadController);
 app.register('menu', MenuController);
 app.register('resize', ResizeController);
 app.register('tab', TabController);
+app.register('variant-controls', VariantControlsController);

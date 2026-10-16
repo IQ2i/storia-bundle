@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Controller;
 
+use IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -139,7 +140,7 @@ class IframeControllerTest extends WebTestCase
 
     public function testOverridesAreNeverResolvedAsPhpCallables(): void
     {
-        $this->requestWithOverrides('product', ['product' => \IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::class . '::createExpensive']);
+        $this->requestWithOverrides('product', ['product' => ProductFactory::class.'::createExpensive']);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextNotContains('body', 'Premium Product');
@@ -151,7 +152,7 @@ class IframeControllerTest extends WebTestCase
 
         $this->assertSame('!data product.expensive', $crawler->filter('h2')->text());
 
-        $crawler = $this->requestWithOverrides('card', ['title' => \IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::class . '::createDefault']);
+        $crawler = $this->requestWithOverrides('card', ['title' => ProductFactory::class.'::createDefault']);
 
         $this->assertStringContainsString('ProductFactory::createDefault', $crawler->filter('h2')->text());
     }

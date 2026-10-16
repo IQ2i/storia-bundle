@@ -80,6 +80,7 @@ class ControlsBuilderTest extends TwigTestCase
         $shouted = $this->byName($this->builder->forComponent($this->anonymous(), []))['shouted'];
 
         $this->assertFalse($shouted->editable);
+        $this->assertSame('expression', $shouted->note);
         $this->assertNull($shouted->value);
     }
 

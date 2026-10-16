@@ -96,6 +96,20 @@ class StaticExporterTest extends KernelTestCase
         $this->assertStringContainsString('Default', $iframe);
     }
 
+    public function testControlsAreReplacedByANoteInTheExport(): void
+    {
+        $this->createExporter()->export($this->outputDir);
+
+        $page = $this->read('components/card/default.html');
+        $this->assertStringContainsString('Interactive controls are not available in the static export.', $page);
+        $this->assertStringContainsString('href="#controls"', $page);
+        $this->assertStringNotContainsString('variant-controls', $page);
+        $this->assertStringNotContainsString('<form', $page);
+        $this->assertStringNotContainsString('control-title', $page);
+
+        $this->assertStringNotContainsString('href="#controls"', $this->read('components/form/text/default.html'));
+    }
+
     public function testResolvesArgsOfComponents(): void
     {
         $this->createExporter()->export($this->outputDir);

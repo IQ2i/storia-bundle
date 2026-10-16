@@ -15,11 +15,10 @@ namespace IQ2i\StoriaBundle\Controls;
 
 final readonly class Control
 {
-    public const array TYPES = ['text', 'textarea', 'number', 'checkbox', 'select', 'json'];
-
     /**
      * @param string       $source  Where the control comes from: "props", "class" or "yaml"
      * @param list<scalar> $choices Allowed values of a "select" control
+     * @param string|null  $note    Why a read-only control cannot be edited, e.g. "expression"
      */
     public function __construct(
         public string $name,
@@ -32,6 +31,7 @@ final readonly class Control
         public bool $inYaml = false,
         public array $choices = [],
         public ?string $enumClass = null,
+        public ?string $note = null,
     ) {
     }
 
@@ -40,8 +40,8 @@ final readonly class Control
         return new self(...[...get_object_vars($this), 'current' => $current]);
     }
 
-    public function asReadOnly(): self
+    public function asReadOnly(string $note): self
     {
-        return new self(...[...get_object_vars($this), 'editable' => false]);
+        return new self(...[...get_object_vars($this), 'editable' => false, 'note' => $note]);
     }
 }

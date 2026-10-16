@@ -72,7 +72,7 @@ readonly class ControlsBuilder
                 ? ControlFactory::fromReflectionType($name, $type, $value, $source, $prop->default, $inYaml)
                 : ControlFactory::fromValue($name, $value, $source, $prop->default, $inYaml);
 
-            $controls[] = $prop->isExpression && !$inYaml ? $control->asReadOnly() : $control;
+            $controls[] = $prop->isExpression && !$inYaml ? $control->asReadOnly('expression') : $control;
         }
 
         foreach ($resolvedArgs as $name => $value) {
