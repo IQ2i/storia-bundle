@@ -438,19 +438,91 @@ variants:
 Note here that the `content` block is the default block for Twig Component according to the documentation ([see here](https://symfony.com/bundles/ux-twig-component/current/index.html#passing-html-to-components)), so it will have a different behavior that we will detail later.
 :::
 
-### Argument Resolver
+### Data
+
+Variants often need the same data (a menu, a product, a user). Instead of copying it, store it once in a named file under `storia/data/` and reference it with the `!data` tag.
+
+```yaml
+# storia/data/menu.yaml
+items:
+    - { label: Home, url: / }
+    - { label: Shop, url: /shop }
+```
+
+```yaml
+# storia/components/header.yaml
+component: Header
+variants:
+    default:
+        args:
+            menu: !data menu
+```
+
+```yaml
+# storia/pages/home/home.yaml
+variants:
+    default:
+        args:
+            menu: !data menu
+```
+
+Changing `storia/data/menu.yaml` updates every view that uses it. Files in `storia/data/` are not views: they do not appear in the navigation.
+
+#### Sub-paths
+
+Sub-folders are part of the name (`!data shop/catalog`), and a dotted path reaches inside the file: `!data menu.items.0` or `!data shop/product.default.price`.
+
+#### Variants of a piece of data
+
+A file can hold several entries, and `with` overrides some of their values (mappings are merged, lists are replaced):
+
+```yaml
+# storia/data/product.yaml
+default: { name: Chair, price: 49, inStock: true }
+expensive: !data { ref: product.default, with: { price: 999 } }
+sold_out: !data { ref: product.default, with: { inStock: false } }
+```
+
+#### Repeating an item: `!repeat`
+
+`!repeat` builds a list from a template; `{i}` is replaced by the position (starting at 1) in every string of the item.
+
+```yaml
+products: !repeat
+    count: 4
+    item:
+        name: 'Product {i}'
+        price: 19.99
+```
+
+#### Filler text: `!lorem`
+
+`!lorem` generates a deterministic placeholder text, so the output is stable between two renderings: `!lorem 12` (words), `!lorem 2 sentences`, `!lorem 1 paragraph`. It works in `args` and in `blocks`.
+
+```yaml
+blocks:
+    content: !lorem 3
+```
+
+#### PHP data providers
+
+When the data needs logic (relative dates, computed values, business objects), use the same tag with a PHP method: `!data App\Factory\ProductFactory::createDefault`.
+
+#### Argument Resolver
 
 UI Storia provides an **Argument Resolver** feature that allows you to dynamically generate arguments by calling PHP methods directly from your YAML configuration files.
 
 Instead of hardcoding values in your variant arguments, you can reference a PHP class method using the syntax `ClassName::methodName`. UI Storia will automatically detect this pattern and call the method to generate the argument value.
 
-#### How it works
+The bare `ClassName::methodName` string is the legacy syntax and is still accepted; `!data ClassName::methodName` is the recommended equivalent.
+
+##### How it works
 
 The Argument Resolver supports both:
 - **Static methods**: Called directly on the class
 - **Instance methods**: If the class is registered as a service in the Symfony container, UI Storia will retrieve the service and call the method on it
 
-#### Example
+##### Example
 
 ```yaml
 # storia/components/product.yaml
@@ -529,7 +601,9 @@ class ProductFactory
 }
 ```
 
-### YAML Composition
+### Advanced: include and extends
+
+To share data between views, prefer [named data](#data). `include:` and `extends:` are advanced features meant for sharing YAML structure.
 
 UI Storia supports two directives to avoid duplication across your YAML files: `include:` for sharing anchor definitions, and `extends:` for inheriting and overriding a complete configuration.
 
