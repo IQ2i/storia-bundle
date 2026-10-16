@@ -24,6 +24,25 @@ bin/console storia:render components/button plain
 
 Prints the HTML of a variant on the standard output. `--format=twig` prints the source of the template and `--format=include` prints the code that includes a component. On error (unknown view or variant, Twig or PHP exception), the message goes to the error output and the exit code is `1`.
 
+## Mate tools
+
+With [Symfony Mate](https://symfony.com/doc/current/ai/components/mate.html), the catalog is also available as tools, called with `vendor/bin/mate tools:call <tool> --<param>=<value>`:
+
+| Tool | Parameters | Result |
+|------|------------|--------|
+| `storia-list` | `filter` | The views with their type, YAML file, variants and resolved arguments |
+| `storia-render` | `view`, `variant`, `format` (`html`, `twig` or `include`) | What the variant renders |
+| `storia-test` | `filter`, `snapshots` | Whether every variant renders and matches its snapshot, and the output of the command |
+
+The tools run the console of your application, `bin/console` at the root of the project. Change the path in `mate/config.php` when it is elsewhere:
+
+```php
+// mate/config.php
+$container->parameters()->set('ai_mate_storia.console', '%mate.root_dir%/app/bin/console');
+```
+
+`storia-test` writes the snapshot of a variant that has none, as `storia:test` does, and never updates an existing one. The results are wrapped under an `untrusted_data` key, as the data comes from your templates.
+
 ## Install the skill
 
 The skill is the `skills/ui-storia` folder of the bundle. It follows the [Agent Skills](https://agentskills.io) format and is declared in `composer.json` for [Symfony Mate](https://symfony.com/doc/current/ai/components/mate.html), which discovers it without any copy.
@@ -38,7 +57,7 @@ vendor/bin/mate init
 vendor/bin/mate discover
 ```
 
-Mate installs the skill as `mate-ui-storia` in `.agents/skills` and `.claude/skills`, and runs the discovery again after each `composer install` and `composer update`, so the skill always matches the installed version of the bundle. Commit the generated folders to share them with your team. Use `vendor/bin/mate skills:disable ui-storia` to turn it off and `vendor/bin/mate skills:override ui-storia` to adapt a copy to your project.
+Mate registers the tools of the bundle (see below) and installs its skill as `mate-ui-storia` in `.agents/skills` and `.claude/skills`. It runs the discovery again after each `composer install` and `composer update`, so the tools and the skill always match the installed version of the bundle. Commit the generated folders to share them with your team. Use `vendor/bin/mate skills:disable ui-storia` to turn it off and `vendor/bin/mate skills:override ui-storia` to adapt a copy to your project.
 
 ### Without Symfony Mate
 
