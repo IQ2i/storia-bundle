@@ -19,7 +19,6 @@ use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Controls\PropsExtractor;
 use IQ2i\StoriaBundle\Data\DataRepository;
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\Builder\TemplateBuilder;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use IQ2i\StoriaBundle\View\ViewBuilder;
@@ -66,15 +65,6 @@ return static function (ContainerConfigurator $container) {
                 '%iq2i_storia.default_path%',
                 tagged_iterator('iq2i_storia.builder'),
                 service(YamlPreProcessor::class),
-            ])
-
-        ->set(FormBuilder::class)
-            ->tag('iq2i_storia.builder')
-            ->args([
-                '%iq2i_storia.default_path%',
-                service('twig'),
-                service('form.factory'),
-                service(DataResolver::class),
             ])
 
         ->set(TemplateBuilder::class)

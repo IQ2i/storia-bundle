@@ -34,6 +34,7 @@ use IQ2i\StoriaBundle\Test\VariantRunner;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
+use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use IQ2i\StoriaBundle\View\ViewFinder;
 use IQ2i\StoriaBundle\View\ViewRenderer;
@@ -44,6 +45,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 final class IQ2iStoriaBundle extends AbstractBundle
@@ -199,6 +201,17 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     new Reference(DataResolver::class),
                     new Reference(ControlsBuilder::class),
                     new Reference(ComponentIntrospector::class),
+                ]);
+        }
+
+        if (interface_exists(FormFactoryInterface::class)) {
+            $builder->register(FormBuilder::class)
+                ->addTag('iq2i_storia.builder')
+                ->setArguments([
+                    '%iq2i_storia.default_path%',
+                    new Reference('twig'),
+                    new Reference('form.factory'),
+                    new Reference(DataResolver::class),
                 ]);
         }
 

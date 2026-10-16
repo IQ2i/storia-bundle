@@ -30,13 +30,15 @@ final class Kernel extends SymfonyKernel
 
     public function registerBundles(): iterable
     {
-        return [
-            new FrameworkBundle(),
-            new TwigBundle(),
-            new TwigComponentBundle(),
-            new WebProfilerBundle(),
-            new IQ2iStoriaBundle(),
-        ];
+        yield new FrameworkBundle();
+        yield new TwigBundle();
+
+        if (class_exists(TwigComponentBundle::class)) {
+            yield new TwigComponentBundle();
+        }
+
+        yield new WebProfilerBundle();
+        yield new IQ2iStoriaBundle();
     }
 
     public function getCacheDir(): string
