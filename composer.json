@@ -25,7 +25,7 @@
     "symfony/ux-twig-component": "Required to use the component view type (^2.16)",
     "symfony/form": "Required to use the form view type",
     "sebastian/diff": "Pretty snapshot diffs in storia:test",
-    "symfony/ai-mate": "Discovers the UI Storia skill shipped in skills/ (vendor/bin/mate discover)"
+    "symfony/ai-mate": "Gives your agent the UI Storia tools and skill (vendor/bin/mate discover)"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.52",
@@ -33,6 +33,7 @@
     "phpstan/phpstan-symfony": "^2.0",
     "phpunit/phpunit": "^10.5",
     "rector/rector": "^2.0",
+    "symfony/ai-mate": "^0.14.0",
     "symfony/browser-kit": "^6.4|^7.0|^8.0",
     "symfony/css-selector": "^6.4|^7.0|^8.0",
     "symfony/form": "^6.4|^7.0|^8.0",
@@ -45,7 +46,8 @@
   "config": {
     "sort-packages": true,
     "allow-plugins": {
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "symfony/ai-mate-composer-plugin": false
     },
     "audit": {
       "block-insecure": false
@@ -64,6 +66,13 @@
   },
   "extra": {
     "ai-mate": {
+      "scan-dirs": [
+        "src/Mate"
+      ],
+      "includes": [
+        "config/mate.php"
+      ],
+      "instructions": "INSTRUCTIONS.md",
       "skills": [
         "skills"
       ]

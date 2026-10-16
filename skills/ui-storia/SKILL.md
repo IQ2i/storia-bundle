@@ -37,6 +37,8 @@ bin/console storia:render components/button plain --format=twig    # the templat
 bin/console storia:render components/button plain --format=include # code to use the component (components only)
 ```
 
+With Symfony Mate, the same catalog is available as tools: `storia-list` (`filter`), `storia-render` (`view`, `variant`, `format`) and `storia-test` (`filter`, `snapshots`), called with `vendor/bin/mate tools:call <tool> --<param>=<value>`. Prefer them to the commands when Mate is installed: they run the commands of the application and wrap the result as untrusted data. `storia-test` never updates a snapshot.
+
 `storia:render` is the quickest check that a variant renders: no browser, no server, errors on stderr and exit code 1. A view that cannot be loaded appears in `storia:list` with its error.
 
 ## 3. Layout of the `storia/` folder
