@@ -15,6 +15,11 @@ namespace IQ2i\StoriaBundle\Tests\Fixtures;
 
 class Panel
 {
+    /**
+     * Title of the panel.
+     *
+     * @control textarea
+     */
     public string $title = 'Panel';
 
     public int $rows = 2;

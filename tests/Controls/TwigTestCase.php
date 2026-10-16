@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Tests\Controls;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\UX\TwigComponent\Twig\PropsNode;
 use Symfony\UX\TwigComponent\Twig\PropsTokenParser;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -22,6 +23,13 @@ use Twig\TokenParser\TokenParserInterface;
 
 abstract class TwigTestCase extends TestCase
 {
+    public static function requirePropDocumentation(): void
+    {
+        if (!method_exists(PropsNode::class, 'getPropDocumentation')) {
+            self::markTestSkipped('Prop documentation needs ux-twig-component 3.5.');
+        }
+    }
+
     /**
      * @param array<string, string> $templates
      */

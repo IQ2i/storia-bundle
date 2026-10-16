@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
+use IQ2i\StoriaBundle\Controls\ComponentIntrospector;
 use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Controls\PropsExtractor;
 use IQ2i\StoriaBundle\Data\DataRepository;
@@ -49,9 +50,15 @@ return static function (ContainerConfigurator $container) {
                 service('twig'),
             ])
 
+        ->set(ComponentIntrospector::class)
+            ->args([
+                service(PropsExtractor::class),
+            ])
+
         ->set(ControlsBuilder::class)
             ->args([
                 service(PropsExtractor::class),
+                service(ComponentIntrospector::class),
             ])
 
         ->set(ViewBuilder::class)

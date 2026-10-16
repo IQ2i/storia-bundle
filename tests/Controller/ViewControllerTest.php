@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Controller;
 
+use IQ2i\StoriaBundle\Tests\Controls\TwigTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ViewControllerTest extends WebTestCase
@@ -63,6 +64,8 @@ class ViewControllerTest extends WebTestCase
 
     public function testAnonymousComponentGetsOneControlPerPropWithoutAnyYaml(): void
     {
+        TwigTestCase::requirePropDocumentation();
+
         $client = static::createClient();
         $crawler = $client->request('GET', '/storia/components/card?variant=default');
 
@@ -73,10 +76,16 @@ class ViewControllerTest extends WebTestCase
         $this->assertSelectorExists('#twig.hidden');
 
         $fields = $crawler->filter('#controls [data-variant-controls-target="field"]');
-        $this->assertCount(3, $fields);
-        $this->assertSame(['text', 'number', 'checkbox'], $fields->each(static fn ($field): string => $field->attr('data-type')));
+        $this->assertCount(5, $fields);
+        $this->assertSame(['text', 'range', 'checkbox', 'color', 'radio'], $fields->each(static fn ($field): string => $field->attr('data-type')));
         $this->assertSame('Card title', $crawler->filter('#control-title')->attr('value'));
         $this->assertSame('"Card title"', $crawler->filter('#control-title')->attr('data-initial-value'));
+        $this->assertSame('Title of the card', $crawler->filter('.controls__row')->first()->filter('.controls__help')->text());
+        $this->assertSelectorExists('#control-count[type="range"][min="0"][max="10"][step="1"][value="3"]');
+        $this->assertSame('3', $crawler->filter('output[for="control-count"]')->text());
+        $this->assertSelectorExists('#control-accent[type="color"][value="#0f172a"]');
+        $this->assertSame(['left', 'center', 'right'], $crawler->filter('fieldset#control-align input[type="radio"]')->each(static fn ($radio): string => $radio->attr('value')));
+        $this->assertSelectorExists('fieldset#control-align input[value="left"][checked]');
         $this->assertSame(['props'], array_unique($crawler->filter('.controls__badges .controls__badge:last-child')->each(static fn ($badge): string => $badge->text())));
         $this->assertSelectorExists('[data-variant-controls-controls-outlet=".main__content"]');
         $this->assertSelectorTextContains('[data-variant-controls-target="copyLabel"]', 'Copy variant YAML');
@@ -87,10 +96,26 @@ class ViewControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/storia/components/notice?variant=warning');
 
-        $this->assertSame(['info', 'warning', 'danger'], $crawler->filter('#control-kind option')->each(static fn ($option): string => $option->attr('value')));
-        $this->assertSame('info', $crawler->filter('#control-kind option[selected]')->attr('value'));
-        $this->assertSame('warning', $crawler->filter('#control-level')->attr('value'));
+        $this->assertSame(['info', 'warning', 'danger'], $crawler->filter('#control-kind input[type="radio"]')->each(static fn ($radio): string => $radio->attr('value')));
+        $this->assertSelectorExists('#control-kind input[value="info"][checked]');
+        $this->assertSame(['info', 'warning', 'danger'], $crawler->filter('#control-level option')->each(static fn ($option): string => $option->attr('value')));
+        $this->assertSame('warning', $crawler->filter('#control-level option[selected]')->attr('value'));
+        $this->assertSame('CSS modifier of the notice', $crawler->filter('label[for="control-level"] + .controls__help')->text());
         $this->assertSelectorExists('#control-dismissible[type="checkbox"]:not([checked])');
+
+        $crawler = $client->request('GET', '/storia/components/snackbar?variant=default');
+
+        $this->assertSame(['message', 'delay'], $crawler->filter('#controls [data-variant-controls-target="field"]')->each(static fn ($field): string => $field->attr('data-name')));
+        $this->assertSame('Saved', $crawler->filter('#control-message')->attr('value'));
+        $this->assertSelectorExists('#control-delay[type="range"][min="1"][max="30"][value="5"]');
+        $this->assertSelectorTextContains('.controls__badge--class', 'class');
+
+        $crawler = $client->request('GET', '/storia/pages/homepage/homepage?variant=default');
+
+        $this->assertSame(['message', 'columns'], $crawler->filter('#controls [data-variant-controls-target="field"]')->each(static fn ($field): string => $field->attr('data-name')));
+        $this->assertSame('textarea', $crawler->filter('#control-message')->attr('data-type'));
+        $this->assertSelectorExists('#control-columns[type="range"][min="1"][max="4"]');
+        $this->assertSelectorTextContains('.controls__badge--types', 'types');
 
         $crawler = $client->request('GET', '/storia/components/badge?variant=default');
 

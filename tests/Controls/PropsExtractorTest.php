@@ -71,4 +71,53 @@ class PropsExtractorTest extends TwigTestCase
     {
         $this->assertSame([], $this->extract('<p>{{ title }}</p>'));
     }
+
+    public function testDocumentationCommentsOfTheProps(): void
+    {
+        self::requirePropDocumentation();
+
+        $props = $this->extract("{% props\n ## The title @control textarea\n title = 'Hi',\n count = 3,\n ## Required one\n label\n%}");
+
+        $this->assertSame('The title', $props['title']->directive?->description);
+        $this->assertSame('textarea', $props['title']->directive?->type);
+        $this->assertNull($props['count']->directive);
+        $this->assertSame('Required one', $props['label']->directive?->description);
+        $this->assertFalse($props['label']->hasDefault);
+    }
+
+    public function testPropsAreParsedOnce(): void
+    {
+        $twig = $this->createTwig(['t.html.twig' => '{% props a = 1 %}']);
+        $extractor = new PropsExtractor($twig);
+
+        $this->assertSame($extractor->extract('t.html.twig'), $extractor->extract('t.html.twig'));
+        $this->assertSame(['a'], array_keys($extractor->extract('t.html.twig')));
+    }
+
+    public function testTypesOfATemplate(): void
+    {
+        $extractor = new PropsExtractor($this->createTwig([]));
+
+        $types = $extractor->types("{% types {\n ## The message @control textarea\n message: 'string',\n columns?: 'number',\n} %}<p>{{ message }}</p>");
+
+        $this->assertSame(['message', 'columns'], array_keys($types));
+        $this->assertSame('string', $types['message']->type);
+        $this->assertFalse($types['message']->optional);
+        $this->assertSame('The message', $types['message']->directive?->description);
+        $this->assertSame('textarea', $types['message']->directive?->type);
+        $this->assertSame('number', $types['columns']->type);
+        $this->assertTrue($types['columns']->optional);
+        $this->assertNull($types['columns']->directive);
+
+        $this->assertSame([], $extractor->types('<p>{{ message }}</p>'));
+    }
+
+    public function testTypesOfAChildTemplate(): void
+    {
+        $extractor = new PropsExtractor($this->createTwig(['base.html.twig' => '{% block body %}{% endblock %}']));
+
+        $types = $extractor->types("{% extends 'base.html.twig' %}{% types { message: 'string' } %}{% block body %}{{ message }}{% endblock %}");
+
+        $this->assertSame(['message'], array_keys($types));
+    }
 }

@@ -16,9 +16,10 @@ namespace IQ2i\StoriaBundle\Controls;
 final readonly class Control
 {
     /**
-     * @param string       $source  Where the control comes from: "props", "class" or "yaml"
-     * @param list<scalar> $choices Allowed values of a "select" control
-     * @param string|null  $note    Why a read-only control cannot be edited, e.g. "expression"
+     * @param string       $source     Where the control comes from: "props", "class", "types" or "yaml"
+     * @param list<scalar> $choices    Allowed values of a "select" or "radio" control
+     * @param string|null  $valueClass The enum or date class the rendered value must be an instance of
+     * @param string|null  $note       Why a control is read-only, or why its directive was ignored
      */
     public function __construct(
         public string $name,
@@ -30,18 +31,22 @@ final readonly class Control
         public bool $editable = true,
         public bool $inYaml = false,
         public array $choices = [],
-        public ?string $enumClass = null,
+        public ?string $valueClass = null,
         public ?string $note = null,
+        public ?string $description = null,
+        public ?float $min = null,
+        public ?float $max = null,
+        public ?float $step = null,
     ) {
     }
 
-    public function withCurrent(mixed $current): self
+    public function with(mixed ...$changes): self
     {
-        return new self(...[...get_object_vars($this), 'current' => $current]);
+        return new self(...[...get_object_vars($this), ...$changes]);
     }
 
     public function asReadOnly(string $note): self
     {
-        return new self(...[...get_object_vars($this), 'editable' => false, 'note' => $note]);
+        return $this->with(editable: false, note: $note);
     }
 }

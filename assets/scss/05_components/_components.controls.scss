@@ -17,10 +17,20 @@
   align-items: start;
 }
 
-.controls__label {
+.controls__heading {
+  min-width: 0;
   padding-top: .6rem;
+}
+
+.controls__label {
   font-weight: 500;
   overflow-wrap: anywhere;
+}
+
+.controls__help {
+  margin: .2rem 0 0;
+  color: #666;
+  font-size: 1.2rem;
 }
 
 .controls__row--changed .controls__label {
@@ -55,6 +65,59 @@
   input[type="checkbox"] {
     margin-top: 1rem;
   }
+
+  input[type="color"] {
+    width: 6rem;
+    height: 3.6rem;
+    padding: .2rem;
+    border: .1rem solid var(--color-primary-20);
+    border-radius: .4rem;
+    background-color: var(--color-light);
+  }
+
+  input[type="date"] {
+    padding: .6rem 1rem;
+    border: .1rem solid var(--color-primary-20);
+    border-radius: .4rem;
+    background-color: var(--color-light);
+    font: inherit;
+  }
+}
+
+.controls__range {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding-top: .6rem;
+
+  input {
+    flex: 1;
+  }
+
+  output {
+    min-width: 3rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.controls__radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1.6rem;
+  margin: 0;
+  padding: .6rem 0 0;
+  border: 0;
+
+  &:disabled {
+    color: #888;
+  }
+}
+
+.controls__radio {
+  display: flex;
+  gap: .4rem;
+  align-items: center;
 }
 
 .controls__json {
@@ -94,6 +157,11 @@
 .controls__badge--yaml {
   background-color: #fff4e0;
   color: #8a5300;
+}
+
+.controls__badge--types {
+  background-color: #ede7f6;
+  color: #4a2c82;
 }
 
 .controls__actions {

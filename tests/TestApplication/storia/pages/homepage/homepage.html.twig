@@ -1,12 +1,19 @@
 {% extends 'base.html.twig' %}
 
+{% types {
+    ## Main message of the page @control textarea
+    message: 'string',
+    ## Number of columns @control range min=1 max=4
+    columns?: 'number',
+} %}
+
 {% block body %}
     {% block hero %}
         <p>This is the homepage hero</p>
     {% endblock %}
 
     {% block content %}
-        <p>{{ message }}</p>
+        <p data-columns="{{ columns|default(1) }}">{{ message }}</p>
 
         {% set button_args = iq2i_storia_variant_args('button/button', 'plain_icon_right') %}
         <twig:Button class="{{ button_args.class }}" icon="{{ button_args.icon }}">

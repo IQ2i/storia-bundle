@@ -1,6 +1,16 @@
-{% props title = 'Card title', count = 3, highlighted = false %}
+{% props
+    ## Title of the card
+    title = 'Card title',
+    ## Number of items @control range min=0 max=10
+    count = 3,
+    highlighted = false,
+    ## Accent color @control color
+    accent = '#0f172a',
+    ## Alignment of the content @control radio left|center|right
+    align = 'left'
+%}
 
-<article class="card{{ highlighted ? ' card--highlighted' : '' }}">
+<article class="card{{ highlighted ? ' card--highlighted' : '' }}" style="--accent: {{ accent }}" data-align="{{ align }}">
     <h2>{{ title }}</h2>
     <p class="count">{{ count }}</p>
 </article>

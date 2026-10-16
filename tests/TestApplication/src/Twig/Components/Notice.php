@@ -18,6 +18,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent('Notice')]
 class Notice
 {
+    /** CSS modifier of the notice @control select info|warning|danger */
     public string $level = 'info';
 
     public bool $dismissible = false;

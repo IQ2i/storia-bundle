@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Controller;
 
+use IQ2i\StoriaBundle\Tests\Controls\TwigTestCase;
 use IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -97,12 +98,41 @@ class IframeControllerTest extends WebTestCase
 
     public function testOverridesApplyToAnAnonymousComponent(): void
     {
-        $crawler = $this->requestWithOverrides('card', ['title' => 'Hello', 'count' => 12, 'highlighted' => true]);
+        $crawler = $this->requestWithOverrides('card', ['title' => 'Hello', 'count' => 7, 'highlighted' => true, 'accent' => '#FF0000', 'align' => 'center']);
 
         $this->assertResponseIsSuccessful();
         $this->assertSame('Hello', $crawler->filter('h2')->text());
-        $this->assertSame('12', $crawler->filter('.count')->text());
-        $this->assertSelectorExists('article.card--highlighted');
+        $this->assertSame('7', $crawler->filter('.count')->text());
+        $this->assertSelectorExists('article.card--highlighted[data-align="center"]');
+        $this->assertSame('--accent: #ff0000', $crawler->filter('article')->attr('style'));
+    }
+
+    public function testOverridesOutsideTheDirectiveAreIgnored(): void
+    {
+        TwigTestCase::requirePropDocumentation();
+
+        $crawler = $this->requestWithOverrides('card', ['count' => 12, 'accent' => 'red', 'align' => 'top']);
+
+        $this->assertSame('3', $crawler->filter('.count')->text());
+        $this->assertSelectorExists('article[data-align="left"]');
+        $this->assertSame('--accent: #0f172a', $crawler->filter('article')->attr('style'));
+    }
+
+    public function testOverridesApplyToTheMountParameters(): void
+    {
+        $crawler = $this->requestWithOverrides('snackbar', ['message' => 'done', 'delay' => 12]);
+
+        $this->assertSame('DONE', $crawler->filter('.snackbar')->text());
+        $this->assertSame('12', $crawler->filter('.snackbar')->attr('data-delay'));
+    }
+
+    public function testOverridesApplyToTheTypesOfAPage(): void
+    {
+        $this->client ??= static::createClient();
+        $crawler = $this->client->request('GET', '/storia/iframe/pages/homepage/homepage?variant=default&overrides='.rawurlencode((string) json_encode(['message' => "Two\nlines", 'columns' => 3])));
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSame("Two\nlines", $crawler->filter('p[data-columns="3"]')->text(normalizeWhitespace: false));
     }
 
     public function testWithoutOverridesTheDefaultsApply(): void

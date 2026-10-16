@@ -51,14 +51,14 @@ class TemplateBuilder extends AbstractBuilder
             $variantConfig = $config['variants'][$variantPath];
 
             $resolvedArgs = $this->dataResolver->resolve($variantConfig['args']);
+            $twigContent = $this->getTwigContent($template);
 
-            ['controls' => $controls, 'overrides' => $appliedOverrides] = $this->controlsBuilder->applyOverrides(
-                $this->controlsBuilder->forTemplate($resolvedArgs),
+            ['controls' => $controls, 'overrides' => $renderOverrides, 'display' => $appliedOverrides] = $this->controlsBuilder->applyOverrides(
+                $this->controlsBuilder->forTemplate($resolvedArgs, $twigContent),
                 $overrides
             );
 
-            $twigContent = $this->getTwigContent($template);
-            $htmlContent = $this->generateHtml($twigContent, array_replace($resolvedArgs, $appliedOverrides));
+            $htmlContent = $this->generateHtml($twigContent, array_replace($resolvedArgs, $renderOverrides));
 
             $markdownContent = null;
             if (file_exists($this->defaultPath.'/'.$path.'.md')) {

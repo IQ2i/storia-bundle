@@ -21,19 +21,33 @@ readonly class ControlsBuilder
 
     public function __construct(
         private PropsExtractor $propsExtractor,
+        private ComponentIntrospector $introspector,
     ) {
     }
 
     /**
      * @param array<string, mixed> $resolvedArgs
+     * @param string|null          $code         the source of the template, whose {% types %} tag declares and documents the args
      *
      * @return list<Control>
      */
-    public function forTemplate(array $resolvedArgs): array
+    public function forTemplate(array $resolvedArgs, ?string $code = null): array
     {
+        $types = null === $code ? [] : $this->propsExtractor->types($code);
+
         $controls = [];
+        foreach ($types as $name => $type) {
+            $control = \array_key_exists($name, $resolvedArgs)
+                ? ControlFactory::fromValue($name, $resolvedArgs[$name], 'types', null, true)
+                : ControlFactory::fromTwigType($name, $type->type, null, 'types');
+
+            $controls[] = ControlFactory::withDirective($control, $type->directive);
+        }
+
         foreach ($resolvedArgs as $name => $value) {
-            $controls[] = ControlFactory::fromValue((string) $name, $value, 'yaml', inYaml: true);
+            if (!isset($types[$name])) {
+                $controls[] = ControlFactory::fromValue((string) $name, $value, 'yaml', inYaml: true);
+            }
         }
 
         return $controls;
@@ -46,31 +60,17 @@ readonly class ControlsBuilder
      */
     public function forComponent(ComponentMetadata $metadata, array $resolvedArgs): array
     {
-        $declared = [];
-        foreach ($this->propsExtractor->extract($metadata->getTemplate()) as $name => $prop) {
-            $declared[$name] = ['props', $prop, null];
-        }
-
-        if (!$metadata->isAnonymous() && $metadata->isPublicPropsExposed()) {
-            $properties = (new \ReflectionClass($metadata->getClass()))->getProperties(\ReflectionProperty::IS_PUBLIC);
-            foreach ($properties as $property) {
-                if ($property->isStatic()) {
-                    continue;
-                }
-
-                $default = new PropDefinition($property->hasDefaultValue() ? $property->getDefaultValue() : null, $property->hasDefaultValue());
-                $declared[$property->getName()] = ['class', $default, $property->getType()];
-            }
-        }
+        $declared = $this->introspector->props($metadata);
 
         $controls = [];
-        foreach ($declared as $name => [$source, $prop, $type]) {
+        foreach ($declared as $name => $prop) {
             $inYaml = \array_key_exists($name, $resolvedArgs);
             $value = $inYaml ? $resolvedArgs[$name] : $prop->default;
 
-            $control = 'class' === $source
-                ? ControlFactory::fromReflectionType($name, $type, $value, $source, $prop->default, $inYaml)
-                : ControlFactory::fromValue($name, $value, $source, $prop->default, $inYaml);
+            $control = 'class' === $prop->source
+                ? ControlFactory::fromReflectionType($name, $prop->type, $value, $prop->source, $prop->default, $inYaml)
+                : ControlFactory::fromValue($name, $value, $prop->source, $prop->default, $inYaml);
+            $control = ControlFactory::withDirective($control, $prop->directive);
 
             $controls[] = $prop->isExpression && !$inYaml ? $control->asReadOnly('expression') : $control;
         }
@@ -91,11 +91,14 @@ readonly class ControlsBuilder
      * @param list<Control>        $controls
      * @param array<string, mixed> $overrides
      *
-     * @return array{controls: list<Control>, overrides: array<string, mixed>}
+     * @return array{controls: list<Control>, overrides: array<string, mixed>, display: array<string, mixed>}
+     *                                                                                                        the controls with their current value, the values to render (enums and dates as objects),
+     *                                                                                                        and the same values as scalars, to display and put back in the URL
      */
     public function applyOverrides(array $controls, array $overrides): array
     {
         $retained = [];
+        $display = [];
         $result = [];
         foreach ($controls as $control) {
             $coerced = \array_key_exists($control->name, $overrides)
@@ -109,11 +112,11 @@ readonly class ControlsBuilder
                 continue;
             }
 
-            [$retained[$control->name], $display] = $coerced;
-            $result[] = $control->withCurrent($display);
+            [$retained[$control->name], $display[$control->name]] = $coerced;
+            $result[] = $control->with(current: $display[$control->name]);
         }
 
-        return ['controls' => $result, 'overrides' => $retained];
+        return ['controls' => $result, 'overrides' => $retained, 'display' => $display];
     }
 
     /**
@@ -123,14 +126,13 @@ readonly class ControlsBuilder
     {
         $value = match ($control->type) {
             'checkbox' => \is_bool($raw) ? $raw : null,
-            'number' => match (true) {
-                \is_int($raw), \is_float($raw) => $raw,
-                \is_string($raw) && is_numeric($raw) => $raw + 0,
-                default => null,
-            },
+            'number' => $this->coerceNumber($raw),
+            'range' => $this->coerceRange($control, $raw),
             'text', 'textarea' => \is_scalar($raw) ? (string) $raw : null,
+            'color' => \is_string($raw) && preg_match('/^#[0-9a-f]{6}$/i', $raw) ? strtolower($raw) : null,
+            'date' => $this->coerceDate($control, $raw),
             'json' => \is_array($raw) ? $raw : null,
-            'select' => $this->coerceChoice($control, $raw),
+            'select', 'radio' => $this->coerceChoice($control, $raw),
             default => null,
         };
 
@@ -138,7 +140,47 @@ readonly class ControlsBuilder
             return null;
         }
 
-        return [$value, $value instanceof \BackedEnum ? $value->value : $value];
+        $display = match (true) {
+            $value instanceof \BackedEnum => $value->value,
+            $value instanceof \DateTimeInterface => $value->format('Y-m-d'),
+            default => $value,
+        };
+
+        return [$value, $display];
+    }
+
+    private function coerceNumber(mixed $raw): int|float|null
+    {
+        return match (true) {
+            \is_int($raw), \is_float($raw) => $raw,
+            \is_string($raw) && is_numeric($raw) => $raw + 0,
+            default => null,
+        };
+    }
+
+    private function coerceRange(Control $control, mixed $raw): int|float|null
+    {
+        $value = $this->coerceNumber($raw);
+
+        return null !== $value && $value >= ($control->min ?? -\INF) && $value <= ($control->max ?? \INF) ? $value : null;
+    }
+
+    private function coerceDate(Control $control, mixed $raw): \DateTimeInterface|string|null
+    {
+        if (!\is_string($raw) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw)) {
+            return null;
+        }
+
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $raw);
+        if (false === $date || $date->format('Y-m-d') !== $raw) {
+            return null;
+        }
+
+        if (null === $control->valueClass) {
+            return $raw;
+        }
+
+        return \DateTime::class === $control->valueClass ? \DateTime::createFromImmutable($date) : $date;
     }
 
     private function coerceChoice(Control $control, mixed $raw): mixed
@@ -149,7 +191,7 @@ readonly class ControlsBuilder
 
         foreach ($control->choices as $choice) {
             if ((string) $choice === (string) $raw) {
-                return null !== $control->enumClass ? $control->enumClass::from($choice) : $choice;
+                return null !== $control->valueClass ? $control->valueClass::from($choice) : $choice;
             }
         }
 

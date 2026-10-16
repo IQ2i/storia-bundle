@@ -87,6 +87,10 @@ export default class extends Controller {
 
             if (field.type === 'checkbox') {
                 field.checked = Boolean(initial);
+            } else if (field.dataset.type === 'radio') {
+                field.querySelectorAll('input').forEach((radio) => {
+                    radio.checked = radio.value === String(initial ?? '');
+                });
             } else if (field.dataset.type === 'json') {
                 field.value = JSON.stringify(initial, null, 2);
             } else {
@@ -146,6 +150,19 @@ export default class extends Controller {
                 return { value: field.checked };
             case 'number':
                 return field.value === '' ? { invalid: true } : { value: Number(field.value) };
+            case 'range': {
+                const output = field.parentElement.querySelector('output');
+                if (output) {
+                    output.textContent = field.value;
+                }
+
+                return { value: Number(field.value) };
+            }
+            case 'radio': {
+                const checked = field.querySelector('input:checked');
+
+                return checked ? { value: checked.value } : { invalid: true };
+            }
             case 'json':
                 try {
                     const value = JSON.parse(field.value);
@@ -170,9 +187,14 @@ export default class extends Controller {
 
         switch (field.dataset.type) {
             case 'select':
+            case 'radio':
                 return String(initial) === String(value);
+            case 'range':
+                return Number(initial) === value;
             case 'text':
             case 'textarea':
+            case 'color':
+            case 'date':
                 return (initial ?? '') === value;
             case 'checkbox':
                 return Boolean(initial) === value;
