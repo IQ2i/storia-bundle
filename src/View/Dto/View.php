@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Dto;
 
+use IQ2i\StoriaBundle\Controls\Control;
+
 readonly class View
 {
     public function __construct(
@@ -22,6 +24,8 @@ readonly class View
         private ?string $includeContent = null,
         private ?string $markdownContent = null,
         private array $variants = [],
+        private array $controls = [],
+        private array $overrides = [],
     ) {
     }
 
@@ -56,6 +60,22 @@ readonly class View
     public function getVariants(): array
     {
         return $this->variants;
+    }
+
+    /**
+     * @return list<Control>
+     */
+    public function getControls(): array
+    {
+        return $this->controls;
+    }
+
+    /**
+     * @return array<string, mixed> the overrides applied to the args of the current variant
+     */
+    public function getOverrides(): array
+    {
+        return $this->overrides;
     }
 
     public function getCurrentVariant(): ?Variant

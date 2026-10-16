@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
+use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
@@ -25,6 +26,7 @@ class TemplateBuilder extends AbstractBuilder
         string $defaultPath,
         Environment $twig,
         private readonly DataResolver $dataResolver,
+        private readonly ControlsBuilder $controlsBuilder,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -34,7 +36,7 @@ class TemplateBuilder extends AbstractBuilder
         return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
     }
 
-    public function build(string $path, ?string $variantPath, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['template'] ?? null;
 
@@ -42,18 +44,21 @@ class TemplateBuilder extends AbstractBuilder
             $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 
+        $controls = [];
+        $appliedOverrides = [];
+
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
             $resolvedArgs = $this->dataResolver->resolve($variantConfig['args']);
 
-            $variantArgs = [];
-            foreach ($resolvedArgs as $argName => $argValue) {
-                $variantArgs[$argName] = $argValue;
-            }
+            ['controls' => $controls, 'overrides' => $appliedOverrides] = $this->controlsBuilder->applyOverrides(
+                $this->controlsBuilder->forTemplate($resolvedArgs),
+                $overrides
+            );
 
             $twigContent = $this->getTwigContent($template);
-            $htmlContent = $this->generateHtml($twigContent, $variantArgs);
+            $htmlContent = $this->generateHtml($twigContent, array_replace($resolvedArgs, $appliedOverrides));
 
             $markdownContent = null;
             if (file_exists($this->defaultPath.'/'.$path.'.md')) {
@@ -73,7 +78,9 @@ class TemplateBuilder extends AbstractBuilder
             $htmlContent ?? null,
             null,
             $markdownContent ?? null,
-            $variants
+            $variants,
+            $controls,
+            $appliedOverrides
         );
     }
 }

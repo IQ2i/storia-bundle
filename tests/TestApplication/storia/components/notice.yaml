@@ -1,0 +1,12 @@
+component: Notice
+
+variants:
+  default:
+    blocks:
+      content: Something happened
+
+  warning:
+    args:
+      level: warning
+    blocks:
+      content: Careful

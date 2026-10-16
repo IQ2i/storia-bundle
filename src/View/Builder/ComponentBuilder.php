@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Builder;
 
+use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
@@ -30,6 +31,7 @@ class ComponentBuilder extends AbstractBuilder
         private readonly ComponentTemplateFinderInterface $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
         private readonly DataResolver $dataResolver,
+        private readonly ControlsBuilder $controlsBuilder,
     ) {
         parent::__construct($defaultPath, $twig);
     }
@@ -39,9 +41,12 @@ class ComponentBuilder extends AbstractBuilder
         return \array_key_exists('component', $config);
     }
 
-    public function build(string $path, ?string $variantPath, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['component'];
+
+        $controls = [];
+        $appliedOverrides = [];
 
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
@@ -57,6 +62,11 @@ class ComponentBuilder extends AbstractBuilder
                     throw new \LogicException(\sprintf('Block "%s" of component "%s" must resolve to a string, got %s.', $blockName, $path, get_debug_type($block)));
                 }
             }
+
+            ['controls' => $controls, 'overrides' => $appliedOverrides] = $this->controlsBuilder->applyOverrides(
+                $this->controlsBuilder->forComponent($this->componentFactory->metadataFor($template), $resolvedArgs),
+                $overrides
+            );
 
             $variantArgs = [];
             foreach ($resolvedArgs as $argName => $argValue) {
@@ -82,9 +92,15 @@ class ComponentBuilder extends AbstractBuilder
                 unset($parameters['blocks']['content']);
             }
 
-            $includeContent = $this->generateInclude($skeletonPath, $parameters);
+            $includeContent = $this->generateInclude($skeletonPath, [...$parameters, 'args' => $this->replaceArgs($variantArgs, $appliedOverrides, false)]);
             $twigContent = $this->getTwigContent($template);
-            $htmlContent = $this->generateHtml($includeContent, $parameters['args']);
+
+            // Overrides never reach the Twig source: they are read from the rendering context
+            $renderArgs = $this->replaceArgs($variantArgs, $appliedOverrides, true);
+            $htmlContent = $this->generateHtml(
+                $this->generateInclude($skeletonPath, [...$parameters, 'args' => $renderArgs]),
+                [...$parameters['args'], '__storia_overrides' => $appliedOverrides]
+            );
 
             $markdownContent = null;
             if (file_exists($this->defaultPath.'/'.$path.'.md')) {
@@ -104,7 +120,9 @@ class ComponentBuilder extends AbstractBuilder
             $htmlContent ?? null,
             $includeContent ?? null,
             $markdownContent ?? null,
-            $variants
+            $variants,
+            $controls,
+            $appliedOverrides
         );
     }
 
@@ -113,6 +131,37 @@ class ComponentBuilder extends AbstractBuilder
         $template = $this->componentTemplateFinder->findAnonymousComponentTemplate($template);
 
         return parent::getTwigContent($template);
+    }
+
+    /**
+     * @param array<string, mixed> $args
+     * @param array<string, mixed> $overrides
+     *
+     * @return array<string, mixed>
+     */
+    private function replaceArgs(array $args, array $overrides, bool $forRendering): array
+    {
+        foreach ($overrides as $name => $value) {
+            unset($args[$name], $args[':'.$name]);
+
+            if ($forRendering) {
+                $args[':'.$name] = \sprintf("__storia_overrides['%s']", $name);
+                continue;
+            }
+
+            $value = $value instanceof \BackedEnum ? $value->value : $value;
+            if (\is_array($value)) {
+                $args[':'.$name] = str_replace('"', "'", json_encode($value, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
+            } elseif (\is_bool($value)) {
+                $args[':'.$name] = $value ? 'true' : 'false';
+            } elseif (\is_int($value) || \is_float($value)) {
+                $args[':'.$name] = (string) $value;
+            } else {
+                $args[$name] = htmlspecialchars((string) $value, \ENT_QUOTES);
+            }
+        }
+
+        return $args;
     }
 
     private function getComponentProperties(string $template): array

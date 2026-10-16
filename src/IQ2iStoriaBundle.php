@@ -19,6 +19,7 @@ use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\Controller\ChangesController;
 use IQ2i\StoriaBundle\Controller\IframeController;
 use IQ2i\StoriaBundle\Controller\ViewController;
+use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ArgResolverPass;
 use IQ2i\StoriaBundle\DependencyInjection\Compiler\ProfilerPass;
@@ -168,6 +169,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     new Reference('ux.twig_component.component_template_finder'),
                     new Reference('ux.twig_component.component_factory'),
                     new Reference(DataResolver::class),
+                    new Reference(ControlsBuilder::class),
                 ]);
         }
 
