@@ -72,6 +72,8 @@ class ArgResolverPass implements CompilerPassInterface
             try {
                 $data = $preProcessor->process($storiaPath, $relativePath);
             } catch (\Throwable) {
+                // An invalid file must not break the whole application container (this pass also runs where
+                // Storia is disabled). The error is reported when the view is loaded, and by storia:test.
                 continue;
             }
 
