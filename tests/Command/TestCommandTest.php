@@ -33,6 +33,15 @@ class TestCommandTest extends KernelTestCase
         parent::tearDown();
     }
 
+    public function testTheVersionedSnapshotsOfTheTestApplicationAreUpToDate(): void
+    {
+        $tester = $this->createTester();
+        $exitCode = $tester->execute([]);
+
+        $this->assertSame(0, $exitCode, $tester->getDisplay());
+        $this->assertStringContainsString('41 variants, 41 passed, 0 new, 0 updated, 0 failed', $tester->getDisplay());
+    }
+
     public function testWritesNewSnapshotsWithoutFailing(): void
     {
         $tester = $this->createTester();
