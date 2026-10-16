@@ -27,6 +27,30 @@ class ViewControllerTest extends WebTestCase
         $this->assertCount(2, $crawler->filter('main > div > div > .tabs > .tabs__item'));
     }
 
+    public function testViewWithoutVariantRedirectsToTheFirstOne(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/components/badge');
+
+        $this->assertResponseRedirects('/storia/components/badge?variant=default');
+    }
+
+    public function testLinksAreGeneratedFromTheRouter(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/badge?variant=large');
+
+        $this->assertSame('/storia/iframe/components/badge?variant=large', $crawler->filter('iframe')->attr('src'));
+        $this->assertSame('/storia/components/badge?variant=default', $crawler->filter('header .tabs__item_link')->first()->attr('href'));
+        $this->assertCount(1, $crawler->filter('header .tab-is-active'));
+        $this->assertSelectorTextContains('header .tab-is-active', 'Large');
+        $this->assertSame('/storia/components/avatar?variant=rounded', $crawler->filter('.menu_item a')->first()->attr('href'));
+        $this->assertSelectorExists('.menu_item.active a[href="/storia/components/badge?variant=default"]');
+        $this->assertSelectorExists('[data-controller~="live-reload"]');
+        $this->assertSelectorExists('script[src="/bundles/iq2istoria/storia.js"]');
+        $this->assertSelectorNotExists('.main__sidebar_notice');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

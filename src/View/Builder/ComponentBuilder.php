@@ -17,7 +17,6 @@ use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 use Symfony\UX\TwigComponent\ComponentFactory;
 use Symfony\UX\TwigComponent\ComponentTemplateFinderInterface;
@@ -40,12 +39,11 @@ class ComponentBuilder extends AbstractBuilder
         return \array_key_exists('component', $config);
     }
 
-    public function build(Request $request, string $path, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config): ?View
     {
         $template = $config['component'];
 
-        $variantPath = $request->query->get('variant');
-        if (isset($config['variants'][$variantPath])) {
+        if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
             $skeletonPath = __DIR__.'/../../../skeleton/component.tpl.php';

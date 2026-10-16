@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $container): void {
         ],
     ]);
 
-    if ('test' === $container->env()) {
+    if (\in_array($container->env(), ['test', 'export_failure'], true)) {
         $container->extension('framework', [
             'session' => [
                 'storage_factory_id' => 'session.storage.factory.mock_file',

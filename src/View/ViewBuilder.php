@@ -32,7 +32,16 @@ readonly class ViewBuilder
     public function createFromRequest(Request $request): ?View
     {
         $path = $request->attributes->get('view');
-        if (null === $path || null === $this->yamlPreProcessor->resolveFilePath($this->defaultPath, $path)) {
+        if (null === $path) {
+            return null;
+        }
+
+        return $this->create($path, $request->query->get('variant'));
+    }
+
+    public function create(string $path, ?string $variant): ?View
+    {
+        if (null === $this->yamlPreProcessor->resolveFilePath($this->defaultPath, $path)) {
             return null;
         }
 
@@ -44,7 +53,7 @@ readonly class ViewBuilder
         /** @var BuilderInterface $builder */
         foreach ($this->builders as $builder) {
             if ($builder->supports($path, $config)) {
-                return $builder->build($request, $path, $config);
+                return $builder->build($path, $variant, $config);
             }
         }
 

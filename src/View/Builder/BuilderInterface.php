@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\View\Dto\View;
-use Symfony\Component\HttpFoundation\Request;
 
 interface BuilderInterface
 {
     public function supports(string $path, array $config): bool;
 
-    public function build(Request $request, string $path, array $config): ?View;
+    public function build(string $path, ?string $variantPath, array $config): ?View;
 }

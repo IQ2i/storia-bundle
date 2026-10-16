@@ -17,7 +17,6 @@ use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use Michelf\MarkdownExtra;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 class TemplateBuilder extends AbstractBuilder
@@ -35,7 +34,7 @@ class TemplateBuilder extends AbstractBuilder
         return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
     }
 
-    public function build(Request $request, string $path, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config): ?View
     {
         $template = $config['template'] ?? null;
 
@@ -43,8 +42,7 @@ class TemplateBuilder extends AbstractBuilder
             $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 
-        $variantPath = $request->query->get('variant');
-        if (isset($config['variants'][$variantPath])) {
+        if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
             // Resolve args with ArgResolver

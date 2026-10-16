@@ -11,6 +11,7 @@
 
 declare(strict_types=1);
 
+use IQ2i\StoriaBundle\Tests\TestApplication\Controller\DynamicAssetController;
 use Symfony\Bundle\FrameworkBundle\Controller\TemplateController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
@@ -18,6 +19,9 @@ return static function (RoutingConfigurator $routes) {
     $routes->add('home', '/')
         ->controller(TemplateController::class)
         ->defaults(['template' => 'pages/homepage.html.twig']);
+
+    $routes->add('dynamic_asset', '/dynamic/app.css')
+        ->controller(DynamicAssetController::class);
 
     $routes->import('@IQ2iStoriaBundle/config/routes.php')->prefix('/storia');
 

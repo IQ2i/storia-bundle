@@ -9,7 +9,9 @@
   },
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "core-js": "^3.35.0",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
     "highlight.js": "^11.9.0",
     "rollup": "^4.27.2",
     "rollup-plugin-copy": "^3.5.0",

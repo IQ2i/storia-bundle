@@ -6,23 +6,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UI Storia</title>
-        <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('/bundles/iq2istoria/favicon.svg') }}">
+        <link rel="shortcut icon" type="image/svg+xml" href="{{ urls.asset('favicon.svg') }}">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="stylesheet" href="{{ asset('/bundles/iq2istoria/storia.css') }}"/>
+        <link rel="stylesheet" href="{{ urls.asset('storia.css') }}"/>
 
-        <script type="importmap">
-            {
-                "imports": {
-                    "storia": "{{ asset('/bundles/iq2istoria/storia.js') }}",
-                    "@hotwired/stimulus": "{{ asset('/bundles/iq2istoria/vendor/stimulus/stimulus.js') }}",
-                    "highlight.js/lib/core": "{{ asset('/bundles/iq2istoria/vendor/highlight.js/lib/core.js') }}",
-                    "highlight.js/lib/languages/twig": "{{ asset('/bundles/iq2istoria/vendor/highlight.js/lib/languages/twig.js') }}",
-                    "highlight.js/lib/languages/xml": "{{ asset('/bundles/iq2istoria/vendor/highlight.js/lib/languages/xml.js') }}"
-                }
-            }
-        </script>
-        <script type="module">import 'storia';</script>
+        <script src="{{ urls.asset('storia.js') }}" defer></script>
     </head>
 
     <body>
@@ -37,23 +26,27 @@
                 </div>
                 <nav class="main__sidebar_nav">
                     <ul role="list">
-                        {% for menu_item in iq2i_storia_menu() %}
+                        {% for menu_item in menu %}
                             {{ _self.generate_submenu(menu_item) }}
                         {% endfor %}
                     </ul>
                 </nav>
+
+                {% if static %}
+                    <p class="main__sidebar_notice">Static export — generated {{ exported_at|date('Y-m-d H:i') }}. Live reload is not available.</p>
+                {% endif %}
             </div>
 
             <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
-            <div class="main__content resize__panel" data-controller="controls live-reload" data-live-reload-url-value="{{ path('iq2i_storia_changes') }}" data-resize-target="panelB">
+            <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %} data-resize-target="panelB">
                 {% if view is not null %}
                     <header>
                         {% if view.variants is not empty %}
                             <ul class="tabs">
                                 {% for variant in view.variants %}
                                     <li class="tabs__item">
-                                        <a href="{{ path('iq2i_storia_view', {view: view.path, variant: variant.path}) }}" class="tabs__item_link {% if app.request.query.get('variant') == variant.path %}tab-is-active{% else %}tab-is-unactive{% endif %}">
+                                        <a href="{{ urls.view(view.path, variant.path) }}" class="tabs__item_link {% if variant.current %}tab-is-active{% else %}tab-is-unactive{% endif %}">
                                             {{ variant.name }}
                                         </a>
                                     </li>
@@ -81,7 +74,7 @@
 
                             <div class="actions_separator"></div>
 
-                            <a class="actions_item" href="{{ path('iq2i_storia_iframe', { view: view.path, variant: view.currentVariant.path }) }}" target="_blank" title="Open in new tab">
+                            <a class="actions_item" href="{{ urls.iframe(view.path, view.currentVariant.path) }}" target="_blank" title="Open in new tab">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                 <span>Iframe</span>
                             </a>
@@ -98,7 +91,7 @@
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ path('iq2i_storia_iframe', {view: view.path, variant: view.currentVariant.path}) }}" data-controls-target="iframe" data-live-reload-target="iframe"></iframe>
+                                    <iframe src="{{ urls.iframe(view.path, view.currentVariant.path) }}" data-controls-target="iframe"{% if not static %} data-live-reload-target="iframe"{% endif %}></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>

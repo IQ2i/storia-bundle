@@ -17,7 +17,6 @@ use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 class FormBuilder extends AbstractBuilder
@@ -35,7 +34,7 @@ class FormBuilder extends AbstractBuilder
         return \array_key_exists('form', $config) && class_exists($config['form']);
     }
 
-    public function build(Request $request, string $path, array $config): ?View
+    public function build(string $path, ?string $variantPath, array $config): ?View
     {
         $config['variants'] = [
             'default' => [
@@ -54,8 +53,7 @@ class FormBuilder extends AbstractBuilder
             ],
         ];
 
-        $variantPath = $request->query->get('variant');
-        if (isset($config['variants'][$variantPath])) {
+        if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
