@@ -293,10 +293,12 @@ The command renders every variant of every component and page, then compares the
 
 - `✗` the variant cannot be rendered (Twig or PHP error). It always fails the command.
 - `≠` the rendering differs from the snapshot. A diff is shown (install `sebastian/diff` to get it) and the command fails.
-- `+` the variant has no snapshot yet: it is written and the command does not fail.
+- `+` the variant has no snapshot yet: it is written and the command does not fail, except in CI (see below).
 - `↻` the snapshot was rewritten because of `--update`.
+- `?` a view defines no variant, or a snapshot has no variant any more: nothing is tested. A view without variant fails the command in CI.
 
-The exit code is `1` as soon as one variant fails, `0` otherwise, so the command can be used as is in a CI job:
+The exit code is `1` as soon as one variant fails, `0` otherwise, so the command can be used as is in a CI job.
+When the `CI` environment variable is set (GitHub Actions and GitLab CI set it), or with `--ci`, a missing snapshot is an error instead of being written: a file written on a runner is lost, and the variant would never be compared.
 
 ```yaml
 # .gitlab-ci.yml
@@ -321,6 +323,8 @@ bin/console storia:test --update
 
 A snapshot whose variant no longer exists is reported with `?` but does not fail the command; delete the file.
 
+Snapshots can only be stable if the rendering is: `!repeat` and `!lorem` are deterministic, but a form with CSRF protection, or a PHP data provider returning dates or random values, is not. Disable the CSRF token in the test environment, make such data deterministic, or use `--no-snapshots` for it.
+
 ```yaml
 # config/packages/iq2i_storia.yaml
 
@@ -336,10 +340,9 @@ iq2i_storia:
 | `--filter=<text>` | Only test the views or variants whose `view` or `view:variant` name contains the text |
 | `--update` | Rewrite the snapshots that differ |
 | `--no-snapshots` | Only check that every variant renders |
+| `--ci` | Fail on a missing snapshot instead of writing it (default when the `CI` environment variable is set) |
 | `--snapshot-path=<dir>` | Use another snapshot directory |
 | `-v` | Show the stack trace of the errors |
-
-Snapshots can only be stable if the rendering is: `!repeat` and `!lorem` are deterministic, but a PHP data provider returning dates or random values is not. Make such data deterministic, or use `--no-snapshots` for it.
 
 ### PHPUnit
 
