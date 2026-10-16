@@ -16,6 +16,7 @@ namespace IQ2i\StoriaBundle\Menu;
 use IQ2i\StoriaBundle\Menu\Dto\Menu;
 use IQ2i\StoriaBundle\Menu\Dto\MenuItem;
 use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
+use IQ2i\StoriaBundle\Util\Label;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -58,8 +59,7 @@ readonly class MenuBuilder
 
         /** @var SplFileInfo $file */
         foreach ((new Finder())->in($this->defaultPath.'/'.$folder)->depth('== 0')->sortByName(true)->sortByType() as $file) {
-            $label = u($file->getFilenameWithoutExtension())->title()->toString();
-            $label = ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $label))));
+            $label = Label::humanize($file->getFilenameWithoutExtension());
 
             if ($file->isDir()) {
                 $child = new Menu($label);
