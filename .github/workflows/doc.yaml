@@ -2,6 +2,7 @@ name: Build and deploy to GitHub Pages
 on:
     push:
         branches: [main]
+        tags: ['*.*.*']
     workflow_dispatch: # run manually
 
 permissions:
@@ -25,6 +26,12 @@ jobs:
               with:
                   php-version: '8.3'
                   extensions: fileinfo, gd, mbstring
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: Export the demo
+              run: php tests/TestApplication/bin/console storia:export doc/static/demo --env=test
 
             - name: Build site
               uses: Cecilapp/Cecil-Action@v3

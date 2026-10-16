@@ -30,3 +30,4 @@ yarn-error.log
 doc/.cache
 doc/.cecil
 doc/_site
+doc/static/demo

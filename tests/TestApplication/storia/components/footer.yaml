@@ -1,0 +1,10 @@
+component: Footer
+
+variants:
+  default: ~
+
+  legal_links:
+    args:
+      company: Mezcalito
+    blocks:
+      content: '<a href="/legal">Legal notice</a> · <a href="/privacy">Privacy</a>'
