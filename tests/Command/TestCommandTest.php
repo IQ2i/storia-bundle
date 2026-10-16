@@ -46,16 +46,6 @@ class TestCommandTest extends KernelTestCase
         return \count(StoriaVariants::fromDirectory(__DIR__.'/../TestApplication/storia'));
     }
 
-    public function testTheVersionedSnapshotsOfTheTestApplicationAreUpToDate(): void
-    {
-        $tester = $this->createTester();
-        $exitCode = $tester->execute(['--ci' => true]);
-
-        $this->assertSame(0, $exitCode, $tester->getDisplay());
-        $this->assertStringContainsString(\sprintf('%1$d variants, %1$d passed, 0 new, 0 updated, 0 failed', $this->variantCount()), $tester->getDisplay());
-        $this->assertStringNotContainsString('orphan snapshot', $tester->getDisplay());
-    }
-
     public function testWritesNewSnapshotsWithoutFailing(): void
     {
         $tester = $this->createTester();
@@ -192,7 +182,7 @@ class TestCommandTest extends KernelTestCase
     {
         $kernel = self::bootKernel();
 
-        $this->assertSame($kernel->getProjectDir().'/storia/snapshots', $kernel->getContainer()->getParameter('iq2i_storia.test.snapshot_path'));
+        $this->assertSame($kernel->getCacheDir().'/storia/snapshots', $kernel->getContainer()->getParameter('iq2i_storia.test.snapshot_path'));
     }
 
     private function createTester(string $environment = 'test'): CommandTester

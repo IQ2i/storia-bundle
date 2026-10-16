@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $container): void {
             'assets' => ['img/extra.svg'],
         ],
         'test' => [
-            'snapshot_path' => '%kernel.project_dir%/storia/snapshots',
+            'snapshot_path' => '%kernel.cache_dir%/storia/snapshots',
         ],
     ]);
 };

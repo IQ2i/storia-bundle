@@ -314,6 +314,7 @@ storia:
 
 A snapshot is the HTML of one variant, without the preview page around it, stored in `tests/storia/snapshots/<view>/<variant>.html`. Commit them: they are reviewed in your merge requests like any other file.
 Only line endings and trailing spaces are normalized, nothing else is reformatted.
+The HTML also depends on the rendering stack: upgrading Symfony or Twig can change a form theme or an attribute, review the diff and accept it with `--update`.
 
 Snapshots are never rewritten silently. When a change is intended, accept it explicitly:
 
