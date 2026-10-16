@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Test\PHPUnit;
 
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
+use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\ViewFinder;
 
 /**
@@ -22,8 +23,6 @@ use IQ2i\StoriaBundle\View\ViewFinder;
  */
 final class StoriaVariants
 {
-    private const array FORM_VARIANTS = ['default', 'disabled', 'error'];
-
     /**
      * Data provider reading the directory from the STORIA_PATH environment variable, or ./storia.
      *
@@ -46,7 +45,7 @@ final class StoriaVariants
         $dataSets = [];
         foreach ((new ViewFinder($storiaPath))->findPaths() as $path) {
             $config = $preProcessor->process($storiaPath, $path);
-            $variants = \array_key_exists('form', $config) ? self::FORM_VARIANTS : array_map(self::normalizeName(...), array_keys($config['variants'] ?? []));
+            $variants = \array_key_exists('form', $config) ? array_keys(FormBuilder::VARIANTS) : array_map(self::normalizeName(...), array_keys($config['variants'] ?? []));
 
             foreach ($variants as $variant) {
                 $name = $path.':'.$variant;
