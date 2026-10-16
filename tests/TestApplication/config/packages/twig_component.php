@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $container): void {
     $container->extension('twig_component', [
+        'anonymous_template_directory' => 'components',
         'defaults' => [
             'IQ2i\\StoriaBundle\\Tests\\TestApplication\\Twig\\Component\\' => null,
             'IQ2i\\StoriaBundle\\Tests\\TestApplication\\Twig\\Components\\' => null,
