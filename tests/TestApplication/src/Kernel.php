@@ -41,7 +41,7 @@ final class Kernel extends SymfonyKernel
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/storia/tests/var/'.$this->environment.'/cache';
+        return sys_get_temp_dir().'/storia/tests/var/'.$this->environment.($this->debug ? '' : '_nodebug').'/cache';
     }
 
     public function getLogDir(): string

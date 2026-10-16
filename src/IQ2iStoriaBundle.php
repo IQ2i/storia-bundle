@@ -58,7 +58,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->scalarNode('default_path')
                     ->defaultValue('%kernel.project_dir%/storia')
                 ->end()
-                ->booleanNode('enabled')->defaultTrue()->end()
+                ->booleanNode('enabled')->defaultNull()->info('Defaults to kernel.debug')->end()
                 ->arrayNode('watch')
                     ->scalarPrototype()->end()
                     ->defaultValue(['%kernel.project_dir%/assets', '%kernel.project_dir%/templates'])
@@ -94,7 +94,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $container->import('../config/services.php');
 
         $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
-        $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
+        $builder->setParameter('iq2i_storia.enabled', $config['enabled'] ?? '%kernel.debug%');
         $builder->setParameter('iq2i_storia.watch', $config['watch']);
         $builder->setParameter('iq2i_storia.export.output_dir', $config['export']['output_dir']);
         $builder->setParameter('iq2i_storia.export.public_dir', $config['export']['public_dir']);
