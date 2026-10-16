@@ -116,7 +116,7 @@ readonly class YamlPreProcessor
         $yamlParts[] = $rawContent;
 
         /** @var array<string, mixed> $data */
-        $data = Yaml::parse(implode("\n", $yamlParts)) ?? [];
+        $data = Yaml::parse(implode("\n", $yamlParts), Yaml::PARSE_CUSTOM_TAGS) ?? [];
 
         // Save extends path before stripping meta keys.
         $extendsPath = isset($data[self::EXTENDS_KEY]) ? (string) $data[self::EXTENDS_KEY] : null;
@@ -182,7 +182,7 @@ readonly class YamlPreProcessor
         }
 
         /** @var array<string, mixed> $parsed */
-        $parsed = Yaml::parse(implode("\n", $includeLines)) ?? [];
+        $parsed = Yaml::parse(implode("\n", $includeLines), Yaml::PARSE_CUSTOM_TAGS) ?? [];
         $value = $parsed[self::INCLUDE_KEY] ?? null;
 
         if (null === $value) {

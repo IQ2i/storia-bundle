@@ -44,6 +44,36 @@ class ComponentConfigurationTest extends TestCase
         ], $config);
     }
 
+    public function testWithKnownTags(): void
+    {
+        $yaml = Yaml::parse(<<<EOF
+            template: some_template.html.twig
+            variants:
+                default:
+                    args:
+                        menu: !data menu
+                        items: !repeat { count: 2, item: !lorem 3 }
+            EOF, Yaml::PARSE_CUSTOM_TAGS);
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+
+        $this->assertSame('data', $config['variants']['default']['args']['menu']->getTag());
+    }
+
+    public function testWithUnknownTag(): void
+    {
+        $yaml = Yaml::parse(<<<EOF
+            template: some_template.html.twig
+            variants:
+                default:
+                    args:
+                        foo: [!foo bar]
+            EOF, Yaml::PARSE_CUSTOM_TAGS);
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Unknown tag "!foo"');
+        (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+    }
+
     public function testWithTemplateAndComponentTogether(): void
     {
         $this->expectException(InvalidConfigurationException::class);
