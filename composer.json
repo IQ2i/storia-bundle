@@ -23,7 +23,8 @@
   },
   "suggest": {
     "symfony/ux-twig-component": "Required to use the component view type (^2.16)",
-    "symfony/form": "Required to use the form view type"
+    "symfony/form": "Required to use the form view type",
+    "sebastian/diff": "Pretty snapshot diffs in storia:test"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.52",

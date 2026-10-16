@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle;
 
 use IQ2i\StoriaBundle\Command\ExportCommand;
+use IQ2i\StoriaBundle\Command\TestCommand;
 use IQ2i\StoriaBundle\Command\WatchCommand;
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\Controller\ChangesController;
@@ -28,6 +29,7 @@ use IQ2i\StoriaBundle\Export\AssetCollector;
 use IQ2i\StoriaBundle\Export\StaticExporter;
 use IQ2i\StoriaBundle\Export\UrlRewriter;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
+use IQ2i\StoriaBundle\Test\Snapshot\SnapshotStore;
 use IQ2i\StoriaBundle\Test\VariantRunner;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
@@ -76,6 +78,14 @@ final class IQ2iStoriaBundle extends AbstractBundle
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('test')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('snapshot_path')
+                            ->defaultValue('%kernel.project_dir%/tests/storia/snapshots')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
     }
 
@@ -89,6 +99,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $builder->setParameter('iq2i_storia.export.output_dir', $config['export']['output_dir']);
         $builder->setParameter('iq2i_storia.export.public_dir', $config['export']['public_dir']);
         $builder->setParameter('iq2i_storia.export.assets', $config['export']['assets']);
+        $builder->setParameter('iq2i_storia.test.snapshot_path', $config['test']['snapshot_path']);
 
         $builder->register(ChangesController::class)
             ->addTag('controller.service_arguments')
@@ -119,6 +130,17 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->setArguments([
                 new Reference(ViewFinder::class),
                 new Reference(ViewBuilder::class),
+            ]);
+        $builder->register(SnapshotStore::class)
+            ->setArguments([
+                '%iq2i_storia.test.snapshot_path%',
+                new Reference('iq2i_storia.filesystem'),
+            ]);
+        $builder->register(TestCommand::class)
+            ->addTag('console.command')
+            ->setArguments([
+                new Reference(VariantRunner::class),
+                new Reference(SnapshotStore::class),
             ]);
         $builder->register(StaticExporter::class)
             ->setArguments([
