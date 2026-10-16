@@ -39,7 +39,6 @@ final class IQ2iStoriaBundle extends AbstractBundle
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $definition->rootNode();
 
-        // @phpstan-ignore class.notFound
         $rootNode
             ->children()
                 ->scalarNode('default_path')

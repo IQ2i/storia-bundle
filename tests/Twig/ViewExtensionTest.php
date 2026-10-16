@@ -23,8 +23,14 @@ class ViewExtensionTest extends IntegrationTestCase
         return __DIR__.'/fixtures';
     }
 
+    // Required by recent Twig versions, which no longer fall back on getFixturesDir()
+    protected static function getFixturesDirectory(): string
+    {
+        return __DIR__.'/fixtures';
+    }
+
     protected function getExtensions(): iterable
     {
-        yield new ViewExtension(\dirname(__DIR__).'/TestApplication/storia');
+        yield new ViewExtension(__DIR__.'/../TestApplication/storia');
     }
 }

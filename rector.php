@@ -13,34 +13,25 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
-use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
+use Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withPaths([
         __DIR__.'/config',
         __DIR__.'/src',
         __DIR__.'/tests',
-    ]);
-
-    $rectorConfig->sets([
-        SetList::CODE_QUALITY,
-        SetList::CODING_STYLE,
-        LevelSetList::UP_TO_PHP_83,
-        SymfonySetList::SYMFONY_64,
-        PHPUnitSetList::PHPUNIT_100,
-    ]);
-
-    $rectorConfig->skip([
+    ])
+    ->withPreparedSets(codeQuality: true, codingStyle: true)
+    ->withPhpSets(php83: true)
+    ->withComposerBased(phpunit: true, symfony: true)
+    ->withSkip([
         __DIR__.'/tests/TestApplication/*',
-        AddOverrideAttributeToOverriddenMethodsRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
-        FirstClassCallableRector::class => [
+        ArrayToFirstClassCallableRector::class => [
+            __DIR__.'/src/Twig',
+        ],
+        MagicClosureTwigExtensionToNativeMethodsRector::class => [
             __DIR__.'/src/Twig',
         ],
     ]);
-};
