@@ -6,7 +6,7 @@ menu:
     weight: 110
 ---
 
-The YAML files of the `storia` folder are a catalog that a program can read: every component, its variants and its arguments. UI Storia ships a skill for [Claude Code](https://claude.com/claude-code) that uses it, so an agent can look at your design system before it writes a template.
+The YAML files of the `storia` folder are a catalog that a program can read: every component, its variants and its arguments. UI Storia ships a skill for [Claude Code](https://claude.com/claude-code), and any agent that reads Agent Skills, that uses it, so an agent can look at your design system before it writes a template.
 
 ## Two commands for tools
 
@@ -26,7 +26,23 @@ Prints the HTML of a variant on the standard output. `--format=twig` prints the 
 
 ## Install the skill
 
-The skill is the `skills/ui-storia` folder of the bundle. Copy it to your project, or link it, so Claude Code finds it in `.claude/skills/ui-storia`:
+The skill is the `skills/ui-storia` folder of the bundle. It follows the [Agent Skills](https://agentskills.io) format and is declared in `composer.json` for [Symfony Mate](https://symfony.com/doc/current/ai/components/mate.html), which discovers it without any copy.
+
+### With Symfony Mate
+
+Install Mate in your project, then discover the extensions:
+
+```bash
+composer require --dev symfony/ai-mate
+vendor/bin/mate init
+vendor/bin/mate discover
+```
+
+Mate installs the skill as `mate-ui-storia` in `.agents/skills` and `.claude/skills`, and runs the discovery again after each `composer install` and `composer update`, so the skill always matches the installed version of the bundle. Commit the generated folders to share them with your team. Use `vendor/bin/mate skills:disable ui-storia` to turn it off and `vendor/bin/mate skills:override ui-storia` to adapt a copy to your project.
+
+### Without Symfony Mate
+
+Copy the folder to your project, or link it, so your agent finds it in `.claude/skills/ui-storia`:
 
 ```bash
 mkdir -p .claude/skills
@@ -38,12 +54,14 @@ cp -r vendor/iq2i/storia-bundle/skills/ui-storia .claude/skills/ui-storia
 ln -s ../../vendor/iq2i/storia-bundle/skills/ui-storia .claude/skills/ui-storia
 ```
 
-The content of the skill follows the version of the bundle: copy it again after an upgrade, or use the link. Commit `.claude/skills` to share it with your team.
+The content of the skill follows the version of the bundle: copy it again after an upgrade, or use the link.
 
 ## What the skill does
 
+- Checks how Storia is installed in the project: configuration, routes, assets of the preview.
 - Lists the components and variants of the project, and shows what a variant renders.
-- Knows the format of the YAML files and the `!data`, `!repeat` and `!lorem` tags, so it can create a component and its variants.
+- Knows the format of the YAML files and the `!data`, `!repeat` and `!lorem` tags, so it can create a component and its variants, with the conventions of your project.
+- Checks a rendering with `storia:render`, or in a browser on the iframe URL of the variant.
 - Runs `storia:test` after a change and reads its output.
 
 ## What it does not do
