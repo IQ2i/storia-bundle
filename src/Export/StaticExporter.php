@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Export;
 
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
-use IQ2i\StoriaBundle\Url\StaticUrlGenerator;
+use IQ2i\StoriaBundle\Url\StaticLinkGenerator;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use IQ2i\StoriaBundle\View\ViewFinder;
@@ -151,10 +151,10 @@ readonly class StaticExporter
         $view = $this->viewBuilder->create($path, $variant) ?? throw new ExportException(\sprintf('View "%s" disappeared during the export.', $path));
 
         $file = $path.'/'.$variant.'.html';
-        $menu = $this->menuBuilder->createSidebarMenu(new StaticUrlGenerator($file), $path, $firstVariants);
+        $menu = $this->menuBuilder->createSidebarMenu(new StaticLinkGenerator($file), $path, $firstVariants);
         $this->filesystem->dumpFile(
             $outputDir.'/'.$file,
-            $this->viewRenderer->renderShell($view, $menu->getChildren(), new StaticUrlGenerator($file), $exportedAt)
+            $this->viewRenderer->renderShell($view, $menu->getChildren(), new StaticLinkGenerator($file), $exportedAt)
         );
 
         $iframe = $this->viewRenderer->renderIframe($view);
@@ -169,7 +169,7 @@ readonly class StaticExporter
      */
     private function writeIndex(string $outputDir, array $firstVariants, \DateTimeImmutable $exportedAt): void
     {
-        $urls = new StaticUrlGenerator();
+        $urls = new StaticLinkGenerator();
         $menu = $this->menuBuilder->createSidebarMenu($urls, null, $firstVariants);
 
         $this->filesystem->dumpFile($outputDir.'/index.html', $this->viewRenderer->renderShell(null, $menu->getChildren(), $urls, $exportedAt));

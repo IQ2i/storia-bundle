@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Url;
 
-use IQ2i\StoriaBundle\Url\RouterUrlGenerator;
+use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\RouterInterface;
 
-class RouterUrlGeneratorTest extends TestCase
+class RouterLinkGeneratorTest extends TestCase
 {
     public function testGeneratesUrlsFromTheRouter(): void
     {
@@ -28,7 +28,7 @@ class RouterUrlGeneratorTest extends TestCase
         $packages = $this->createMock(Packages::class);
         $packages->method('getUrl')->willReturnCallback(static fn (string $path): string => '/base'.$path);
 
-        $urls = new RouterUrlGenerator($router, $packages);
+        $urls = new RouterLinkGenerator($router, $packages);
 
         $this->assertSame('iq2i_storia_view:{"view":"components\/badge","variant":"default"}', $urls->view('components/badge', 'default'));
         $this->assertSame('iq2i_storia_view:{"view":"components\/badge"}', $urls->view('components/badge'));

@@ -15,7 +15,7 @@ namespace IQ2i\StoriaBundle\Tests\Menu;
 
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
-use IQ2i\StoriaBundle\Url\UrlGeneratorInterface;
+use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
 use IQ2i\StoriaBundle\View\Builder\BuilderInterface;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
@@ -121,9 +121,9 @@ class MenuBuilderTest extends TestCase
         return new MenuBuilder($defaultPath, new ViewBuilder($defaultPath, [$builder], new YamlPreProcessor()));
     }
 
-    private function createUrls(): UrlGeneratorInterface
+    private function createUrls(): LinkGeneratorInterface
     {
-        $urls = $this->createMock(UrlGeneratorInterface::class);
+        $urls = $this->createMock(LinkGeneratorInterface::class);
         $urls->method('view')->willReturnCallback(static fn (string $path, ?string $variant = null): string => '/'.$path.'?'.$variant);
 
         return $urls;

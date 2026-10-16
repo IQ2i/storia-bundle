@@ -15,7 +15,7 @@ namespace IQ2i\StoriaBundle\Menu;
 
 use IQ2i\StoriaBundle\Menu\Dto\Menu;
 use IQ2i\StoriaBundle\Menu\Dto\MenuItem;
-use IQ2i\StoriaBundle\Url\UrlGeneratorInterface;
+use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -33,7 +33,7 @@ readonly class MenuBuilder
     /**
      * @param ?array<string, ?string> $firstVariants
      */
-    public function createSidebarMenu(UrlGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants = null): Menu
+    public function createSidebarMenu(LinkGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants = null): Menu
     {
         $menu = new Menu();
 
@@ -48,7 +48,7 @@ readonly class MenuBuilder
         return $menu;
     }
 
-    private function getChildren(UrlGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants, Menu $menu, string $folder): void
+    private function getChildren(LinkGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants, Menu $menu, string $folder): void
     {
         if (!is_dir($this->defaultPath.'/'.$folder)) {
             return;

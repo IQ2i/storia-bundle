@@ -15,7 +15,7 @@ namespace IQ2i\StoriaBundle\View;
 
 use IQ2i\StoriaBundle\Menu\Dto\Menu;
 use IQ2i\StoriaBundle\Menu\Dto\MenuItem;
-use IQ2i\StoriaBundle\Url\UrlGeneratorInterface;
+use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Twig\Environment;
 
@@ -29,7 +29,7 @@ readonly class ViewRenderer
     /**
      * @param list<Menu|MenuItem> $menu
      */
-    public function renderShell(?View $view, array $menu, UrlGeneratorInterface $urls, ?\DateTimeImmutable $exportedAt = null): string
+    public function renderShell(?View $view, array $menu, LinkGeneratorInterface $urls, ?\DateTimeImmutable $exportedAt = null): string
     {
         return $this->twig->render('@IQ2iStoria/view.html.twig', [
             'view' => $view,

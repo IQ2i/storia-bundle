@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Url;
 
-readonly class StaticUrlGenerator implements UrlGeneratorInterface
+use IQ2i\StoriaBundle\Export\UrlRewriter;
+
+readonly class StaticLinkGenerator implements LinkGeneratorInterface
 {
     private string $prefix;
 
     public function __construct(string $currentFile = 'index.html')
     {
-        $this->prefix = str_repeat('../', substr_count($currentFile, '/'));
+        $this->prefix = UrlRewriter::prefixFor($currentFile);
     }
 
     public function view(string $path, ?string $variant = null): string

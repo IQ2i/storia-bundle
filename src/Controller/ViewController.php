@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\Controller;
 
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
-use IQ2i\StoriaBundle\Url\UrlGeneratorInterface;
+use IQ2i\StoriaBundle\Url\LinkGeneratorInterface;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use IQ2i\StoriaBundle\View\ViewRenderer;
@@ -28,7 +28,7 @@ final readonly class ViewController
         private ViewBuilder $viewBuilder,
         private ViewRenderer $viewRenderer,
         private MenuBuilder $menuBuilder,
-        private UrlGeneratorInterface $urls,
+        private LinkGeneratorInterface $urls,
     ) {
     }
 

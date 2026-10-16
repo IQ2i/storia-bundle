@@ -25,7 +25,7 @@ use IQ2i\StoriaBundle\Export\StaticExporter;
 use IQ2i\StoriaBundle\Export\UrlRewriter;
 use IQ2i\StoriaBundle\Menu\MenuBuilder;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
-use IQ2i\StoriaBundle\Url\RouterUrlGenerator;
+use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
 use IQ2i\StoriaBundle\View\Resolver\ArgResolver;
 use IQ2i\StoriaBundle\View\ViewBuilder;
@@ -141,7 +141,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 new Reference(ViewBuilder::class),
                 new Reference(ViewRenderer::class),
                 new Reference(MenuBuilder::class),
-                new Reference(RouterUrlGenerator::class),
+                new Reference(RouterLinkGenerator::class),
             ]);
 
         $builder->register(ViewRenderer::class)
@@ -152,7 +152,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->setArguments([
                 '%iq2i_storia.default_path%',
             ]);
-        $builder->register(RouterUrlGenerator::class)
+        $builder->register(RouterLinkGenerator::class)
             ->setArguments([
                 new Reference('router'),
                 new Reference('assets.packages'),

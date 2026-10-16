@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Url;
 
-interface UrlGeneratorInterface
+interface LinkGeneratorInterface
 {
     public function view(string $path, ?string $variant = null): string;
 

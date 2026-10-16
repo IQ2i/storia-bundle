@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Url;
 
-use IQ2i\StoriaBundle\Url\StaticUrlGenerator;
+use IQ2i\StoriaBundle\Url\StaticLinkGenerator;
 use PHPUnit\Framework\TestCase;
 
-class StaticUrlGeneratorTest extends TestCase
+class StaticLinkGeneratorTest extends TestCase
 {
     public function testLinksFromTheRoot(): void
     {
-        $urls = new StaticUrlGenerator();
+        $urls = new StaticLinkGenerator();
 
         $this->assertSame('components/badge/default.html', $urls->view('components/badge', 'default'));
         $this->assertSame('iframe/components/badge/default.html', $urls->iframe('components/badge', 'default'));
@@ -29,7 +29,7 @@ class StaticUrlGeneratorTest extends TestCase
 
     public function testLinksAreRelativeToTheCurrentFileDepth(): void
     {
-        $urls = new StaticUrlGenerator('components/badge/default.html');
+        $urls = new StaticLinkGenerator('components/badge/default.html');
 
         $this->assertSame('../../components/button/button/large.html', $urls->view('components/button/button', 'large'));
         $this->assertSame('../../iframe/components/badge/default.html', $urls->iframe('components/badge', 'default'));
@@ -38,20 +38,20 @@ class StaticUrlGeneratorTest extends TestCase
 
     public function testSegmentsAreUrlEncoded(): void
     {
-        $this->assertSame('components/my%20badge/with%20space.html', (new StaticUrlGenerator())->view('components/my badge', 'with space'));
+        $this->assertSame('components/my%20badge/with%20space.html', (new StaticLinkGenerator())->view('components/my badge', 'with space'));
     }
 
     public function testViewWithoutVariantCannotBeExported(): void
     {
         $this->expectException(\LogicException::class);
 
-        (new StaticUrlGenerator())->view('components/badge');
+        (new StaticLinkGenerator())->view('components/badge');
     }
 
     public function testIframeWithoutVariantCannotBeExported(): void
     {
         $this->expectException(\LogicException::class);
 
-        (new StaticUrlGenerator())->iframe('components/badge');
+        (new StaticLinkGenerator())->iframe('components/badge');
     }
 }
