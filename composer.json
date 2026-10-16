@@ -1,7 +1,7 @@
 {
   "name": "iq2i/storia-bundle",
   "type": "symfony-bundle",
-  "description": "UI Storia bundle",
+  "description": "UI Storia is the design-system workbench for Symfony, published by IQ2i and sponsored by Mezcalito",
   "license": "MIT",
   "require": {
     "php": ">=8.3",
