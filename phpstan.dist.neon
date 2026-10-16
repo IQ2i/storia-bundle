@@ -8,3 +8,7 @@ parameters:
         - src
     fileExtensions:
         - php
+    ignoreErrors:
+        -
+            identifier: trait.unused
+            path: src/Test/PHPUnit/StoriaTestCaseTrait.php
