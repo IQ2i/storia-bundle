@@ -95,8 +95,17 @@ class DataResolverTest extends TestCase
 
         $this->assertSame([
             ['name' => 'Item 1', 'text' => 'lorem ipsum', 'price' => 49],
-            ['name' => 'Item 2', 'text' => 'lorem ipsum', 'price' => 49],
+            ['name' => 'Item 2', 'text' => 'dolor sit', 'price' => 49],
         ], $resolved['p']);
+    }
+
+    public function testLoremVariesInsideRepeatedData(): void
+    {
+        $resolved = $this->resolve("p: !repeat\n  count: 3\n  item: !data { ref: shop/product.default, with: { name: !lorem 1 sentence } }");
+
+        $names = array_column($resolved['p'], 'name');
+        $this->assertCount(3, array_unique($names));
+        $this->assertSame(LoremIpsum::sentences(1, 2), $names[2]);
     }
 
     public function testRepeatZero(): void

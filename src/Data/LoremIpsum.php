@@ -30,18 +30,22 @@ final class LoremIpsum
 
     private const int SENTENCES_PER_PARAGRAPH = 4;
 
-    public static function fromSpec(string $spec): string
+    /**
+     * @param int $seed Shifts the text by $seed chunks of $count units, so that two specs with different seeds never share text
+     */
+    public static function fromSpec(string $spec, int $seed = 0): string
     {
         if (!preg_match('/^(\d+)(?:\s+(words?|sentences?|paragraphs?))?$/', trim($spec), $matches)) {
             throw new \InvalidArgumentException(\sprintf('Invalid !lorem spec "%s": expected a count optionally followed by "words", "sentences" or "paragraphs" (e.g. "12", "2 sentences").', $spec));
         }
 
         $count = (int) $matches[1];
+        $offset = $seed * $count;
 
         return match (rtrim($matches[2] ?? 'words', 's')) {
-            'sentence' => self::sentences($count),
-            'paragraph' => self::paragraphs($count),
-            default => self::words($count),
+            'sentence' => self::sentences($count, $offset),
+            'paragraph' => self::paragraphs($count, $offset),
+            default => self::words($count, $offset),
         };
     }
 
@@ -65,11 +69,11 @@ final class LoremIpsum
         return implode(' ', $sentences);
     }
 
-    public static function paragraphs(int $count): string
+    public static function paragraphs(int $count, int $offset = 0): string
     {
         $paragraphs = [];
         for ($i = 0; $i < $count; ++$i) {
-            $paragraphs[] = self::sentences(self::SENTENCES_PER_PARAGRAPH, $i * self::SENTENCES_PER_PARAGRAPH);
+            $paragraphs[] = self::sentences(self::SENTENCES_PER_PARAGRAPH, ($offset + $i) * self::SENTENCES_PER_PARAGRAPH);
         }
 
         return implode("\n\n", $paragraphs);

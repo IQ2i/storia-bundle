@@ -504,6 +504,16 @@ blocks:
     content: !lorem 3
 ```
 
+Inside a `!repeat`, each item gets a different text, so a list of cards does not repeat the same sentence:
+
+```yaml
+articles: !repeat
+    count: 3
+    item:
+        title: !lorem 4
+        summary: !lorem 2 sentences
+```
+
 #### PHP data providers
 
 When the data needs logic (relative dates, computed values, business objects), use the same tag with a PHP method: `!data App\Factory\ProductFactory::createDefault`.
@@ -531,19 +541,19 @@ component: Product
 variants:
     default:
         args:
-            product: App\Factory\ProductFactory::createDefault
+            product: !data App\Factory\ProductFactory::createDefault
         blocks:
             content: ''
 
     expensive:
         args:
-            product: App\Factory\ProductFactory::createExpensive
+            product: !data App\Factory\ProductFactory::createExpensive
         blocks:
             content: ''
 
     outOfStock:
         args:
-            product: App\Factory\ProductFactory::createOutOfStock
+            product: !data App\Factory\ProductFactory::createOutOfStock
         blocks:
             content: ''
 

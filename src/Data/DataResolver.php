@@ -33,25 +33,26 @@ readonly class DataResolver
 
     public function resolve(mixed $value): mixed
     {
-        return $this->doResolve($value, []);
+        return $this->doResolve($value, [], 0);
     }
 
     /**
      * @param list<string> $stack References being resolved, to detect cycles
+     * @param int          $seed  Position in the enclosing !repeat (0 outside), so generated text differs between items
      */
-    private function doResolve(mixed $value, array $stack): mixed
+    private function doResolve(mixed $value, array $stack, int $seed): mixed
     {
         if ($value instanceof TaggedValue) {
             return match ($value->getTag()) {
-                'data' => $this->resolveData($value->getValue(), $stack),
+                'data' => $this->resolveData($value->getValue(), $stack, $seed),
                 'repeat' => $this->resolveRepeat($value->getValue(), $stack),
-                'lorem' => LoremIpsum::fromSpec((string) $value->getValue()),
+                'lorem' => LoremIpsum::fromSpec((string) $value->getValue(), $seed),
                 default => throw new \InvalidArgumentException(\sprintf('Unknown tag "!%s": supported tags are !data, !repeat, !lorem.', $value->getTag())),
             };
         }
 
         if (\is_array($value)) {
-            return array_map(fn (mixed $item): mixed => $this->doResolve($item, $stack), $value);
+            return array_map(fn (mixed $item): mixed => $this->doResolve($item, $stack, $seed), $value);
         }
 
         if (\is_string($value) && preg_match(self::METHOD_PATTERN, $value)) {
@@ -64,7 +65,7 @@ readonly class DataResolver
     /**
      * @param list<string> $stack
      */
-    private function resolveData(mixed $spec, array $stack): mixed
+    private function resolveData(mixed $spec, array $stack, int $seed): mixed
     {
         $with = [];
         if (\is_array($spec)) {
@@ -80,14 +81,14 @@ readonly class DataResolver
         }
 
         $ref = trim($ref);
-        $resolved = $this->resolveRef($ref, $stack);
+        $resolved = $this->resolveRef($ref, $stack, $seed);
 
         if ([] !== $with) {
             if (!\is_array($resolved)) {
                 throw new \InvalidArgumentException(\sprintf('Invalid !data: "with" can only override a mapping, but "%s" is not one.', $ref));
             }
 
-            $resolved = YamlPreProcessor::deepMerge($resolved, $this->doResolve($with, $stack));
+            $resolved = YamlPreProcessor::deepMerge($resolved, $this->doResolve($with, $stack, $seed));
         }
 
         return $resolved;
@@ -96,7 +97,7 @@ readonly class DataResolver
     /**
      * @param list<string> $stack
      */
-    private function resolveRef(string $ref, array $stack): mixed
+    private function resolveRef(string $ref, array $stack, int $seed): mixed
     {
         if (str_contains($ref, '::')) {
             return $this->argResolver->resolveReference($ref);
@@ -107,9 +108,9 @@ readonly class DataResolver
         }
 
         $stack[] = $ref;
-        $raw = $this->repository->get($ref, fn (TaggedValue $tag): mixed => $this->doResolve($tag, $stack));
+        $raw = $this->repository->get($ref, fn (TaggedValue $tag): mixed => $this->doResolve($tag, $stack, $seed));
 
-        return $this->doResolve($raw, $stack);
+        return $this->doResolve($raw, $stack, $seed);
     }
 
     /**
@@ -125,7 +126,7 @@ readonly class DataResolver
 
         $items = [];
         for ($i = 1; $i <= $spec['count']; ++$i) {
-            $items[] = $this->doResolve($this->substituteIndex($spec['item'], $i), $stack);
+            $items[] = $this->doResolve($this->substituteIndex($spec['item'], $i), $stack, $i - 1);
         }
 
         return $items;

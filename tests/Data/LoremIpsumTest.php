@@ -59,6 +59,15 @@ class LoremIpsumTest extends TestCase
         yield ['2 paragraphs', LoremIpsum::paragraphs(2)];
     }
 
+    public function testSeedShiftsTheTextWithoutOverlap(): void
+    {
+        $this->assertSame('lorem ipsum dolor', LoremIpsum::fromSpec('3', 0));
+        $this->assertSame('sit amet consectetur', LoremIpsum::fromSpec('3', 1));
+        $this->assertSame(LoremIpsum::sentences(2, 2), LoremIpsum::fromSpec('2 sentences', 1));
+        $this->assertSame(LoremIpsum::paragraphs(1, 1), LoremIpsum::fromSpec('1 paragraph', 1));
+        $this->assertNotSame(LoremIpsum::paragraphs(1), LoremIpsum::paragraphs(1, 1));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('invalidSpecs')]
     public function testInvalidSpec(string $spec): void
     {
