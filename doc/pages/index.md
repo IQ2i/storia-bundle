@@ -270,6 +270,7 @@ The export is not written to `public/`, which is the default publish directory o
 - Assets served from an absolute base URL (a CDN, `asset()` configured with `base_urls`) are neither rewritten nor copied: the exported pages keep pointing to that host.
 - Browsers block ES modules on `file://` pages: a project that loads its own modules must serve the folder over HTTP, or be opened with Firefox.
 - The static export has no live reload.
+- The static export has no [controls](#controls).
 
 ## Interfaces
 
@@ -437,6 +438,30 @@ variants:
 
 Note here that the `content` block is the default block for Twig Component according to the documentation ([see here](https://symfony.com/bundles/ux-twig-component/current/index.html#passing-html-to-components)), so it will have a different behavior that we will detail later.
 :::
+
+### Controls
+
+The **Controls** tab, next to Twig, HTML and Include, lets you change the arguments of the current variant and see the result immediately, without editing the YAML file. Controls are deduced automatically:
+
+| Source  | Where the controls come from                                                                     |
+|---------|--------------------------------------------------------------------------------------------------|
+| `props` | the `{% props %}` tag of the component template (names and default values)                       |
+| `class` | the public properties of the component PHP class (types, enums become a select)                  |
+| `yaml`  | the `args` of the variant, typed by their value (text, number, checkbox, JSON for arrays)        |
+
+A component with `{% props title = 'Card title', count = 3, highlighted = false %}` gets three controls, even if its YAML file describes no argument.
+An argument written in the YAML file replaces the default value of the prop with the same name.
+
+Some controls are read-only: a prop whose default value is a Twig expression, or an argument that resolves to a PHP object. They are displayed with a badge explaining why.
+`blocks` and form types have no controls.
+
+Changes are **never written to disk**. They are kept in the `overrides` query parameter of the URL, so reloading the page or sharing the link keeps them, and the **Reset** button removes them.
+To keep a state, click **Copy variant YAML** and paste the result in your YAML file. Values coming from `!data` or from a PHP data provider are copied once resolved, as literal values.
+
+Overridden values are always passed as plain data, never as Twig code and never through `!data` or the argument resolver: a string like `App\Foo::bar` stays a string.
+However, if your template prints an argument with the `|raw` filter, a crafted link can inject HTML in the preview: only open Storia links you trust.
+
+The static export has no controls: the tab only displays a note explaining that they are not available.
 
 ### Data
 
