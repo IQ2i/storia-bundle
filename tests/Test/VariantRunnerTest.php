@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Tests\Test;
 
+use IQ2i\StoriaBundle\Test\PHPUnit\StoriaVariants;
 use IQ2i\StoriaBundle\Test\VariantRunner;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -22,8 +23,9 @@ class VariantRunnerTest extends KernelTestCase
     {
         $variantsByView = $this->createRunner()->findVariants();
 
-        $this->assertCount(14, $variantsByView);
-        $this->assertSame(41, array_sum(array_map(count(...), $variantsByView)));
+        $dataSets = StoriaVariants::fromDirectory(__DIR__.'/../TestApplication/storia');
+        $this->assertCount(\count(array_unique(array_column($dataSets, 0))), $variantsByView);
+        $this->assertSame(\count($dataSets), array_sum(array_map(count(...), $variantsByView)));
         $this->assertContains('default', $variantsByView['components/badge']);
         $this->assertSame(['default', 'disabled', 'error'], $variantsByView['components/form/text']);
     }

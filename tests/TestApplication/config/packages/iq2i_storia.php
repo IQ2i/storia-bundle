@@ -18,5 +18,8 @@ return static function (ContainerConfigurator $container): void {
         'export' => [
             'assets' => ['img/extra.svg'],
         ],
+        'test' => [
+            'snapshot_path' => '%kernel.project_dir%/storia/snapshots',
+        ],
     ]);
 };

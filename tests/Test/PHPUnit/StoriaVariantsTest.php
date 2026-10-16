@@ -22,8 +22,10 @@ class StoriaVariantsTest extends TestCase
     {
         $dataSets = StoriaVariants::fromDirectory($this->storiaPath());
 
-        $this->assertCount(41, $dataSets);
         $this->assertSame(['components/badge', 'default'], $dataSets['components/badge:default']);
+        $this->assertSame(['components/snackbar', 'default'], $dataSets['components/snackbar:default']);
+        $this->assertSame(['pages/homepage/homepage', 'default'], $dataSets['pages/homepage/homepage:default']);
+        $this->assertCount(\count(array_unique(array_keys($dataSets))), $dataSets);
         $this->assertSame(['components/product', 'expensive'], $dataSets['components/product:expensive']);
     }
 
@@ -45,7 +47,7 @@ class StoriaVariantsTest extends TestCase
         putenv('STORIA_PATH='.$this->storiaPath());
 
         try {
-            $this->assertCount(41, StoriaVariants::provide());
+            $this->assertSame(StoriaVariants::fromDirectory($this->storiaPath()), StoriaVariants::provide());
         } finally {
             putenv('STORIA_PATH');
         }

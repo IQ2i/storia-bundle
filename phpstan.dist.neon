@@ -9,6 +9,7 @@ parameters:
     fileExtensions:
         - php
     ignoreErrors:
+        # The trait is for the test suites of the projects, tests/ is out of the analysed paths
         -
             identifier: trait.unused
             path: src/Test/PHPUnit/StoriaTestCaseTrait.php
