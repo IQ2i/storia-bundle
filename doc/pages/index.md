@@ -272,6 +272,109 @@ The export is not written to `public/`, which is the default publish directory o
 - The static export has no live reload.
 - The static export has no [controls](#controls).
 
+## Testing
+
+Every variant is a test case: the integrator writes the variants, the developer overrides an anonymous component with a PHP class, and `storia:test` catches the regressions.
+
+```bash
+bin/console storia:test
+```
+
+The command renders every variant of every component and page, then compares the HTML with its snapshot:
+
+```
+✓ components/badge:default
+≠ components/badge:large
+✗ components/product:expensive
+    Twig\Error\RuntimeError: Variable "price" does not exist.
+
+41 variants, 39 passed, 0 new, 0 updated, 2 failed
+```
+
+- `✗` the variant cannot be rendered (Twig or PHP error). It always fails the command.
+- `≠` the rendering differs from the snapshot. A diff is shown (install `sebastian/diff` to get it) and the command fails.
+- `+` the variant has no snapshot yet: it is written and the command does not fail.
+- `↻` the snapshot was rewritten because of `--update`.
+
+The exit code is `1` as soon as one variant fails, `0` otherwise, so the command can be used as is in a CI job:
+
+```yaml
+# .gitlab-ci.yml
+
+storia:
+    stage: test
+    script:
+        - composer install --no-interaction --prefer-dist
+        - php bin/console storia:test
+```
+
+### Snapshots
+
+A snapshot is the HTML of one variant, without the preview page around it, stored in `tests/storia/snapshots/<view>/<variant>.html`. Commit them: they are reviewed in your merge requests like any other file.
+Only line endings and trailing spaces are normalized, nothing else is reformatted.
+
+Snapshots are never rewritten silently. When a change is intended, accept it explicitly:
+
+```bash
+bin/console storia:test --update
+```
+
+A snapshot whose variant no longer exists is reported with `?` but does not fail the command; delete the file.
+
+```yaml
+# config/packages/iq2i_storia.yaml
+
+iq2i_storia:
+    test:
+        snapshot_path: '%kernel.project_dir%/tests/storia/snapshots'
+```
+
+### Options
+
+| Option | Description |
+| --- | --- |
+| `--filter=<text>` | Only test the views or variants whose `view` or `view:variant` name contains the text |
+| `--update` | Rewrite the snapshots that differ |
+| `--no-snapshots` | Only check that every variant renders |
+| `--snapshot-path=<dir>` | Use another snapshot directory |
+| `-v` | Show the stack trace of the errors |
+
+Snapshots can only be stable if the rendering is: `!repeat` and `!lorem` are deterministic, but a PHP data provider returning dates or random values is not. Make such data deterministic, or use `--no-snapshots` for it.
+
+### PHPUnit
+
+For custom assertions, expose the variants as a data provider and use the `StoriaTestCaseTrait` in a `KernelTestCase`:
+
+```php
+use IQ2i\StoriaBundle\Test\PHPUnit\StoriaTestCaseTrait;
+use IQ2i\StoriaBundle\Test\PHPUnit\StoriaVariants;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+final class StoriaTest extends KernelTestCase
+{
+    use StoriaTestCaseTrait;
+
+    #[DataProvider('provideVariants')]
+    public function testVariant(string $path, string $variant): void
+    {
+        $view = $this->assertVariantRenders($path, $variant);
+
+        self::assertStringNotContainsString('TODO', (string) $view->getHtmlContent());
+    }
+
+    public static function provideVariants(): array
+    {
+        return StoriaVariants::fromDirectory(__DIR__.'/../storia');
+    }
+}
+```
+
+`StoriaVariants::fromDirectory()` reads the YAML files without booting the kernel, as a data provider runs before any test. The `StoriaVariants::provide()` method can also be used with `#[DataProviderExternal]`: it reads the directory from the `STORIA_PATH` environment variable, or `./storia`.
+`assertVariantMatchesSnapshot()` compares a variant with its snapshot.
+
+Screenshots (Panther) and accessibility checks are not covered yet.
+
 ## Interfaces
 
 UI Storia allows you to create interfaces for individual components or more complete pages.  
