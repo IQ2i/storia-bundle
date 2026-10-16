@@ -23,6 +23,11 @@ export default class extends Controller {
     }
 
     scaleValueChanged() {
+        // No iframe on the home page, where no view is displayed
+        if (!this.hasIframeTarget) {
+            return;
+        }
+
         this.iframeTarget.style.transform = `scale(${this.scaleValue})`;
     }
 
