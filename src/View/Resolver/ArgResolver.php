@@ -48,7 +48,7 @@ readonly class ArgResolver
     {
         // Handle arrays recursively
         if (\is_array($value)) {
-            return array_map(fn ($item) => $this->resolveValue($item), $value);
+            return array_map($this->resolveValue(...), $value);
         }
 
         // Only strings can be method references

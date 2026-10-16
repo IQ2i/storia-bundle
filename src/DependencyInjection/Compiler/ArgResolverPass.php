@@ -77,13 +77,13 @@ class ArgResolverPass implements CompilerPassInterface
             $this->extractClassNames($data, $classNames);
         }
 
-        return array_unique($classNames);
+        return array_values(array_unique($classNames));
     }
 
     /**
      * Recursively walks a parsed YAML value and collects class names from "ClassName::method" strings.
      *
-     * @param array<string, string> $classNames
+     * @param list<string> $classNames
      */
     private function extractClassNames(mixed $value, array &$classNames): void
     {

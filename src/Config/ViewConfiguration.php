@@ -24,7 +24,6 @@ class ViewConfiguration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('component');
 
-        // @phpstan-ignore class.notFound
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('template')

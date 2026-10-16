@@ -27,7 +27,7 @@ class MenuBuilderTest extends TestCase
             ->method('generate')
             ->willReturnCallback(static fn (string $name, array $parameters = []): string => '/'.$parameters['view']);
 
-        $builder = new MenuBuilder(\dirname(__DIR__).'/TestApplication/storia', $router);
+        $builder = new MenuBuilder(__DIR__.'/../TestApplication/storia', $router);
         $menu = $builder->createSidebarMenu(Request::create('/components/avatar'));
 
         $this->assertCount(2, $menu->getChildren());
