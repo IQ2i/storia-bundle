@@ -131,20 +131,20 @@ class AssetCollectorTest extends KernelTestCase
         $this->createCollector()->collect(['components/badge:default' => ['/index.php']], $this->outputDir);
     }
 
-    public function testSymlinksLeavingThePublicDirectoryAreNotFollowed(): void
+    public function testSymlinksLeavingThePublicDirectoryAreFollowed(): void
     {
         $publicDir = $this->outputDir.'_public';
-        $this->filesystem->mkdir($publicDir);
-        $this->filesystem->dumpFile($this->outputDir.'_secret.txt', 'secret');
-        $this->filesystem->symlink($this->outputDir.'_secret.txt', $publicDir.'/link.txt');
+        $linkedDir = $this->outputDir.'_linked';
+        $this->filesystem->dumpFile($linkedDir.'/app.css', '.linked {}');
+        $this->filesystem->symlink($linkedDir, $publicDir.'/build');
 
         try {
-            $this->createCollector([], $publicDir)->collect(['components/badge:default' => ['/link.txt']], $this->outputDir);
-            $this->fail('The symlink target must not be exported.');
-        } catch (ExportException) {
-            $this->assertFileDoesNotExist($this->outputDir.'/link.txt');
+            $count = $this->createCollector([], $publicDir)->collect(['components/badge:default' => ['/build/app.css']], $this->outputDir);
+
+            $this->assertSame(1, $count);
+            $this->assertSame('.linked {}', file_get_contents($this->outputDir.'/build/app.css'));
         } finally {
-            $this->filesystem->remove([$publicDir, $this->outputDir.'_secret.txt']);
+            $this->filesystem->remove([$publicDir, $linkedDir]);
         }
     }
 

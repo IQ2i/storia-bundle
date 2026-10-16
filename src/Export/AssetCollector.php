@@ -147,19 +147,19 @@ readonly class AssetCollector
         }
     }
 
+    /**
+     * Symlinks are followed on purpose: "assets:install --symlink" and build tools commonly link
+     * public/ entries to directories outside of it. Traversal is prevented upstream by assertSafePath().
+     */
     private function findPublicFile(string $path): ?string
     {
-        $publicDir = realpath($this->publicDir);
-        if (false === $publicDir || \in_array(strtolower(pathinfo($path, \PATHINFO_EXTENSION)), self::FORBIDDEN_EXTENSIONS, true)) {
+        if (\in_array(strtolower(pathinfo($path, \PATHINFO_EXTENSION)), self::FORBIDDEN_EXTENSIONS, true)) {
             return null;
         }
 
-        $file = realpath($publicDir.$path);
-        if (false === $file || !is_file($file) || !str_starts_with($file, $publicDir.\DIRECTORY_SEPARATOR)) {
-            return null;
-        }
+        $file = rtrim($this->publicDir, '/').$path;
 
-        return $file;
+        return is_file($file) ? $file : null;
     }
 
     /**
