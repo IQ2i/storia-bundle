@@ -13,6 +13,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - UI Storia is now enabled when `kernel.debug` is true. Set `iq2i_storia.enabled: true` to keep it on an environment running without debug.
 - The `iq2i_storia_menu()` Twig function is removed. The sidebar is built by the bundle.
 - A form variant declared in YAML now overrides the global `options` of the view (it used to be the opposite for the automatic variants).
+- The `blocks` of a component are printed as HTML and are no longer compiled as Twig.
 
 ### Added
 
@@ -31,11 +32,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - The live reload stream closes after 55 seconds and the browser reconnects by itself.
 - The `name` of a variant is now used as the label of its tab, as documented.
 - Resolving a bare `Class::method` string is deprecated, use `!data Class::method`.
+- The CSRF token of the form previews is disabled, so the snapshots are stable and `storia:render` no longer needs a session.
+- The absolute templates shown in the Twig tab are limited to the project directory.
+
+### Security
+
+- The args and blocks of a component go through the rendering context instead of the Twig source: a value coming from a data provider is never compiled as Twig.
+- The `storia/` folder is documented as code.
 
 ### Fixed
 
 - A view without any variant renders its page instead of crashing.
 - The iframe layout no longer requests favicons that do not exist.
+- Array args containing an apostrophe, an accent or a numeric string render correctly, and a data provider can return an enum or a date.
+- The Include tab writes valid Twig literals.
+- A menu folder that only holds another folder no longer fails.
 
 ## [0.5.0] - 2026-03-25
 
