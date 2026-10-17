@@ -85,3 +85,17 @@ Form views accept custom variants with `options` and `with_errors`. The options 
 ### Variant names
 
 The `name` key of a variant is now used as the label of its tab. Remove it from your files if you do not want the label to change.
+
+### Blocks are plain HTML
+
+The `blocks` of a component are printed as is and are no longer compiled as Twig. Move the logic to an argument or to the component template:
+
+```yaml
+# before
+blocks:
+    content: '<strong>{{ "now"|date("Y") }}</strong>'
+
+# after
+blocks:
+    content: '<strong>2026</strong>'
+```

@@ -179,7 +179,7 @@ GitHub Actions (`.github/workflows/ci.yaml`) runs the quality tools and the test
 3. **Readonly Classes**: Modern PHP readonly classes where appropriate (ViewBuilder, VariantRunner, MenuBuilder)
 4. **Symfony Config Component**: YAML configs processed through Symfony's Configuration system
 5. **Compiler Passes**: `ProfilerPass` for Web Profiler integration, `ArgResolverPass` for the services referenced in the YAML files
-6. **Trust boundary**: the `storia/` YAML files are treated as code (args and blocks are rendered as Twig, `Class::method` references are called)
+6. **Trust boundary**: the `storia/` YAML files are treated as code (args are resolved and `Class::method` references are called, blocks are printed as HTML)
 
 ## Development Workflow
 
