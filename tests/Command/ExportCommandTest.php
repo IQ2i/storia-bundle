@@ -40,7 +40,7 @@ class ExportCommandTest extends KernelTestCase
 
         $this->assertSame(0, $exitCode);
         $this->assertStringContainsString('Exported components/badge:default', $tester->getDisplay());
-        $this->assertStringContainsString('Exported 21 views, 51 variants and 6 assets to '.$this->outputDir, $tester->getDisplay());
+        $this->assertStringContainsString('Exported 21 views, 53 variants and 6 assets to '.$this->outputDir, $tester->getDisplay());
         $this->assertFileExists($this->outputDir.'/index.html');
     }
 
