@@ -1,0 +1,20 @@
+{% extends '_base.html.twig' %}
+
+{% block content %}
+    <div class="docs">
+        <nav class="docs__nav" aria-label="Documentation">
+            <ul>
+                {% for entry in site.menus.docs|sort_by_weight %}
+                    <li>
+                        <a href="{{ url(entry.id) }}"{% if entry.id == page.id %} class="is-active" aria-current="page"{% endif %}>{{ entry.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <article class="docs__content markdown-body">
+            <h1>{{ page.title }}</h1>
+            {{ page.content }}
+        </article>
+    </div>
+{% endblock %}

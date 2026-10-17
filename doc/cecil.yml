@@ -1,7 +1,7 @@
 title: 'UI Storia'
-baseline: 'UI Storia is a powerful tool designed to simplify and speed up the development process of user interfaces in your Symfony application.'
+baseline: 'UI Storia is the design-system workbench for Symfony, published as iq2i/storia-bundle by IQ2i and sponsored by Mezcalito.'
 baseurl: 'https://ui-storia.com/'
-description: 'Designed to simplify and speed up the development process of UI by providing a visual and modular development environment in your Symfony application.'
+description: 'UI Storia is the design-system workbench for Symfony, published as iq2i/storia-bundle by IQ2i and sponsored by Mezcalito.'
 author:
   name: 'Loïc Sapone'
   url: 'https://loic-sapone.fr/'

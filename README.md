@@ -2,13 +2,25 @@
 
 ## Overview
 
-UI Storia is a powerful tool designed to simplify and speed up the development process of user interfaces by providing a visual and modular development environment for interface in your Symfony application.
+UI Storia is the design-system workbench for Symfony, published as `iq2i/storia-bundle` by IQ2i and sponsored by Mezcalito.
 
-![UI Storia, a powerful tool designed to simplify and speed up the development process of user interfaces by providing a visual and modular development environment for interface in your Symfony application.](https://ui-storia.com/ui-storia-promo.png)
+Your design system lives in your Symfony project, built by your integrators.
 
-Unlike Fractal or StoryBook, which rely on a port of Twig to JS for Symfony projects, UI Storia allows direct work on project templates, thus enabling the safe use of the latest Twig features available.
+![UI Storia, the design-system workbench for Symfony](https://ui-storia.com/ui-storia-promo.png)
 
-[Read the Documentation](https://ui-storia.com/)
+- **Real templates.** Unlike Fractal or Storybook, which rely on a port of Twig to JS, UI Storia renders the templates and Twig Components of your project, thus enabling the safe use of the latest Twig features available.
+- **No PHP required.** An integrator writes an anonymous component and a YAML file of variants.
+- **Variants are tests.** `storia:test` renders every variant and compares it with a snapshot.
+
+[Read the documentation](https://ui-storia.com/docs/getting-started/) · [See the demo](https://ui-storia.com/demo/) · [Changelog](CHANGELOG.md)
+
+## Requirements
+
+| UI Storia | PHP    | Symfony          |
+|-----------|--------|------------------|
+| 0.x       | >= 8.3 | 6.4, 7.x and 8.x |
+
+`symfony/ux-twig-component` and `symfony/form` are optional: install them to preview components and form types.
 
 ## Sponsors
 
