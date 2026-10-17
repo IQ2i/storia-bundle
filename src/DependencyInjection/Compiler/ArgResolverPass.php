@@ -35,7 +35,10 @@ class ArgResolverPass implements CompilerPassInterface
             return;
         }
 
-        $storiaPath = (string) $container->getParameter('iq2i_storia.default_path');
+        $storiaPath = $container->getParameter('iq2i_storia.default_path');
+        if (!\is_string($storiaPath)) {
+            return;
+        }
 
         $classNames = $this->collectClassNamesFromYamlFiles($storiaPath);
 

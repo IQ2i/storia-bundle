@@ -58,7 +58,8 @@ bin/console storia:test --update
 
 A snapshot whose variant no longer exists is reported with `?` but does not fail the command; delete the file.
 
-Snapshots can only be stable if the rendering is: `!repeat` and `!lorem` are deterministic, but a form with CSRF protection, or a PHP data provider returning dates or random values, is not. Disable the CSRF token in the test environment, make such data deterministic, or use `--no-snapshots` for it.
+Snapshots can only be stable if the rendering is. `!repeat` and `!lorem` are deterministic, and the CSRF protection of a form view is disabled by UI Storia, so no `_token` ends up in a snapshot.
+A PHP data provider is yours to make deterministic: seed Faker, avoid `new DateTime()` and random values, and give versioned asset URLs a stable value in the test environment. A variant that cannot be stable can be left out with `--no-snapshots`.
 
 ```yaml
 # config/packages/iq2i_storia.yaml

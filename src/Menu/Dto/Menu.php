@@ -18,6 +18,9 @@ namespace IQ2i\StoriaBundle\Menu\Dto;
  */
 class Menu
 {
+    /**
+     * @param list<Menu|MenuItem> $children
+     */
     public function __construct(
         private readonly ?string $label = null,
         private bool $opened = false,
@@ -43,7 +46,7 @@ class Menu
     }
 
     /**
-     * @return Menu[]|MenuItem[]
+     * @return list<Menu|MenuItem>
      */
     public function getChildren(): array
     {

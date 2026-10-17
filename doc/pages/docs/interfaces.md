@@ -168,7 +168,7 @@ The `options` and `with_errors` keys of a variant are allowed for forms only, as
 The `variants` key lists the different variations of your interface, passing different arguments to your template.
 
 Each variant is described with a name (which can be overridden as shown in the example below) and an array of arguments called `args`.
-Twig Component support also brings a `blocks` key to configure [HTML blocks](https://symfony.com/bundles/ux-twig-component/current/index.html#passing-html-to-components-via-blocks) that will be passed to your component.
+Twig Component support also brings a `blocks` key to configure [HTML blocks](https://symfony.com/bundles/ux-twig-component/current/index.html#passing-html-to-components-via-blocks) that will be passed to your component. A block is plain HTML: it is printed as is and never compiled as Twig.
 
 ```yaml
 # storia/components/button.yaml

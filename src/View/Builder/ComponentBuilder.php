@@ -16,10 +16,8 @@ namespace IQ2i\StoriaBundle\View\Builder;
 use IQ2i\StoriaBundle\Controls\ComponentIntrospector;
 use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\Util\Label;
-use IQ2i\StoriaBundle\View\Dto\Variant;
+use IQ2i\StoriaBundle\Util\TwigLiteral;
 use IQ2i\StoriaBundle\View\Dto\View;
-use Michelf\MarkdownExtra;
 use Symfony\UX\TwigComponent\ComponentFactory;
 use Symfony\UX\TwigComponent\ComponentTemplateFinderInterface;
 use Twig\Environment;
@@ -29,34 +27,50 @@ use Twig\Environment;
  */
 class ComponentBuilder extends AbstractBuilder
 {
+    /** Names are written in the Twig source: only plain identifiers are accepted. */
+    private const string ATTRIBUTE_NAME_PATTERN = '/^[A-Za-z_][A-Za-z0-9_-]*$/';
+
+    private const string BLOCK_NAME_PATTERN = '/^[A-Za-z_][A-Za-z0-9_]*$/';
+
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly ComponentTemplateFinderInterface $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
         private readonly DataResolver $dataResolver,
         private readonly ControlsBuilder $controlsBuilder,
         private readonly ComponentIntrospector $introspector,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('component', $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['component'];
 
         $controls = [];
         $appliedOverrides = [];
+        $twigContent = null;
+        $htmlContent = null;
+        $includeContent = null;
+        $markdownContent = null;
 
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
 
-            $skeletonPath = __DIR__.'/../../../skeleton/component.tpl.php';
             $metadata = $this->componentFactory->metadataFor($template);
 
             $resolvedArgs = $this->dataResolver->resolve($variantConfig['args']);
@@ -74,57 +88,58 @@ class ComponentBuilder extends AbstractBuilder
 
             // A value exposed by the class is computed, it cannot be passed to the component
             $exposedNames = $this->introspector->exposedNames($metadata);
+            $variantArgs = array_diff_key($resolvedArgs, array_flip($exposedNames));
 
-            $variantArgs = [];
-            foreach ($resolvedArgs as $argName => $argValue) {
-                if (\in_array($argName, $exposedNames, true)) {
-                    continue;
-                }
-
-                if (\is_array($argValue)) {
-                    $variantArgs[':'.$argName] = str_replace('"', "'", json_encode($argValue, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
-                } else {
-                    $variantArgs[$argName] = $argValue;
+            foreach (array_keys($variantArgs) as $argName) {
+                if (1 !== preg_match(self::ATTRIBUTE_NAME_PATTERN, (string) $argName)) {
+                    throw new \LogicException(\sprintf('Argument name "%s" of component "%s" is not a valid attribute name.', $argName, $path));
                 }
             }
 
-            $parameters = [
-                'template' => str_replace('/', ':', (string) $template),
-                'args' => $variantArgs,
-                'blocks' => $resolvedBlocks,
-            ];
-
-            if (isset($parameters['blocks']['content'])) {
-                $parameters['content'] = $parameters['blocks']['content'];
-                unset($parameters['blocks']['content']);
+            foreach (array_keys($resolvedBlocks) as $blockName) {
+                if (1 !== preg_match(self::BLOCK_NAME_PATTERN, (string) $blockName)) {
+                    throw new \LogicException(\sprintf('Block name "%s" of component "%s" is not a valid block name.', $blockName, $path));
+                }
             }
 
-            $includeContent = $this->generateInclude($skeletonPath, [...$parameters, 'args' => $this->argsForInclude($variantArgs, $appliedOverrides)]);
+            $skeletonPath = __DIR__.'/../../../skeleton/component.tpl.php';
+            $parameters = ['template' => str_replace('/', ':', (string) $template)];
+
+            // What the Include tab shows: the values written as Twig literals, never compiled
+            $includeContent = $this->generateInclude($skeletonPath, $parameters + $this->splitContent(
+                $this->attributesForInclude(array_replace($variantArgs, $appliedOverrides)),
+                $resolvedBlocks
+            ));
             $twigContent = $this->getTwigContent($template);
 
+            // What is rendered: values and blocks stay in the rendering context, they never reach the Twig source
+            $renderArgs = array_replace($variantArgs, $renderOverrides);
+            $attributes = [];
+            foreach (array_keys($renderArgs) as $index => $argName) {
+                $attributes[':'.$argName] = \sprintf('__storia_args[%d]', $index);
+            }
+
+            $blockExpressions = [];
+            foreach (array_keys($resolvedBlocks) as $blockName) {
+                $blockExpressions[$blockName] = \sprintf("{{ __storia_blocks['%s']|raw }}", $blockName);
+            }
+
             $htmlContent = $this->generateHtml(
-                $this->generateInclude($skeletonPath, [...$parameters, 'args' => $this->argsForRendering($variantArgs, $renderOverrides)]),
-                [...$variantArgs, '__storia_overrides' => $renderOverrides]
+                $this->generateInclude($skeletonPath, $parameters + $this->splitContent($attributes, $blockExpressions)),
+                ['__storia_args' => array_values($renderArgs), '__storia_blocks' => $resolvedBlocks]
             );
 
-            $markdownContent = null;
-            if (file_exists($this->defaultPath.'/'.$path.'.md')) {
-                $markdownContent = MarkdownExtra::defaultTransform(@file_get_contents($this->defaultPath.'/'.$path.'.md'));
-            }
+            $markdownContent = $this->loadMarkdown($path);
         }
 
-        $variants = array_map(static fn (string $name): Variant => new Variant(
-            $name,
-            $config['variants'][$name]['name'] ?? Label::humanize($name),
-            $variantPath === $name
-        ), array_keys($config['variants']));
+        $variants = $this->buildVariants($config['variants'], $variantPath);
 
         return new View(
             $path,
-            $twigContent ?? null,
-            $htmlContent ?? null,
-            $includeContent ?? null,
-            $markdownContent ?? null,
+            $twigContent,
+            $htmlContent,
+            $includeContent,
+            $markdownContent,
             $variants,
             $controls,
             $appliedOverrides
@@ -139,47 +154,43 @@ class ComponentBuilder extends AbstractBuilder
     }
 
     /**
-     * The overrides as the user would write them in the Include tab: literal attributes.
+     * The default block is passed to the skeleton apart from the others.
      *
-     * @param array<string, mixed>        $args
-     * @param array<string, scalar|array> $overrides
+     * @param array<array-key, string> $args
+     * @param array<array-key, string> $blocks
      *
-     * @return array<string, mixed>
+     * @return array{args: array<array-key, string>, blocks: array<array-key, string>, content?: string}
      */
-    private function argsForInclude(array $args, array $overrides): array
+    private function splitContent(array $args, array $blocks): array
     {
-        foreach ($overrides as $name => $value) {
-            unset($args[$name], $args[':'.$name]);
+        $parameters = ['args' => $args, 'blocks' => $blocks];
 
-            if (\is_array($value)) {
-                $args[':'.$name] = str_replace('"', "'", json_encode($value, \JSON_FORCE_OBJECT | \JSON_NUMERIC_CHECK));
-            } elseif (\is_bool($value)) {
-                $args[':'.$name] = $value ? 'true' : 'false';
-            } elseif (\is_int($value) || \is_float($value)) {
-                $args[':'.$name] = (string) $value;
-            } else {
-                $args[$name] = htmlspecialchars((string) $value, \ENT_QUOTES);
-            }
+        if (isset($blocks['content'])) {
+            $parameters['content'] = $blocks['content'];
+            unset($parameters['blocks']['content']);
         }
 
-        return $args;
+        return $parameters;
     }
 
     /**
-     * The overrides never reach the Twig source: the include reads them from the rendering context.
+     * Strings are written as plain attributes, any other value as a Twig literal.
      *
      * @param array<string, mixed> $args
-     * @param array<string, mixed> $overrides
      *
-     * @return array<string, mixed>
+     * @return array<string, string>
      */
-    private function argsForRendering(array $args, array $overrides): array
+    private function attributesForInclude(array $args): array
     {
-        foreach (array_keys($overrides) as $name) {
-            unset($args[$name], $args[':'.$name]);
-            $args[':'.$name] = \sprintf("__storia_overrides['%s']", $name);
+        $attributes = [];
+        foreach ($args as $name => $value) {
+            if (\is_string($value)) {
+                $attributes[$name] = htmlspecialchars($value, \ENT_QUOTES);
+            } else {
+                $attributes[':'.$name] = TwigLiteral::export($value);
+            }
         }
 
-        return $args;
+        return $attributes;
     }
 }

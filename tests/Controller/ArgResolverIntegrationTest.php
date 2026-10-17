@@ -23,7 +23,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=default');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Test Product', $content);
         $this->assertStringContainsString('29.99', $content);
         $this->assertStringContainsString('In Stock', $content);
@@ -35,7 +35,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=expensive');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Premium Product', $content);
         $this->assertStringContainsString('999.99', $content);
         $this->assertStringContainsString('In Stock', $content);
@@ -47,7 +47,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=outOfStock');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Unavailable Product', $content);
         $this->assertStringContainsString('49.99', $content);
         $this->assertStringContainsString('Out of Stock', $content);
@@ -59,7 +59,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=from_data');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Chair', $content);
         $this->assertStringContainsString('999', $content);
     }
@@ -70,7 +70,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=php_tag');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Test Product', $content);
         $this->assertStringContainsString('29.99', $content);
     }
@@ -81,7 +81,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/components/product?variant=static');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Static Product', $content);
         $this->assertStringContainsString('19.99', $content);
         $this->assertStringContainsString('In Stock', $content);
@@ -93,7 +93,7 @@ class ArgResolverIntegrationTest extends WebTestCase
         $client->request('GET', '/storia/iframe/components/product?variant=default');
 
         $this->assertResponseIsSuccessful();
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Test Product', $content);
         $this->assertStringContainsString('29.99', $content);
     }

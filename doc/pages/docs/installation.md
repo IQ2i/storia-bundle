@@ -62,6 +62,8 @@ iq2i_storia:
 
 UI Storia is enabled when `kernel.debug` is true, like the Symfony profiler: in `dev` and `test`, not in `prod`. Its routes answer with a 404 when it is disabled. The commands (`storia:test`, `storia:export`, ...) keep working in every environment.
 
+The content of the `storia/` folder is executed by the bundle, see [Security](/docs/data/#security).
+
 Force the value with the `enabled` option when you need to:
 
 ```yaml

@@ -15,10 +15,7 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\Util\Label;
-use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
-use Michelf\MarkdownExtra;
 use Twig\Environment;
 
 /**
@@ -29,27 +26,38 @@ class TemplateBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly DataResolver $dataResolver,
         private readonly ControlsBuilder $controlsBuilder,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
-        return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
+        return \array_key_exists('template', $config) || is_file($this->defaultPath.'/'.$path.'.html.twig');
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['template'] ?? null;
 
-        if (null === $template && @file_exists($this->defaultPath.'/'.$path.'.html.twig')) {
+        if (null === $template && is_file($this->defaultPath.'/'.$path.'.html.twig')) {
             $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 
         $controls = [];
         $appliedOverrides = [];
+        $twigContent = null;
+        $htmlContent = null;
+        $markdownContent = null;
 
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
@@ -64,24 +72,17 @@ class TemplateBuilder extends AbstractBuilder
 
             $htmlContent = $this->generateHtml($twigContent, array_replace($resolvedArgs, $renderOverrides));
 
-            $markdownContent = null;
-            if (file_exists($this->defaultPath.'/'.$path.'.md')) {
-                $markdownContent = MarkdownExtra::defaultTransform(@file_get_contents($this->defaultPath.'/'.$path.'.md'));
-            }
+            $markdownContent = $this->loadMarkdown($path);
         }
 
-        $variants = array_map(static fn (string $name): Variant => new Variant(
-            $name,
-            $config['variants'][$name]['name'] ?? Label::humanize($name),
-            $variantPath === $name
-        ), array_keys($config['variants']));
+        $variants = $this->buildVariants($config['variants'], $variantPath);
 
         return new View(
             $path,
-            $twigContent ?? null,
-            $htmlContent ?? null,
+            $twigContent,
+            $htmlContent,
             null,
-            $markdownContent ?? null,
+            $markdownContent,
             $variants,
             $controls,
             $appliedOverrides

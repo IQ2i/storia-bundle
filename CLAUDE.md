@@ -160,9 +160,9 @@ The core architecture uses a **builder pattern with tagged services** (`iq2i_sto
 - Excludes: `skeleton/` and `vendor/`
 
 ### PHPStan
-- **Level**: 5 (PHPStan 2)
+- **Level**: 7 (PHPStan 2)
 - **Extensions**: symfony/phpstan-symfony for Symfony-specific rules
-- **Scope**: Only `src/` directory (tests excluded)
+- **Scope**: `src/` and `tests/` (TestApplication excluded)
 
 ### Rector
 - **Sets**: CODE_QUALITY, CODING_STYLE, PHP 8.3, Symfony and PHPUnit sets deduced from `composer.json`

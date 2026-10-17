@@ -39,6 +39,7 @@
     "symfony/form": "^6.4|^7.0|^8.0",
     "symfony/framework-bundle": "^6.4|^7.0|^8.0",
     "symfony/runtime": "^6.4|^7.0|^8.0",
+    "symfony/security-csrf": "^6.4|^7.0|^8.0",
     "symfony/string": "^6.4|^7.0|^8.0",
     "symfony/ux-twig-component": "^2.16|^3.0",
     "symfony/web-profiler-bundle": "^6.4|^7.0|^8.0"

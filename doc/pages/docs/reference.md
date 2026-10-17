@@ -32,7 +32,7 @@ A view file is a YAML file in `storia/components` or `storia/pages`. The path of
 |-----|------|-------|-------------|
 | `name` | string | all | Label displayed instead of the name deduced from the key. |
 | `args` | map | template, component | Arguments passed to the template or props of the component. |
-| `blocks` | map | component | Content of the blocks of the component. |
+| `blocks` | map | component | HTML content of the blocks of the component, printed as is. |
 | `options` | map | form | Form options for this variant, merged over the `options` of the view. |
 | `with_errors` | bool | form | Displays a validation error. |
 

@@ -94,7 +94,7 @@ class IframeControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $labels = $crawler->filter('header > .tabs > .tabs__item')->each(static fn ($node) => trim($node->text()));
-        $this->assertSame(['Default', 'Disabled', 'Error', 'Preselected'], $labels);
+        $this->assertSame(['Default', 'Disabled', 'Error', 'Preselected', 'Expanded'], $labels);
     }
 
     public function testUnknownView(): void
@@ -264,5 +264,44 @@ class IframeControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Card title');
+    }
+
+    public function testArrayArgWithSpecialCharactersIsRenderedAsIs(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/product?variant=special_characters');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextSame('h3', 'It\'s a café "quoted" {{ 7*7 }}');
+        $this->assertSelectorTextContains('.price', '$5');
+    }
+
+    public function testProviderObjectAndUntrustedTextAreNotInterpretedAsTwig(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/notice?variant=provider_object');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('.notice-danger');
+        $this->assertSelectorTextSame('.notice', 'Hello {{ 7*7 }} {% if true %}yes{% endif %}');
+    }
+
+    public function testBlocksAreRenderedAsHtml(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/footer?variant=legal_links');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('a[href="/legal"]', 'Legal notice');
+    }
+
+    public function testExpandedChoiceHasNoCsrfToken(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/form/choice?variant=expanded');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('input[type="radio"]');
+        $this->assertSelectorNotExists('input[name$="[_token]"]');
     }
 }

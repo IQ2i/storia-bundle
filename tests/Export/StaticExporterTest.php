@@ -44,8 +44,8 @@ class StaticExporterTest extends KernelTestCase
         });
 
         $this->assertSame(21, $result->views);
-        $this->assertSame(51, $result->variants);
-        $this->assertCount(51, $progress);
+        $this->assertSame(54, $result->variants);
+        $this->assertCount(54, $progress);
         $this->assertContains('components/badge:default', $progress);
         $this->assertSame(6, $result->assets);
 
@@ -169,7 +169,10 @@ class StaticExporterTest extends KernelTestCase
     {
         self::bootKernel();
 
-        return static::getContainer()->get(StaticExporter::class);
+        $exporter = static::getContainer()->get(StaticExporter::class);
+        \assert($exporter instanceof StaticExporter);
+
+        return $exporter;
     }
 
     private function read(string $file): string

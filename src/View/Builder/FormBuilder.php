@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\Util\Label;
-use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRegistryInterface;
 use Twig\Environment;
 
 /**
@@ -47,20 +46,31 @@ class FormBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly FormFactoryInterface $formFactory,
+        private readonly FormRegistryInterface $formRegistry,
         private readonly DataResolver $dataResolver,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('form', $config) && class_exists($config['form']);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $variantConfigs = array_replace(self::VARIANTS, $config['variants'] ?? []);
+        $twigContent = null;
+        $htmlContent = null;
 
         if (null !== $variantPath && isset($variantConfigs[$variantPath])) {
             $variantConfig = $variantConfigs[$variantPath];
@@ -68,7 +78,7 @@ class FormBuilder extends AbstractBuilder
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
+            ], $this->csrfOptions($config['form']), $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
 
             if ($variantConfig['with_errors'] ?? false) {
                 $form->addError(new FormError('Error message'));
@@ -82,19 +92,29 @@ class FormBuilder extends AbstractBuilder
             ]);
         }
 
-        $variants = array_map(static fn (string $name): Variant => new Variant(
-            $name,
-            $variantConfigs[$name]['name'] ?? Label::humanize($name),
-            $variantPath === $name
-        ), array_keys($variantConfigs));
+        $variants = $this->buildVariants($variantConfigs, $variantPath);
 
         return new View(
             $path,
-            $twigContent ?? null,
-            $htmlContent ?? null,
+            $twigContent,
+            $htmlContent,
             null,
             null,
             $variants
         );
+    }
+
+    /**
+     * The preview is never submitted: a token would change at every rendering, and cannot be generated outside of a request.
+     *
+     * @param class-string $formType
+     *
+     * @return array{csrf_protection?: false}
+     */
+    private function csrfOptions(string $formType): array
+    {
+        return $this->formRegistry->getType($formType)->getOptionsResolver()->isDefined('csrf_protection')
+            ? ['csrf_protection' => false]
+            : [];
     }
 }

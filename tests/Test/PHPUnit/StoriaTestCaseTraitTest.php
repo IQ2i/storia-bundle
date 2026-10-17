@@ -37,7 +37,9 @@ class StoriaTestCaseTraitTest extends KernelTestCase
     protected function tearDown(): void
     {
         putenv(false === $this->ci ? 'CI' : 'CI='.$this->ci);
-        (new Filesystem())->remove(static::getContainer()->getParameter('iq2i_storia.test.snapshot_path'));
+        $snapshotPath = static::getContainer()->getParameter('iq2i_storia.test.snapshot_path');
+        \assert(\is_string($snapshotPath));
+        (new Filesystem())->remove($snapshotPath);
         parent::tearDown();
     }
 
@@ -60,6 +62,7 @@ class StoriaTestCaseTraitTest extends KernelTestCase
     public function testAVariantMatchingItsSnapshotPasses(): void
     {
         $store = static::getContainer()->get(SnapshotStore::class);
+        \assert($store instanceof SnapshotStore);
         $store->write('components/badge', 'default', (string) $this->renderVariant('components/badge', 'default')->getHtmlContent());
 
         $this->assertVariantMatchesSnapshot('components/badge', 'default');
@@ -67,7 +70,9 @@ class StoriaTestCaseTraitTest extends KernelTestCase
 
     public function testAVariantDifferingFromItsSnapshotFails(): void
     {
-        static::getContainer()->get(SnapshotStore::class)->write('components/badge', 'default', "<span>outdated</span>\n");
+        $store = static::getContainer()->get(SnapshotStore::class);
+        \assert($store instanceof SnapshotStore);
+        $store->write('components/badge', 'default', "<span>outdated</span>\n");
 
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('Variant "components/badge:default" differs from its snapshot.');
@@ -78,6 +83,7 @@ class StoriaTestCaseTraitTest extends KernelTestCase
     public function testAMissingSnapshotIsWrittenAndTheTestIsIncomplete(): void
     {
         $store = static::getContainer()->get(SnapshotStore::class);
+        \assert($store instanceof SnapshotStore);
 
         try {
             $this->assertVariantMatchesSnapshot('components/badge', 'default');
@@ -93,6 +99,7 @@ class StoriaTestCaseTraitTest extends KernelTestCase
     {
         putenv('CI=true');
         $store = static::getContainer()->get(SnapshotStore::class);
+        \assert($store instanceof SnapshotStore);
 
         try {
             $this->assertVariantMatchesSnapshot('components/badge', 'default');

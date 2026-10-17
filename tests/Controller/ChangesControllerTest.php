@@ -39,6 +39,7 @@ class ChangesControllerTest extends TestCase
         $this->assertSame('no', $response->headers->get('X-Accel-Buffering'));
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testStreamEndsAfterTheMaxDuration(): void
     {
         $controller = new ChangesController(\dirname(__DIR__, 2), 0);
@@ -53,7 +54,5 @@ class ChangesControllerTest extends TestCase
                 ob_start();
             }
         }
-
-        $this->assertTrue(true, 'The callback returned instead of looping forever');
     }
 }

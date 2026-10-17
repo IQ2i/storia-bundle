@@ -94,6 +94,9 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->end();
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.php');
@@ -216,6 +219,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->setArguments([
                     '%iq2i_storia.default_path%',
                     new Reference('twig'),
+                    '%kernel.project_dir%',
                     new Reference('ux.twig_component.component_template_finder'),
                     new Reference('ux.twig_component.component_factory'),
                     new Reference(DataResolver::class),
@@ -230,7 +234,9 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->setArguments([
                     '%iq2i_storia.default_path%',
                     new Reference('twig'),
+                    '%kernel.project_dir%',
                     new Reference('form.factory'),
+                    new Reference('form.registry'),
                     new Reference(DataResolver::class),
                 ]);
         }

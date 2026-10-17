@@ -10,3 +10,9 @@ variants:
       level: warning
     blocks:
       content: Careful
+
+  provider_object:
+    args:
+      kind: !data IQ2i\StoriaBundle\Tests\TestApplication\Factory\NoticeFactory::danger
+    blocks:
+      content: !data IQ2i\StoriaBundle\Tests\TestApplication\Factory\NoticeFactory::untrustedText

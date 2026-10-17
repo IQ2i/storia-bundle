@@ -58,10 +58,12 @@ class ComponentIntrospectorTest extends TwigTestCase
         $this->assertSame('class', $props['rows']->source);
         $this->assertSame(2, $props['rows']->default);
         $this->assertTrue($props['rows']->hasDefault);
-        $this->assertSame('int', $props['rows']->type?->getName());
+        $type = $props['rows']->type;
+        \assert($type instanceof \ReflectionNamedType);
+        $this->assertSame('int', $type->getName());
         $this->assertFalse($props['required']->hasDefault);
-        $this->assertSame('Title of the panel.', $props['title']->directive?->description);
-        $this->assertSame('textarea', $props['title']->directive?->type);
+        $this->assertSame('Title of the panel.', $props['title']->directive->description);
+        $this->assertSame('textarea', $props['title']->directive->type);
         $this->assertNull($props['rows']->directive);
     }
 
@@ -77,10 +79,10 @@ class ComponentIntrospectorTest extends TwigTestCase
         $this->assertSame(['message', 'delay', 'at'], array_keys($props));
         $this->assertSame('class', $props['message']->source);
         $this->assertFalse($props['message']->hasDefault);
-        $this->assertSame('The text to display', $props['message']->directive?->description);
+        $this->assertSame('The text to display', $props['message']->directive->description);
         $this->assertSame(5, $props['delay']->default);
-        $this->assertSame('range', $props['delay']->directive?->type);
-        $this->assertSame(['min' => 1.0, 'max' => 30.0], $props['delay']->directive?->options);
+        $this->assertSame('range', $props['delay']->directive->type);
+        $this->assertSame(['min' => 1.0, 'max' => 30.0], $props['delay']->directive->options);
         $this->assertNull($props['at']->directive);
         $this->assertTrue($props['at']->type?->allowsNull());
     }

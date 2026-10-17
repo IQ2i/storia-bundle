@@ -78,10 +78,10 @@ class PropsExtractorTest extends TwigTestCase
 
         $props = $this->extract("{% props\n ## The title @control textarea\n title = 'Hi',\n count = 3,\n ## Required one\n label\n%}");
 
-        $this->assertSame('The title', $props['title']->directive?->description);
-        $this->assertSame('textarea', $props['title']->directive?->type);
+        $this->assertSame('The title', $props['title']->directive->description);
+        $this->assertSame('textarea', $props['title']->directive->type);
         $this->assertNull($props['count']->directive);
-        $this->assertSame('Required one', $props['label']->directive?->description);
+        $this->assertSame('Required one', $props['label']->directive->description);
         $this->assertFalse($props['label']->hasDefault);
     }
 
@@ -105,8 +105,8 @@ class PropsExtractorTest extends TwigTestCase
         $this->assertSame(['message', 'columns'], array_keys($types));
         $this->assertSame('string', $types['message']->type);
         $this->assertFalse($types['message']->optional);
-        $this->assertSame('The message', $types['message']->directive?->description);
-        $this->assertSame('textarea', $types['message']->directive?->type);
+        $this->assertSame('The message', $types['message']->directive->description);
+        $this->assertSame('textarea', $types['message']->directive->type);
         $this->assertSame('number', $types['columns']->type);
         $this->assertTrue($types['columns']->optional);
         $this->assertNull($types['columns']->directive);

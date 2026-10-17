@@ -192,9 +192,26 @@ class ViewControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/storia/components/card?variant=default&overrides='.rawurlencode((string) json_encode(['title' => 'A "b"', 'count' => 5, 'highlighted' => true])));
 
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('title=&quot;A &amp;quot;b&amp;quot;&quot;', $content);
         $this->assertStringContainsString(':count=&quot;5&quot;', $content);
         $this->assertStringContainsString(':highlighted=&quot;true&quot;', $content);
+    }
+
+    public function testIncludeTabWritesValuesAsValidTwigLiterals(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/product?variant=special_characters');
+
+        $include = $crawler->filter('#include pre code')->text();
+        $this->assertStringContainsString(":product=\"{'id': '007', 'name': 'It\\'s a café \\x22quoted\\x22 {{ 7*7 }}', 'price': 5, 'inStock': false}\"", $include);
+    }
+
+    public function testIncludeTabShowsAnEnumReturnedByAProvider(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/notice?variant=provider_object');
+
+        $this->assertStringContainsString(":kind=\"constant('IQ2i\\\\StoriaBundle\\\\Tests\\\\TestApplication\\\\Twig\\\\Components\\\\Level::Danger')\"", $crawler->filter('#include pre code')->text());
     }
 }

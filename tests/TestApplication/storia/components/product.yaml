@@ -40,3 +40,13 @@ variants:
       product: !data IQ2i\StoriaBundle\Tests\TestApplication\Factory\ProductFactory::createDefault
     blocks:
       content: ''
+
+  special_characters:
+    args:
+      product:
+        id: '007'
+        name: 'It''s a café "quoted" {{ 7*7 }}'
+        price: 5
+        inStock: false
+    blocks:
+      content: ''

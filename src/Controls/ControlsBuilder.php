@@ -91,8 +91,8 @@ readonly class ControlsBuilder
      * Keeps the overrides that target an editable control, coerced to the type of that control.
      * Everything else is dropped: an override is only ever data, never code.
      *
-     * @param list<Control>        $controls
-     * @param array<string, mixed> $overrides
+     * @param list<Control>           $controls
+     * @param array<array-key, mixed> $overrides
      *
      * @return array{controls: list<Control>, overrides: array<string, mixed>, display: array<string, mixed>}
      *                                                                                                        the controls with their current value, the values to render (enums and dates as objects),
