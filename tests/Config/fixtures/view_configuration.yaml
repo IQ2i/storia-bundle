@@ -8,6 +8,8 @@ component:
             name:                 ~
             args:                 []
             blocks:               []
+            options:              ~
+            with_errors:          ~
     form:                 ~
     options:              []
     form_theme:           ~
