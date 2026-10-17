@@ -182,3 +182,14 @@ class ProductFactory
     }
 }
 ```
+
+## Security
+
+Everything in the `storia/` folder is treated as code, like the rest of your application:
+
+- `!data Class::method` calls any public method of any class or service of your project.
+- The Markdown notes are rendered without sanitization.
+- A block, or a value printed with `|raw` by your template, is output as HTML. A provider must not return content you do not control.
+
+Never let `storia/` be written by someone you do not trust, and never feed a provider with unchecked external data.
+Values coming from the data files or from the providers are always passed to the component as data, never compiled as Twig.
