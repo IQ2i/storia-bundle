@@ -6,6 +6,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-17
+
 ### Breaking changes
 
 - UI Storia is now enabled when `kernel.debug` is true. Set `iq2i_storia.enabled: true` to keep it on an environment running without debug.
@@ -112,7 +114,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 First public version: a sidebar to browse the components and pages described in YAML files, variants, a preview in an iframe, tabs with the Twig code, the HTML and Markdown notes, resizable panels, Twig Component support and the ability to disable the bundle.
 
-[Unreleased]: https://github.com/IQ2i/storia-bundle/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/IQ2i/storia-bundle/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/IQ2i/storia-bundle/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/IQ2i/storia-bundle/compare/0.4.3...0.5.0
 [0.4.3]: https://github.com/IQ2i/storia-bundle/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/IQ2i/storia-bundle/compare/0.4.1...0.4.2

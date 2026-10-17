@@ -36,7 +36,7 @@ Every other class of the bundle (builders, resolvers, exporter, renderer, contro
 - Dropping the support of a PHP or Symfony version is done in a minor version, never in a patch version. A PHP version is supported until its end of life, a Symfony version until the end of its bug fixes.
 - A new snapshot format would be a major change: the snapshots written by `storia:test` are plain HTML files, normalized in the same way for the whole major version.
 
-## Upgrade from 0.x to 1.0
+## Upgrade from 0.5 to 0.6
 
 ### UI Storia is enabled with `kernel.debug` only
 
