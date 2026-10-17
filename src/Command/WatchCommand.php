@@ -27,6 +27,9 @@ final class WatchCommand extends Command
 {
     private readonly string $tmpFile;
 
+    /**
+     * @param list<string> $watchPaths
+     */
     public function __construct(
         private readonly string $defaultPath,
         private readonly array $watchPaths,

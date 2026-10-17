@@ -25,7 +25,9 @@ trait StoriaTestCaseTrait
 {
     protected function renderVariant(string $path, string $variant): View
     {
-        $view = static::getContainer()->get(ViewBuilder::class)->create($path, $variant);
+        /** @var ViewBuilder $viewBuilder */
+        $viewBuilder = static::getContainer()->get(ViewBuilder::class);
+        $view = $viewBuilder->create($path, $variant);
         if (null === $view) {
             throw new \LogicException(\sprintf('View "%s" does not exist.', $path));
         }
@@ -54,6 +56,7 @@ trait StoriaTestCaseTrait
     {
         $html = SnapshotNormalizer::normalize((string) $this->assertVariantRenders($path, $variant)->getHtmlContent());
 
+        /** @var SnapshotStore $store */
         $store = static::getContainer()->get(SnapshotStore::class);
         if (!$store->exists($path, $variant)) {
             if (filter_var(getenv('CI'), \FILTER_VALIDATE_BOOL)) {

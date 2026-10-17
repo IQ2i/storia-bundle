@@ -30,21 +30,32 @@ class TemplateBuilderTest extends KernelTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->builder()->build('pages/leak', 'default', $this->config(self::getContainer()->getParameter('kernel.project_dir').'/../../../../../../../../etc/passwd'));
+        $this->builder()->build('pages/leak', 'default', $this->config($this->parameter('kernel.project_dir').'/../../../../../../../../etc/passwd'));
     }
 
     public function testAbsoluteTemplateOfTheProjectIsRead(): void
     {
-        $file = self::getContainer()->getParameter('iq2i_storia.default_path').'/pages/homepage/homepage.html.twig';
+        $file = $this->parameter('iq2i_storia.default_path').'/pages/homepage/homepage.html.twig';
 
         $view = $this->builder()->build('pages/homepage/homepage', 'default', $this->config($file));
 
         $this->assertSame(file_get_contents($file), $view->getTwigContent());
     }
 
+    private function parameter(string $name): string
+    {
+        $value = self::getContainer()->getParameter($name);
+        \assert(\is_string($value));
+
+        return $value;
+    }
+
     private function builder(): TemplateBuilder
     {
-        return self::getContainer()->get(TemplateBuilder::class);
+        $builder = self::getContainer()->get(TemplateBuilder::class);
+        \assert($builder instanceof TemplateBuilder);
+
+        return $builder;
     }
 
     /**

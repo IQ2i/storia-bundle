@@ -20,6 +20,11 @@ use IQ2i\StoriaBundle\Controls\Control;
  */
 readonly class View
 {
+    /**
+     * @param list<Variant>        $variants
+     * @param list<Control>        $controls
+     * @param array<string, mixed> $overrides
+     */
     public function __construct(
         private string $path,
         private ?string $twigContent = null,
@@ -58,7 +63,7 @@ readonly class View
     }
 
     /**
-     * @return Variant[]
+     * @return list<Variant>
      */
     public function getVariants(): array
     {

@@ -54,11 +54,18 @@ class FormBuilder extends AbstractBuilder
         parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('form', $config) && class_exists($config['form']);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $variantConfigs = array_replace(self::VARIANTS, $config['variants'] ?? []);

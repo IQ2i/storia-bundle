@@ -30,6 +30,9 @@ abstract class AbstractBuilder implements BuilderInterface
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     protected function generateInclude(string $skeletonPath, array $parameters): string
     {
         ob_start();
@@ -73,6 +76,9 @@ abstract class AbstractBuilder implements BuilderInterface
         return $content;
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     protected function generateHtml(string $content, array $parameters): string
     {
         $template = $this->twig->createTemplate($content);

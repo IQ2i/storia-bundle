@@ -169,7 +169,10 @@ class StaticExporterTest extends KernelTestCase
     {
         self::bootKernel();
 
-        return static::getContainer()->get(StaticExporter::class);
+        $exporter = static::getContainer()->get(StaticExporter::class);
+        \assert($exporter instanceof StaticExporter);
+
+        return $exporter;
     }
 
     private function read(string $file): string

@@ -127,7 +127,7 @@ readonly class UrlRewriter
     private function mapSrcset(string $srcset, callable $map): string
     {
         $candidates = array_map(function (string $candidate) use ($map): string {
-            $parts = preg_split('/\s+/', trim($candidate), 2);
+            $parts = preg_split('/\s+/', trim($candidate), 2) ?: [$candidate];
 
             return $this->mapUrl($parts[0], $map).(isset($parts[1]) ? ' '.$parts[1] : '');
         }, explode(',', $srcset));

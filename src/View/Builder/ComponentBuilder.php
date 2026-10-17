@@ -45,11 +45,18 @@ class ComponentBuilder extends AbstractBuilder
         parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('component', $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['component'];
@@ -149,10 +156,10 @@ class ComponentBuilder extends AbstractBuilder
     /**
      * The default block is passed to the skeleton apart from the others.
      *
-     * @param array<string, string> $args
-     * @param array<string, string> $blocks
+     * @param array<array-key, string> $args
+     * @param array<array-key, string> $blocks
      *
-     * @return array{args: array<string, string>, blocks: array<string, string>, content?: string}
+     * @return array{args: array<array-key, string>, blocks: array<array-key, string>, content?: string}
      */
     private function splitContent(array $args, array $blocks): array
     {

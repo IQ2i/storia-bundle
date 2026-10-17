@@ -33,7 +33,9 @@ class FormBuilderTest extends KernelTestCase
 
     private function render(string $variant): string
     {
-        $view = self::getContainer()->get(ViewBuilder::class)->create('components/form/choice', $variant);
+        $viewBuilder = self::getContainer()->get(ViewBuilder::class);
+        \assert($viewBuilder instanceof ViewBuilder);
+        $view = $viewBuilder->create('components/form/choice', $variant);
 
         return (string) $view?->getHtmlContent();
     }

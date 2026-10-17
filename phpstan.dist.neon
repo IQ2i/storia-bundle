@@ -3,13 +3,28 @@ includes:
     - vendor/phpstan/phpstan-symfony/rules.neon
 
 parameters:
-    level: 5
+    level: 7
     paths:
         - src
+        - tests
+    excludePaths:
+        - tests/TestApplication
     fileExtensions:
         - php
     ignoreErrors:
-        # The trait is for the test suites of the projects, tests/ is out of the analysed paths
+        # The types of the fixtures and data providers are not worth a docblock
         -
-            identifier: trait.unused
-            path: src/Test/PHPUnit/StoriaTestCaseTrait.php
+            identifier: missingType.iterableValue
+            path: tests/*
+        # Depends on the installed version of Twig and ux-twig-component
+        -
+            identifier: function.alreadyNarrowedType
+            path: tests/Controls/TwigTestCase.php
+        # A private method is there to check that the providers cannot call it
+        -
+            identifier: method.unused
+            path: tests/Fixtures/ProductFactory.php
+        # The test walks the tree of menus and items
+        -
+            identifier: method.notFound
+            path: tests/Menu/MenuBuilderTest.php

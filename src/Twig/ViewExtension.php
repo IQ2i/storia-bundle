@@ -40,11 +40,17 @@ class ViewExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVariantArgs(string $view, string $variant): array
     {
         return $this->resolveVariant($view, $variant, 'args');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVariantBlocks(string $view, string $variant): array
     {
         return $this->resolveVariant($view, $variant, 'blocks');

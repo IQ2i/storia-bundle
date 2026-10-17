@@ -26,6 +26,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class ViewBuilder
 {
+    /**
+     * @param iterable<BuilderInterface> $builders
+     */
     public function __construct(
         private string $defaultPath,
         private iterable $builders,

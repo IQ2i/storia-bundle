@@ -33,11 +33,18 @@ class TemplateBuilder extends AbstractBuilder
         parent::__construct($defaultPath, $twig, $projectDir);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function supports(string $path, array $config): bool
     {
         return \array_key_exists('template', $config) || is_file($this->defaultPath.'/'.$path.'.html.twig');
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed> $overrides
+     */
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['template'] ?? null;

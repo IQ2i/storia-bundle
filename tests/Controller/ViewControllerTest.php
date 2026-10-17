@@ -192,7 +192,7 @@ class ViewControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/storia/components/card?variant=default&overrides='.rawurlencode((string) json_encode(['title' => 'A "b"', 'count' => 5, 'highlighted' => true])));
 
-        $content = $client->getResponse()->getContent();
+        $content = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('title=&quot;A &amp;quot;b&amp;quot;&quot;', $content);
         $this->assertStringContainsString(':count=&quot;5&quot;', $content);
         $this->assertStringContainsString(':highlighted=&quot;true&quot;', $content);

@@ -22,11 +22,12 @@ class VariantRunnerTest extends KernelTestCase
     public function testListsEveryVariantOfTheCatalog(): void
     {
         $variantsByView = $this->createRunner()->findVariants();
+        $variantLists = array_filter($variantsByView, \is_array(...));
 
         $dataSets = StoriaVariants::fromDirectory(__DIR__.'/../TestApplication/storia');
         $this->assertCount(\count(array_unique(array_column($dataSets, 0))), $variantsByView);
-        $this->assertSame(\count($dataSets), array_sum(array_map(count(...), $variantsByView)));
-        $this->assertContains('default', $variantsByView['components/badge']);
+        $this->assertSame(\count($dataSets), array_sum(array_map(count(...), $variantLists)));
+        $this->assertContains('default', $variantLists['components/badge']);
         $this->assertSame(['default', 'disabled', 'error'], $variantsByView['components/form/text']);
     }
 
@@ -85,6 +86,9 @@ class VariantRunnerTest extends KernelTestCase
     {
         self::bootKernel(['environment' => $environment]);
 
-        return static::getContainer()->get(VariantRunner::class);
+        $runner = static::getContainer()->get(VariantRunner::class);
+        \assert($runner instanceof VariantRunner);
+
+        return $runner;
     }
 }

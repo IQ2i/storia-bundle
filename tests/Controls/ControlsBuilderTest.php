@@ -149,7 +149,9 @@ class ControlsBuilderTest extends TwigTestCase
         $controls = $this->builder->forComponent($this->anonymous(), ['extra' => 1, 'title' => 'T']);
 
         $this->assertSame(['title', 'count', 'shouted', 'extra'], array_map(static fn (Control $control): string => $control->name, $controls));
-        $this->assertSame('yaml', end($controls)->source);
+        $last = end($controls);
+        \assert($last instanceof Control);
+        $this->assertSame('yaml', $last->source);
     }
 
     public function testPublicPropertiesOfTheComponentClass(): void
