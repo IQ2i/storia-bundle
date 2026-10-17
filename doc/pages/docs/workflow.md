@@ -8,6 +8,8 @@ menu:
 
 UI Storia is built for a team where **integrators** and **developers** share the same templates: your design system lives in your Symfony project, built by your integrators.
 
+![The integrator writes the component and its variants, the developer adds logic and tests, the designer reviews the export](/media/workflow.svg)
+
 ## Integrator first, then developer
 
 1. **From the mockup to a component.** The integrator creates an anonymous component in `templates/components`, with Twig and CSS only. No PHP, no controller, no database.

@@ -32,6 +32,8 @@ variants:
             menu: !data menu
 ```
 
+![One data file referenced by a component and a page with !data](/media/data-flow.svg)
+
 Changing `storia/data/menu.yaml` updates every view that uses it. Files in `storia/data/` are not views: they do not appear in the navigation.
 
 ## Sub-paths

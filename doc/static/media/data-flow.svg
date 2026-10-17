@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 8 880 316" role="img" aria-labelledby="t d">
+  <title id="t">One data file shared by several views</title>
+  <desc id="d">storia/data/menu.yaml is referenced with !data menu by components/header.yaml and by pages/home/home.yaml.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M1 1.5 8.5 5 1 8.5z" fill="#0F53D4"/>
+    </marker>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+      .card { fill: #fff; stroke: #d0d7de; stroke-width: 1.5; }
+      .head { fill: #eef3fd; }
+      .name { font-size: 14px; font-weight: 600; fill: #0F53D4; }
+      .code { font-size: 13px; fill: #1f2328; white-space: pre; }
+      .tag { fill: #0F53D4; font-weight: 600; }
+      .label { font-size: 13px; font-weight: 600; fill: #0F53D4; }
+      .edge { fill: none; stroke: #0F53D4; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <g transform="translate(20 100)">
+    <rect class="card" width="300" height="130" rx="12"/>
+    <path class="head" d="M1.5 12a10.5 10.5 0 0 1 10.5-10.5h276A10.5 10.5 0 0 1 298.500 12V40H1.500z"/>
+    <text class="name mono" x="18" y="27">storia/data/menu.yaml</text>
+    <text class="code mono" x="18" y="68">items:</text>
+    <text class="code mono" x="18" y="90">  - { label: Home, url: / }</text>
+    <text class="code mono" x="18" y="112">  - { label: Shop, url: /shop }</text>
+  </g>
+
+  <g transform="translate(540 20)">
+    <rect class="card" width="320" height="110" rx="12"/>
+    <path class="head" d="M1.500 12a10.500 10.500 0 0 1 10.500-10.500h296A10.500 10.500 0 0 1 318.500 12V40H1.500z"/>
+    <text class="name mono" x="18" y="27">storia/components/header.yaml</text>
+    <text class="code mono" x="18" y="66">args:</text>
+    <text class="code mono" x="18" y="88">  menu: <tspan class="tag">!data menu</tspan></text>
+  </g>
+
+  <g transform="translate(540 200)">
+    <rect class="card" width="320" height="110" rx="12"/>
+    <path class="head" d="M1.500 12a10.500 10.500 0 0 1 10.500-10.500h296A10.500 10.500 0 0 1 318.500 12V40H1.500z"/>
+    <text class="name mono" x="18" y="27">storia/pages/home/home.yaml</text>
+    <text class="code mono" x="18" y="66">args:</text>
+    <text class="code mono" x="18" y="88">  menu: <tspan class="tag">!data menu</tspan></text>
+  </g>
+
+  <path class="edge" d="M322 165 C 430 165, 430 75, 536 75"/>
+  <path class="edge" d="M322 165 C 430 165, 430 255, 536 255"/>
+  </svg>
