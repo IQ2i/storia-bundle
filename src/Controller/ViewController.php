@@ -36,7 +36,7 @@ final readonly class ViewController
     {
         $view = $this->viewBuilder->createFromRequest($request);
 
-        if (null !== $view && null === $request->query->get('variant')) {
+        if (null !== $view && null === $request->query->get('variant') && [] !== $view->getVariants()) {
             /** @var Variant $variant */
             $variant = current($view->getVariants());
 

@@ -85,4 +85,49 @@ class ComponentConfigurationTest extends TestCase
             EOF);
         (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
     }
+
+    public function testFormVariantsAcceptOptionsAndWithErrors(): void
+    {
+        $yaml = Yaml::parse(<<<EOF
+            form: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+            variants:
+                preselected:
+                    options:
+                        data: b
+                    with_errors: true
+            EOF);
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+
+        $this->assertSame(['data' => 'b'], $config['variants']['preselected']['options']);
+        $this->assertTrue($config['variants']['preselected']['with_errors']);
+    }
+
+    public function testFormVariantsRejectArgsAndBlocks(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('"args" and "blocks" are not allowed in the variants of a form view');
+
+        $yaml = Yaml::parse(<<<EOF
+            form: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+            variants:
+                custom:
+                    args:
+                        foo: bar
+            EOF);
+        (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+    }
+
+    public function testTemplateVariantsRejectFormOptions(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('allowed in the variants of a form view only');
+
+        $yaml = Yaml::parse(<<<EOF
+            template: some_template.html.twig
+            variants:
+                default:
+                    with_errors: false
+            EOF);
+        (new Processor())->processConfiguration(new ViewConfiguration(), [$yaml]);
+    }
 }

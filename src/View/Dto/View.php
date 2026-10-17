@@ -80,8 +80,12 @@ readonly class View
 
     public function getCurrentVariant(): ?Variant
     {
-        $variants = array_filter($this->variants, static fn (Variant $variant) => $variant->isCurrent());
+        foreach ($this->variants as $variant) {
+            if ($variant->isCurrent()) {
+                return $variant;
+            }
+        }
 
-        return current($variants);
+        return null;
     }
 }

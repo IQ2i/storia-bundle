@@ -28,6 +28,23 @@ class ViewControllerTest extends WebTestCase
         $this->assertCount(3, $crawler->filter('main > div > div > .tabs > .tabs__item'));
     }
 
+    public function testVariantNameOverridesTheLabelOfItsTab(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/progress?variant=default');
+
+        $this->assertSame(['Tiny', 'Default', 'Large', 'Extra large'], $crawler->filter('header > .tabs > .tabs__item')->each(static fn ($node) => trim($node->text())));
+    }
+
+    public function testViewWithoutAnyVariantIsRenderedWithoutPreview(): void
+    {
+        $client = static::createClient(['environment' => 'empty_view']);
+        $crawler = $client->request('GET', '/storia/components/empty');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(0, $crawler->filter('iframe'));
+    }
+
     public function testViewWithoutVariantRedirectsToTheFirstOne(): void
     {
         $client = static::createClient();

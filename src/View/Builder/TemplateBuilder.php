@@ -15,6 +15,7 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
+use IQ2i\StoriaBundle\Util\Label;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Michelf\MarkdownExtra;
@@ -68,7 +69,7 @@ class TemplateBuilder extends AbstractBuilder
 
         $variants = array_map(static fn (string $name): Variant => new Variant(
             $name,
-            ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name)))),
+            $config['variants'][$name]['name'] ?? Label::humanize($name),
             $variantPath === $name
         ), array_keys($config['variants']));
 

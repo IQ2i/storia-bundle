@@ -12,8 +12,13 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
 
 return static function (ContainerConfigurator $container): void {
+    if (!class_exists(TwigComponentBundle::class)) {
+        return;
+    }
+
     $container->extension('twig_component', [
         'anonymous_template_directory' => 'components',
         'defaults' => [

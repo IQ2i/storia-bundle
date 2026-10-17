@@ -128,3 +128,23 @@ jobs:
             -   name: Test PHPUnit
                 run: |
                     vendor/bin/phpunit
+
+    phpunit-minimal:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v6
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "8.4"
+                    coverage: none
+
+            -   name: Install dependencies without the optional packages
+                run: |
+                    composer update --prefer-dist --no-progress
+                    composer remove --dev --no-progress --update-with-dependencies symfony/form symfony/ux-twig-component
+
+            -   name: Test PHPUnit
+                run: vendor/bin/phpunit --group no-optional

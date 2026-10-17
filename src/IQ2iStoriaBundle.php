@@ -34,6 +34,7 @@ use IQ2i\StoriaBundle\Test\VariantRunner;
 use IQ2i\StoriaBundle\Twig\ViewExtension;
 use IQ2i\StoriaBundle\Url\RouterLinkGenerator;
 use IQ2i\StoriaBundle\View\Builder\ComponentBuilder;
+use IQ2i\StoriaBundle\View\Builder\FormBuilder;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use IQ2i\StoriaBundle\View\ViewFinder;
 use IQ2i\StoriaBundle\View\ViewRenderer;
@@ -44,6 +45,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 final class IQ2iStoriaBundle extends AbstractBundle
@@ -58,7 +60,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->scalarNode('default_path')
                     ->defaultValue('%kernel.project_dir%/storia')
                 ->end()
-                ->booleanNode('enabled')->defaultTrue()->end()
+                ->booleanNode('enabled')->defaultNull()->info('Defaults to kernel.debug')->end()
                 ->arrayNode('watch')
                     ->scalarPrototype()->end()
                     ->defaultValue(['%kernel.project_dir%/assets', '%kernel.project_dir%/templates'])
@@ -94,7 +96,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
         $container->import('../config/services.php');
 
         $builder->setParameter('iq2i_storia.default_path', $config['default_path']);
-        $builder->setParameter('iq2i_storia.enabled', $config['enabled']);
+        $builder->setParameter('iq2i_storia.enabled', $config['enabled'] ?? '%kernel.debug%');
         $builder->setParameter('iq2i_storia.watch', $config['watch']);
         $builder->setParameter('iq2i_storia.export.output_dir', $config['export']['output_dir']);
         $builder->setParameter('iq2i_storia.export.public_dir', $config['export']['public_dir']);
@@ -199,6 +201,17 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     new Reference(DataResolver::class),
                     new Reference(ControlsBuilder::class),
                     new Reference(ComponentIntrospector::class),
+                ]);
+        }
+
+        if (interface_exists(FormFactoryInterface::class)) {
+            $builder->register(FormBuilder::class)
+                ->addTag('iq2i_storia.builder')
+                ->setArguments([
+                    '%iq2i_storia.default_path%',
+                    new Reference('twig'),
+                    new Reference('form.factory'),
+                    new Reference(DataResolver::class),
                 ]);
         }
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Data\DataResolver;
+use IQ2i\StoriaBundle\Util\Label;
 use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
@@ -56,17 +57,17 @@ class FormBuilder extends AbstractBuilder
 
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
-        $config['variants'] = self::VARIANTS;
+        $variantConfigs = array_replace(self::VARIANTS, $config['variants'] ?? []);
 
-        if (null !== $variantPath && isset($config['variants'][$variantPath])) {
-            $variantConfig = $config['variants'][$variantPath];
+        if (null !== $variantPath && isset($variantConfigs[$variantPath])) {
+            $variantConfig = $variantConfigs[$variantPath];
 
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $variantConfig['options'], $this->dataResolver->resolve($config['options'])));
+            ], $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
 
-            if ($variantConfig['with_errors']) {
+            if ($variantConfig['with_errors'] ?? false) {
                 $form->addError(new FormError('Error message'));
                 $form->submit([]);
             }
@@ -80,9 +81,9 @@ class FormBuilder extends AbstractBuilder
 
         $variants = array_map(static fn (string $name): Variant => new Variant(
             $name,
-            ucfirst(strtolower(trim((string) preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $name)))),
+            $variantConfigs[$name]['name'] ?? Label::humanize($name),
             $variantPath === $name
-        ), array_keys($config['variants']));
+        ), array_keys($variantConfigs));
 
         return new View(
             $path,

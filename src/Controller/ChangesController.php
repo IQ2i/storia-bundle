@@ -19,8 +19,13 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 final readonly class ChangesController
 {
+    /**
+     * The stream is closed after $maxDuration seconds, below the idle timeout of common proxies.
+     * The browser reconnects by itself, see live_reload_controller.js.
+     */
     public function __construct(
         private string $projectDir,
+        private int $maxDuration = 55,
     ) {
     }
 
@@ -32,7 +37,9 @@ final readonly class ChangesController
 
         $tmpFile = $this->projectDir.'/var/storia_reload.json';
 
-        return new StreamedResponse(static function () use ($tmpFile): void {
+        $maxDuration = $this->maxDuration;
+
+        return new StreamedResponse(static function () use ($tmpFile, $maxDuration): void {
             set_time_limit(0);
 
             while (ob_get_level() > 0) {
@@ -51,8 +58,9 @@ final readonly class ChangesController
             }
 
             $lastPing = time();
+            $startedAt = $lastPing;
 
-            while (!connection_aborted()) {
+            while (!connection_aborted() && (time() - $startedAt) < $maxDuration) {
                 if (file_exists($tmpFile)) {
                     $data = json_decode((string) file_get_contents($tmpFile), true);
                     if (isset($data['at']) && $data['at'] > $lastAt) {
