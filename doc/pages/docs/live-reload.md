@@ -8,6 +8,11 @@ menu:
 
 UI Storia comes with a live reload feature that automatically refreshes the preview when you modify your files.
 
+<video autoplay loop muted playsinline controls preload="metadata" poster="/media/live-reload-poster.webp" aria-label="Saving a template reloads the preview, saving a YAML file reloads the page">
+    <source src="/media/live-reload.webm" type="video/webm">
+    <source src="/media/live-reload.mp4" type="video/mp4">
+</video>
+
 ## Requirements
 
 `storia:watch` runs a small native binary shipped with the bundle in `tools/watcher/bin/`. It uses the notifications of the operating system, so it is fast and light. The binary is chosen from your system:

@@ -58,6 +58,8 @@ variants:
 
 Open `/storia/components/alert`. You see the three variants as tabs, the rendered component, its Twig code and its HTML. The **Controls** tab already lets you change `type` and watch the result, as it comes from the `{% props %}` of the template.
 
+![The Alert component in UI Storia, with its three variants as tabs and its Controls tab](/media/getting-started-alert.webp)
+
 Run `bin/console storia:watch` to reload the preview when you save a file.
 
 ## 5. Use real-looking data

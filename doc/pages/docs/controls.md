@@ -6,6 +6,11 @@ menu:
     weight: 70
 ---
 
+<video autoplay loop muted playsinline controls preload="metadata" poster="/media/controls-poster.webp" aria-label="Editing the title, count, color and alignment of a card in the Controls tab">
+    <source src="/media/controls.webm" type="video/webm">
+    <source src="/media/controls.mp4" type="video/mp4">
+</video>
+
 The **Controls** tab, next to Twig, HTML and Include, lets you change the arguments of the current variant and see the result immediately, without editing the YAML file. Controls are deduced automatically:
 
 | Source  | Where the controls come from                                                                        |
@@ -31,6 +36,8 @@ The widget is deduced from the value or the PHP type:
 | `radio`    | a backed enum with 4 cases or fewer                                               |
 | `select`   | a backed enum with more cases                                                     |
 | `json`     | an array, edited as JSON                                                          |
+
+![Controls deduced from a PHP component: a select, a checkbox and a radio group](/media/controls-class.webp)
 
 Some controls are read-only: a prop whose default value is a Twig expression, an argument that resolves to a PHP object, or an array too large to be edited by hand. They are displayed with a badge explaining why.
 `blocks` and form types have no controls.
@@ -78,6 +85,8 @@ A widget that does not fit the value, such as a `range` on a string, is ignored 
 For an enum, `select` and `radio` only pick the widget: the choices stay the cases of the enum.
 
 Documentation comments need Twig 3.29: before that version, a `##` comment inside a tag is a syntax error, so only write them once your project runs Twig 3.29 or later. Reading them from `{% props %}` also needs symfony/ux-twig-component 3.5; with an older version the controls are still deduced, without description nor `@control`.
+
+![The Controls tab after some edits: the changed controls are highlighted](/media/controls-tab.webp)
 
 Changes are **never written to disk**. They are kept in the `overrides` query parameter of the URL, so reloading the page or sharing the link keeps them, and the **Reset** button removes them.
 To keep a state, click **Copy variant YAML** and paste the result in your YAML file. Values coming from `!data` or from a PHP data provider are copied once resolved, as literal values.

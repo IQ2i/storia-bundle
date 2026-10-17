@@ -13,6 +13,8 @@ The result can be deployed on any static host (GitLab Pages, S3, ...) or opened 
 bin/console storia:export [output-dir]
 ```
 
+![The static export opened from a folder, with its note about live reload and controls](/media/export-result.webp)
+
 The export stops at the first view, variant or asset that cannot be exported and tells which one:
 
 ```

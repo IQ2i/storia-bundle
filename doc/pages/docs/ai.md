@@ -24,6 +24,8 @@ bin/console storia:render components/button plain
 
 Prints the HTML of a variant on the standard output. `--format=twig` prints the source of the template and `--format=include` prints the code that includes a component. On error (unknown view or variant, Twig or PHP exception), the message goes to the error output and the exit code is `1`.
 
+![storia:list and storia:render on the Alert component](/media/ai-output.webp)
+
 ## Mate tools
 
 With [Symfony Mate](https://symfony.com/doc/current/ai/components/mate.html), the catalog is also available as tools, called with `vendor/bin/mate tools:call <tool> --<param>=<value>`:
