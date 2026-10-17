@@ -8,6 +8,7 @@
 
     @include tablet {
         flex-direction: column;
+        align-items: stretch;
         gap: 2.4rem;
     }
 }
@@ -52,7 +53,7 @@
         }
     }
 
-    a {
+    li a {
         display: block;
         margin-left: -1px;
         padding: .7rem 1.4rem;
@@ -93,7 +94,20 @@
     font-weight: 600;
     letter-spacing: .08rem;
     text-transform: uppercase;
-    color: var(--text);
+
+    a {
+        color: var(--text);
+        text-decoration: none;
+        transition: color ease-in-out .2s;
+
+        &:hover {
+            color: var(--title);
+        }
+
+        &.is-active {
+            color: var(--primary);
+        }
+    }
 
     @include tablet {
         display: none;
@@ -103,7 +117,9 @@
 .docs__content {
     flex: 1;
     min-width: 0;
-    background: #F0F2F6;
+    font-family: var(--font-primary);
+    background: #FFF;
+    border: 1px solid #E6E8EC;
     border-radius: 2rem;
     padding: 4rem;
 
@@ -121,5 +137,9 @@
 
     a {
         color: var(--primary);
+    }
+
+    th {
+        background: #F0F2F6;
     }
 }

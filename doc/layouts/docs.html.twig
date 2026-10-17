@@ -2,10 +2,12 @@
 
 {% block body_class %}page-docs{% endblock %}
 
+{% block header_documentation %}{% endblock %}
+
 {% block content %}
     <div class="docs">
         <nav class="docs__nav" aria-label="Documentation">
-            <p class="docs__nav-title">Documentation</p>
+            <p class="docs__nav-title"><a href="{{ url('docs') }}"{% if page.id == 'docs' %} class="is-active" aria-current="page"{% endif %}>Documentation</a></p>
             <ul>
                 {% for entry in site.menus.docs|sort_by_weight %}
                     <li>

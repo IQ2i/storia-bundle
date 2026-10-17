@@ -40,7 +40,9 @@
                 <img src="{{ asset('img/ui-storia.svg') }}" alt="UI Storia logo">
             </a>
             <div class="buttons">
-                <a class="btn btn--primary btn--small btn-documentation" href="{{ url('docs/getting-started') }}">Documentation</a>
+                {% block header_documentation %}
+                    <a class="btn btn--primary btn--small btn-documentation" href="{{ url('docs/getting-started') }}">Documentation</a>
+                {% endblock %}
                 <a class="btn btn--secondary btn--small" target="_blank" href="https://github.com/IQ2i/storia-bundle">
                     <img src="{{ asset('img/github.svg') }}" alt="GitHub logo">
                     Fork on Github
