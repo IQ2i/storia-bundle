@@ -11,6 +11,7 @@
 /.phpunit.cache
 /phpunit.xml
 /tests/TestApplication/var/
+/tests/TestApplication/config/reference.php
 
 # ======================================================================
 # PHP CS Fixer
