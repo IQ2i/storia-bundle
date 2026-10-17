@@ -35,13 +35,14 @@ class ComponentBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly ComponentTemplateFinderInterface $componentTemplateFinder,
         private readonly ComponentFactory $componentFactory,
         private readonly DataResolver $dataResolver,
         private readonly ControlsBuilder $controlsBuilder,
         private readonly ComponentIntrospector $introspector,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
     public function supports(string $path, array $config): bool

@@ -216,6 +216,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->setArguments([
                     '%iq2i_storia.default_path%',
                     new Reference('twig'),
+                    '%kernel.project_dir%',
                     new Reference('ux.twig_component.component_template_finder'),
                     new Reference('ux.twig_component.component_factory'),
                     new Reference(DataResolver::class),
@@ -230,6 +231,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                 ->setArguments([
                     '%iq2i_storia.default_path%',
                     new Reference('twig'),
+                    '%kernel.project_dir%',
                     new Reference('form.factory'),
                     new Reference(DataResolver::class),
                 ]);

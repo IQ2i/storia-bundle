@@ -45,10 +45,11 @@ class FormBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly FormFactoryInterface $formFactory,
         private readonly DataResolver $dataResolver,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
     public function supports(string $path, array $config): bool

@@ -26,22 +26,23 @@ class TemplateBuilder extends AbstractBuilder
     public function __construct(
         string $defaultPath,
         Environment $twig,
+        string $projectDir,
         private readonly DataResolver $dataResolver,
         private readonly ControlsBuilder $controlsBuilder,
     ) {
-        parent::__construct($defaultPath, $twig);
+        parent::__construct($defaultPath, $twig, $projectDir);
     }
 
     public function supports(string $path, array $config): bool
     {
-        return \array_key_exists('template', $config) || @file_exists($this->defaultPath.'/'.$path.'.html.twig');
+        return \array_key_exists('template', $config) || is_file($this->defaultPath.'/'.$path.'.html.twig');
     }
 
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $template = $config['template'] ?? null;
 
-        if (null === $template && @file_exists($this->defaultPath.'/'.$path.'.html.twig')) {
+        if (null === $template && is_file($this->defaultPath.'/'.$path.'.html.twig')) {
             $template = $this->defaultPath.'/'.$path.'.html.twig';
         }
 

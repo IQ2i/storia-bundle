@@ -72,6 +72,7 @@ return static function (ContainerConfigurator $container) {
             ->args([
                 '%iq2i_storia.default_path%',
                 service('twig'),
+                '%kernel.project_dir%',
                 service(DataResolver::class),
                 service(ControlsBuilder::class),
             ])

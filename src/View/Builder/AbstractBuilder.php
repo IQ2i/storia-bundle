@@ -26,6 +26,7 @@ abstract class AbstractBuilder implements BuilderInterface
     public function __construct(
         protected string $defaultPath,
         protected Environment $twig,
+        protected string $projectDir,
     ) {
     }
 
@@ -40,13 +41,32 @@ abstract class AbstractBuilder implements BuilderInterface
 
     protected function getTwigContent(string $template): string
     {
-        if (str_starts_with($template, '/') && @file_exists($template)) {
-            return @file_get_contents($template);
+        if (str_starts_with($template, '/') && is_file($template)) {
+            return $this->readProjectFile($template);
         }
 
         $source = $this->twig->getLoader()->getSourceContext($template);
 
         return $source->getCode();
+    }
+
+    /**
+     * The Twig tab shows the source of a template: it must not become a way to read any file of the server.
+     */
+    private function readProjectFile(string $file): string
+    {
+        $realFile = realpath($file);
+        $realProjectDir = realpath($this->projectDir);
+        if (false === $realFile || false === $realProjectDir || !str_starts_with($realFile, $realProjectDir.\DIRECTORY_SEPARATOR)) {
+            throw new \InvalidArgumentException(\sprintf('The template "%s" is outside of the project directory.', $file));
+        }
+
+        $content = file_get_contents($realFile);
+        if (false === $content) {
+            throw new \RuntimeException(\sprintf('The template "%s" cannot be read.', $file));
+        }
+
+        return $content;
     }
 
     protected function generateHtml(string $content, array $parameters): string
