@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <twig:Header :menu="menu" />
+
+    <main class="p-6">
+        <twig:Product :product="product" />
+    </main>
+{% endblock %}
+
+{% block footer %}
+    <twig:Footer />
+{% endblock %}

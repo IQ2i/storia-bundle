@@ -26,6 +26,12 @@ jobs:
                   php-version: '8.3'
                   extensions: fileinfo, gd, mbstring
 
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: Export the demo
+              run: php tests/TestApplication/bin/console storia:export doc/static/demo --env=test
+
             - name: Build site
               uses: Cecilapp/Cecil-Action@v3
               with:

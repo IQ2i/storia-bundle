@@ -1,0 +1,6 @@
+{% props year = 2026, company = 'Acme' %}
+
+<footer {{ attributes.defaults({ class: 'footer' }) }}>
+    <p>&copy; {{ year }} {{ company }}. All rights reserved.</p>
+    {% block content %}{% endblock %}
+</footer>
