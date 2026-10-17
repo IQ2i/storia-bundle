@@ -2,7 +2,6 @@ name: Build and deploy to GitHub Pages
 on:
     push:
         branches: [main]
-        tags: ['*.*.*']
     workflow_dispatch: # run manually
 
 permissions:
