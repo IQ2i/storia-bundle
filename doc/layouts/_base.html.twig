@@ -34,7 +34,7 @@
         {% endblock head ~%}
     </head>
 
-    <body>
+    <body class="{% block body_class %}{% endblock %}">
         <header>
             <a class="logo" href="{{ url('index') }}">
                 <img src="{{ asset('img/ui-storia.svg') }}" alt="UI Storia logo">

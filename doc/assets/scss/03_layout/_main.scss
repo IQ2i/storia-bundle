@@ -48,6 +48,13 @@
     }
 }
 
+.hero-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
 .hero-header__image {
     max-width: 117rem;
     position: relative;
@@ -144,6 +151,22 @@
         }
     }
 
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        padding-left: 2rem;
+        color: var(--text);
+        font-size: 1.8rem;
+        font-weight: 450;
+        line-height: 2.8rem;
+
+        strong {
+            color: var(--title);
+            font-weight: 600;
+        }
+    }
+
     p {
         color: var(--text);
         font-size: 1.8rem;
@@ -151,6 +174,19 @@
         font-weight: 450;
         line-height: 2.8rem;
         max-width: 70rem;
+
+        a {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            text-underline-offset: .3rem;
+            transition: text-decoration-color ease-in-out .2s;
+
+            &:hover {
+                text-decoration-color: currentColor;
+            }
+        }
     }
 }
 

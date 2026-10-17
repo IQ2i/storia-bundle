@@ -27,7 +27,16 @@ header {
         width: 100%;
         height: 20rem;
         z-index: -1;
+        pointer-events: none;
         background: linear-gradient(180deg, #FFF 0%, #FFF 30%, rgba(255, 255, 255, 0.00) 100%);
+    }
+
+    .page-docs & {
+        &::before {
+            height: 100%;
+            background: #FFF;
+            border-bottom: 1px solid #E6E8EC;
+        }
     }
 
 
