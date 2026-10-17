@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\View;
 
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @internal
+ */
 readonly class ViewFinder
 {
     private const array FOLDERS = ['components', 'pages'];

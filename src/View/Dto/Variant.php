@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\View\Dto;
 
+/**
+ * @internal
+ */
 readonly class Variant
 {
     public function __construct(

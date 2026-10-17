@@ -20,6 +20,8 @@ use IQ2i\StoriaBundle\View\ViewFinder;
 
 /**
  * Iterates over every variant of the catalog, shared by storia:export and storia:test.
+ *
+ * @internal
  */
 readonly class VariantRunner
 {

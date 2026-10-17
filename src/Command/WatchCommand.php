@@ -19,6 +19,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * @internal
+ */
 #[AsCommand(name: 'storia:watch', description: 'Watch files and trigger live reload')]
 final class WatchCommand extends Command
 {

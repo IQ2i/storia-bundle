@@ -20,6 +20,9 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\UX\TwigComponent\ComponentTemplateFinder;
 
+/**
+ * @internal
+ */
 class ViewConfiguration implements ConfigurationInterface
 {
     public const array TAGS = ['data', 'repeat', 'lorem'];

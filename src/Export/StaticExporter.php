@@ -21,6 +21,9 @@ use IQ2i\StoriaBundle\View\ViewRenderer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @internal
+ */
 readonly class StaticExporter
 {
     public const string MARKER_FILE = '.storia-export';

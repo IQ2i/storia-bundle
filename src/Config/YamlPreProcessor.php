@@ -25,6 +25,8 @@ use Symfony\Component\Yaml\Yaml;
  * - `extends:` performs a deep merge of the parent config, allowing child files to
  *   override only the parts they need.
  * - `_definitions:` sections are stripped from the final result.
+ *
+ * @internal
  */
 readonly class YamlPreProcessor
 {

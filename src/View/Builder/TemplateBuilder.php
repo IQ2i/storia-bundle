@@ -21,6 +21,9 @@ use IQ2i\StoriaBundle\View\Dto\View;
 use Michelf\MarkdownExtra;
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 class TemplateBuilder extends AbstractBuilder
 {
     public function __construct(

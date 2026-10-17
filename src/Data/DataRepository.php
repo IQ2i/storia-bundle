@@ -19,6 +19,8 @@ use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
  * Reads named data files from "<default_path>/data/".
+ *
+ * @internal
  */
 class DataRepository
 {

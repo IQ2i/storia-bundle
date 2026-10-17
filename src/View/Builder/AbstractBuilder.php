@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 abstract class AbstractBuilder implements BuilderInterface
 {
     public function __construct(

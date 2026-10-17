@@ -18,6 +18,8 @@ namespace IQ2i\StoriaBundle\Controls;
  *
  *   ## Padding in rem @control range min=0 max=4 step=0.5
  *   ## Alignment @control radio left|center|right
+ *
+ * @internal
  */
 final readonly class ControlDirective
 {

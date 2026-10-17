@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Export;
 
+/**
+ * @internal
+ */
 final class ExportException extends \RuntimeException
 {
     public static function forView(string $view, ?string $variant, \Throwable $previous): self

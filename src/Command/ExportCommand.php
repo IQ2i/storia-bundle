@@ -21,6 +21,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @internal
+ */
 #[AsCommand(name: 'storia:export', description: 'Export the catalog as a static website')]
 final class ExportCommand extends Command
 {

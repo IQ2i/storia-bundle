@@ -28,6 +28,8 @@ use Twig\Source;
  *
  * PropsNode is internal to ux-twig-component, but its own debug:twig-component command reads it the same way.
  * The "##" documentation comments need Twig 3.29, and PropsNode::getPropDocumentation() ux-twig-component 3.5.
+ *
+ * @internal
  */
 class PropsExtractor
 {

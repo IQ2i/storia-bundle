@@ -20,6 +20,9 @@ use Symfony\Component\Config\Definition\Processor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ */
 class ViewExtension extends AbstractExtension
 {
     public function __construct(

@@ -23,6 +23,9 @@ use Symfony\Component\Finder\SplFileInfo;
 
 use function Symfony\Component\String\u;
 
+/**
+ * @internal
+ */
 readonly class MenuBuilder
 {
     public function __construct(

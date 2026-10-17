@@ -1,0 +1,13 @@
+component:
+    template:             ~
+    component:            ~
+    variants:
+
+        # Prototype
+        -
+            name:                 ~
+            args:                 []
+            blocks:               []
+    form:                 ~
+    options:              []
+    form_theme:           ~

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Export;
 
+/**
+ * @internal
+ */
 final readonly class ExportResult
 {
     public function __construct(

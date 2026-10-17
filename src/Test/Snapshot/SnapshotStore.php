@@ -17,6 +17,9 @@ use IQ2i\StoriaBundle\Test\VariantRunner;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @internal
+ */
 readonly class SnapshotStore
 {
     public function __construct(

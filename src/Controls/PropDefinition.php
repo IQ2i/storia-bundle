@@ -15,6 +15,8 @@ namespace IQ2i\StoriaBundle\Controls;
 
 /**
  * A prop declared by a component: in its {% props %} tag, as a public property or as a mount() parameter.
+ *
+ * @internal
  */
 final readonly class PropDefinition
 {

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Controls;
 
+/**
+ * @internal
+ */
 final readonly class Control
 {
     /**

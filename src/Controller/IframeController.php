@@ -20,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
+/**
+ * @internal
+ */
 final readonly class IframeController
 {
     public function __construct(

@@ -21,6 +21,9 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Twig\Environment;
 
+/**
+ * @internal
+ */
 class FormBuilder extends AbstractBuilder
 {
     /** A form always has these three variants, whatever its YAML file says. */

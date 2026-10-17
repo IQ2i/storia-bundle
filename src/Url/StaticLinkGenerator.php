@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\Url;
 
 use IQ2i\StoriaBundle\Export\UrlRewriter;
 
+/**
+ * @internal
+ */
 readonly class StaticLinkGenerator implements LinkGeneratorInterface
 {
     private string $prefix;

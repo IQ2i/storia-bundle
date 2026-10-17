@@ -15,6 +15,9 @@ namespace IQ2i\StoriaBundle\Controls;
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @internal
+ */
 final class OverridesParser
 {
     private const int MAX_LENGTH = 65536;
