@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle;
 
+use IQ2i\StoriaBundle\Catalog\CatalogDescriber;
 use IQ2i\StoriaBundle\Command\ExportCommand;
+use IQ2i\StoriaBundle\Command\ListCommand;
+use IQ2i\StoriaBundle\Command\RenderCommand;
 use IQ2i\StoriaBundle\Command\TestCommand;
 use IQ2i\StoriaBundle\Command\WatchCommand;
 use IQ2i\StoriaBundle\Config\YamlPreProcessor;
@@ -143,6 +146,23 @@ final class IQ2iStoriaBundle extends AbstractBundle
             ->setArguments([
                 new Reference(VariantRunner::class),
                 new Reference(SnapshotStore::class),
+            ]);
+        $builder->register(CatalogDescriber::class)
+            ->setArguments([
+                '%iq2i_storia.default_path%',
+                new Reference(VariantRunner::class),
+                new Reference(YamlPreProcessor::class),
+                new Reference(DataResolver::class),
+            ]);
+        $builder->register(ListCommand::class)
+            ->addTag('console.command')
+            ->setArguments([
+                new Reference(CatalogDescriber::class),
+            ]);
+        $builder->register(RenderCommand::class)
+            ->addTag('console.command')
+            ->setArguments([
+                new Reference(ViewBuilder::class),
             ]);
         $builder->register(StaticExporter::class)
             ->setArguments([

@@ -4,6 +4,9 @@
 use IQ2i\StoriaBundle\Tests\TestApplication\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
+// The test application has no .env file, which symfony/dotenv (a dependency of symfony/ai-mate) would look for
+$_SERVER['APP_RUNTIME_OPTIONS'] = ['disable_dotenv' => true];
+
 require_once dirname(__DIR__).'/../../vendor/autoload_runtime.php';
 
 return function (array $context) {
