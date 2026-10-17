@@ -17,6 +17,7 @@ use IQ2i\StoriaBundle\Data\DataResolver;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRegistryInterface;
 use Twig\Environment;
 
 /**
@@ -47,6 +48,7 @@ class FormBuilder extends AbstractBuilder
         Environment $twig,
         string $projectDir,
         private readonly FormFactoryInterface $formFactory,
+        private readonly FormRegistryInterface $formRegistry,
         private readonly DataResolver $dataResolver,
     ) {
         parent::__construct($defaultPath, $twig, $projectDir);
@@ -69,7 +71,7 @@ class FormBuilder extends AbstractBuilder
             $form = $this->formFactory->createNamed('field', $config['form'], null, array_merge([
                 'label' => 'Label',
                 'help' => 'Help text',
-            ], $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
+            ], $this->csrfOptions($config['form']), $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
 
             if ($variantConfig['with_errors'] ?? false) {
                 $form->addError(new FormError('Error message'));
@@ -93,5 +95,19 @@ class FormBuilder extends AbstractBuilder
             null,
             $variants
         );
+    }
+
+    /**
+     * The preview is never submitted: a token would change at every rendering, and cannot be generated outside of a request.
+     *
+     * @param class-string $formType
+     *
+     * @return array{csrf_protection?: false}
+     */
+    private function csrfOptions(string $formType): array
+    {
+        return $this->formRegistry->getType($formType)->getOptionsResolver()->isDefined('csrf_protection')
+            ? ['csrf_protection' => false]
+            : [];
     }
 }

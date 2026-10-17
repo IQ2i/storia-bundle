@@ -233,6 +233,7 @@ final class IQ2iStoriaBundle extends AbstractBundle
                     new Reference('twig'),
                     '%kernel.project_dir%',
                     new Reference('form.factory'),
+                    new Reference('form.registry'),
                     new Reference(DataResolver::class),
                 ]);
         }

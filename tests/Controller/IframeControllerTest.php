@@ -94,7 +94,7 @@ class IframeControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $labels = $crawler->filter('header > .tabs > .tabs__item')->each(static fn ($node) => trim($node->text()));
-        $this->assertSame(['Default', 'Disabled', 'Error', 'Preselected'], $labels);
+        $this->assertSame(['Default', 'Disabled', 'Error', 'Preselected', 'Expanded'], $labels);
     }
 
     public function testUnknownView(): void
@@ -293,5 +293,15 @@ class IframeControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('a[href="/legal"]', 'Legal notice');
+    }
+
+    public function testExpandedChoiceHasNoCsrfToken(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/iframe/components/form/choice?variant=expanded');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('input[type="radio"]');
+        $this->assertSelectorNotExists('input[name$="[_token]"]');
     }
 }

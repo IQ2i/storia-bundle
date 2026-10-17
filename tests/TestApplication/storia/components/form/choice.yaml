@@ -6,3 +6,7 @@ variants:
     preselected:
         options:
             data: true
+
+    expanded:
+        options:
+            expanded: true
