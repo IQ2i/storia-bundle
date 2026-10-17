@@ -52,6 +52,9 @@ readonly class MenuBuilder
         return $menu;
     }
 
+    /**
+     * @param ?array<string, ?string> $firstVariants
+     */
     private function getChildren(LinkGeneratorInterface $urls, ?string $currentPath, ?array $firstVariants, Menu $menu, string $folder): void
     {
         if (!is_dir($this->defaultPath.'/'.$folder)) {
@@ -73,8 +76,8 @@ readonly class MenuBuilder
 
                 $opened = $opened || $child->isOpened();
 
-                if (1 === \count($child->getChildren())) {
-                    $menuItem = $child->getChildren()[0];
+                $menuItem = $child->getChildren()[0];
+                if (1 === \count($child->getChildren()) && $menuItem instanceof MenuItem) {
                     $opened = $opened || $menuItem->isActive();
                     $child = new MenuItem($label, $menuItem->getUrl(), $menuItem->isActive());
                 }

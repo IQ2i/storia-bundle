@@ -21,6 +21,7 @@ use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use IQ2i\StoriaBundle\View\ViewBuilder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 class MenuBuilderTest extends TestCase
 {
@@ -60,6 +61,27 @@ class MenuBuilderTest extends TestCase
         $this->assertTrue($menu->getChildren()[0]->isOpened());
     }
 
+    public function testFolderHoldingOnlyAFolderIsKept(): void
+    {
+        $directory = sys_get_temp_dir().'/storia_menu_'.bin2hex(random_bytes(4));
+        mkdir($directory.'/components/outer/inner', 0o777, true);
+        touch($directory.'/components/outer/inner/one.yaml');
+        touch($directory.'/components/outer/inner/two.yaml');
+
+        try {
+            $menu = $this->createBuilder(defaultPath: $directory)->createSidebarMenu($this->createUrls(), 'components/outer/inner/two');
+        } finally {
+            (new Filesystem())->remove($directory);
+        }
+
+        $outer = $menu->getChildren()[0]->getChildren()[0];
+        $this->assertSame('Outer', $outer->getLabel());
+        $this->assertTrue($outer->isOpened());
+        $this->assertCount(1, $outer->getChildren());
+        $this->assertSame('Inner', $outer->getChildren()[0]->getLabel());
+        $this->assertCount(2, $outer->getChildren()[0]->getChildren());
+    }
+
     public function testFirstVariantsCanBeProvided(): void
     {
         $menu = $this->createBuilder(static fn () => throw new \LogicException('The views must not be built.'))->createSidebarMenu(
@@ -93,7 +115,7 @@ class MenuBuilderTest extends TestCase
     /**
      * @param ?\Closure(string): View $build
      */
-    private function createBuilder(?\Closure $build = null): MenuBuilder
+    private function createBuilder(?\Closure $build = null, ?string $defaultPath = null): MenuBuilder
     {
         $build ??= static fn (string $path): View => new View($path, variants: [
             new Variant('first', 'First'),
@@ -116,7 +138,7 @@ class MenuBuilderTest extends TestCase
             }
         };
 
-        $defaultPath = __DIR__.'/../TestApplication/storia';
+        $defaultPath ??= __DIR__.'/../TestApplication/storia';
 
         return new MenuBuilder($defaultPath, new ViewBuilder($defaultPath, [$builder], new YamlPreProcessor()));
     }
