@@ -15,10 +15,7 @@ namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Controls\ControlsBuilder;
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\Util\Label;
-use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
-use Michelf\MarkdownExtra;
 use Twig\Environment;
 
 /**
@@ -50,6 +47,9 @@ class TemplateBuilder extends AbstractBuilder
 
         $controls = [];
         $appliedOverrides = [];
+        $twigContent = null;
+        $htmlContent = null;
+        $markdownContent = null;
 
         if (null !== $variantPath && isset($config['variants'][$variantPath])) {
             $variantConfig = $config['variants'][$variantPath];
@@ -64,24 +64,17 @@ class TemplateBuilder extends AbstractBuilder
 
             $htmlContent = $this->generateHtml($twigContent, array_replace($resolvedArgs, $renderOverrides));
 
-            $markdownContent = null;
-            if (file_exists($this->defaultPath.'/'.$path.'.md')) {
-                $markdownContent = MarkdownExtra::defaultTransform(@file_get_contents($this->defaultPath.'/'.$path.'.md'));
-            }
+            $markdownContent = $this->loadMarkdown($path);
         }
 
-        $variants = array_map(static fn (string $name): Variant => new Variant(
-            $name,
-            $config['variants'][$name]['name'] ?? Label::humanize($name),
-            $variantPath === $name
-        ), array_keys($config['variants']));
+        $variants = $this->buildVariants($config['variants'], $variantPath);
 
         return new View(
             $path,
-            $twigContent ?? null,
-            $htmlContent ?? null,
+            $twigContent,
+            $htmlContent,
             null,
-            $markdownContent ?? null,
+            $markdownContent,
             $variants,
             $controls,
             $appliedOverrides

@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View\Builder;
 
 use IQ2i\StoriaBundle\Data\DataResolver;
-use IQ2i\StoriaBundle\Util\Label;
-use IQ2i\StoriaBundle\View\Dto\Variant;
 use IQ2i\StoriaBundle\View\Dto\View;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -61,6 +59,8 @@ class FormBuilder extends AbstractBuilder
     public function build(string $path, ?string $variantPath, array $config, array $overrides = []): ?View
     {
         $variantConfigs = array_replace(self::VARIANTS, $config['variants'] ?? []);
+        $twigContent = null;
+        $htmlContent = null;
 
         if (null !== $variantPath && isset($variantConfigs[$variantPath])) {
             $variantConfig = $variantConfigs[$variantPath];
@@ -82,16 +82,12 @@ class FormBuilder extends AbstractBuilder
             ]);
         }
 
-        $variants = array_map(static fn (string $name): Variant => new Variant(
-            $name,
-            $variantConfigs[$name]['name'] ?? Label::humanize($name),
-            $variantPath === $name
-        ), array_keys($variantConfigs));
+        $variants = $this->buildVariants($variantConfigs, $variantPath);
 
         return new View(
             $path,
-            $twigContent ?? null,
-            $htmlContent ?? null,
+            $twigContent,
+            $htmlContent,
             null,
             null,
             $variants
