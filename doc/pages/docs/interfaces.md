@@ -94,6 +94,8 @@ When using the `form` key, UI Storia automatically generates **three variants** 
 2. **disabled**: The form field with `disabled: true` option
 3. **error**: The form field with a validation error displayed
 
+![A choice field in its error variant](/media/form-variants.webp)
+
 ### Custom Variants
 
 Declare your own variants with the `variants` key. They are added after the three automatic ones, and a variant with the same name as an automatic one replaces it.
@@ -319,3 +321,5 @@ storia/components/button/button.md
 ```
 
 The file is rendered as HTML, and the tab only appears when the file exists.
+
+![The Notes tab rendering the Markdown file of the Card component](/media/notes-tab.webp)

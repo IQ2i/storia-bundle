@@ -29,6 +29,8 @@ The command renders every variant of every component and page, then compares the
 - `↻` the snapshot was rewritten because of `--update`.
 - `?` a view defines no variant, or a snapshot has no variant any more: nothing is tested. A view without variant fails the command in CI.
 
+![storia:test on a passing run, a changed snapshot with its diff and a variant that fails to render](/media/testing-output.webp)
+
 The exit code is `1` as soon as one variant fails, `0` otherwise, so the command can be used as is in a CI job.
 When the `CI` environment variable is set (GitHub Actions and GitLab CI set it), or with `--ci`, a missing snapshot is an error instead of being written: a file written on a runner is lost, and the variant would never be compared.
 

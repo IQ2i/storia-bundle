@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 24 960 232" role="img" aria-labelledby="t d">
+  <title id="t">Who does what, from the mockup to the review</title>
+  <desc id="d">The integrator turns the mockup into a component and describes its variants. The developer adds a PHP class when needed and runs storia:test in CI. The designer reviews the static export.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1.500 8.500 5 1 8.500z" fill="#8c959f"/>
+    </marker>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+      .node { fill: #fff; stroke: #d0d7de; stroke-width: 1.500; }
+      .num { font-size: 13px; font-weight: 700; fill: #fff; }
+      .title { font-size: 15px; font-weight: 600; fill: #1f2328; }
+      .sub { font-size: 12.500px; fill: #656d76; }
+      .edge { stroke: #8c959f; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .role { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    </style>
+  </defs>
+
+  <!-- nodes -->
+  <g transform="translate(10 40)">
+    <rect class="node" width="140" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#0F53D4"/><text class="num" x="26" y="30.500" text-anchor="middle">1</text>
+    <text class="title" x="16" y="72">Mockup</text>
+    <text class="sub" x="16" y="94">from the designer</text>
+  </g>
+  <g transform="translate(180 40)">
+    <rect class="node" width="140" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#0F53D4"/><text class="num" x="26" y="30.500" text-anchor="middle">2</text>
+    <text class="title" x="16" y="72">Component</text>
+    <text class="sub mono" x="16" y="94">Twig + CSS</text>
+  </g>
+  <g transform="translate(350 40)">
+    <rect class="node" width="140" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#0F53D4"/><text class="num" x="26" y="30.500" text-anchor="middle">3</text>
+    <text class="title" x="16" y="72">Variants</text>
+    <text class="sub mono" x="16" y="94">storia/*.yaml</text>
+  </g>
+  <g transform="translate(520 40)">
+    <rect class="node" width="140" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#5b3fd1"/><text class="num" x="26" y="30.500" text-anchor="middle">4</text>
+    <text class="title" x="16" y="72">PHP class</text>
+    <text class="sub" x="16" y="94">only when needed</text>
+  </g>
+  <g transform="translate(690 40)">
+    <rect class="node" width="140" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#5b3fd1"/><text class="num" x="26" y="30.500" text-anchor="middle">5</text>
+    <text class="title" x="16" y="72">Safety net</text>
+    <text class="sub mono" x="16" y="94">storia:test</text>
+  </g>
+  <g transform="translate(860 40)">
+    <rect class="node" width="90" height="120" rx="12"/>
+    <circle cx="26" cy="26" r="13" fill="#1a7f4b"/><text class="num" x="26" y="30.500" text-anchor="middle">6</text>
+    <text class="title" x="16" y="72">Review</text>
+    <text class="sub" x="16" y="94">export</text>
+  </g>
+
+  <!-- edges -->
+  <path class="edge" d="M152 100H176"/>
+  <path class="edge" d="M322 100H346"/>
+  <path class="edge" d="M492 100H516"/>
+  <path class="edge" d="M662 100H686"/>
+  <path class="edge" d="M832 100H856"/>
+
+  <!-- roles -->
+  <g>
+    <path d="M10 188H490" stroke="#0F53D4" stroke-width="3" stroke-linecap="round"/>
+    <text class="role" x="10" y="216" fill="#0F53D4">Integrator</text>
+    <text class="sub" x="10" y="238">Twig, CSS and YAML. No PHP.</text>
+  </g>
+  <g>
+    <path d="M520 188H830" stroke="#5b3fd1" stroke-width="3" stroke-linecap="round"/>
+    <text class="role" x="520" y="216" fill="#5b3fd1">Developer</text>
+    <text class="sub" x="520" y="238">Logic and tests, same files.</text>
+  </g>
+  <g>
+    <path d="M860 188H950" stroke="#1a7f4b" stroke-width="3" stroke-linecap="round"/>
+    <text class="role" x="860" y="216" fill="#1a7f4b">Designer</text>
+    <text class="sub" x="860" y="238">Reads only.</text>
+  </g>
+</svg>
