@@ -55,7 +55,8 @@ readonly class SnapshotStore
 
     public function read(string $view, string $variant): string
     {
-        $content = @file_get_contents($this->path($view, $variant));
+        $file = $this->path($view, $variant);
+        $content = is_file($file) ? file_get_contents($file) : false;
         if (false === $content) {
             throw new \RuntimeException(\sprintf('Snapshot of "%s:%s" cannot be read.', $view, $variant));
         }

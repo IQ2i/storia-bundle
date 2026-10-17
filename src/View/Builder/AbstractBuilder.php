@@ -33,10 +33,14 @@ abstract class AbstractBuilder implements BuilderInterface
     protected function generateInclude(string $skeletonPath, array $parameters): string
     {
         ob_start();
-        extract($parameters, \EXTR_SKIP);
-        include $skeletonPath;
+        try {
+            extract($parameters, \EXTR_SKIP);
+            include $skeletonPath;
 
-        return ob_get_clean();
+            return (string) ob_get_contents();
+        } finally {
+            ob_end_clean();
+        }
     }
 
     protected function getTwigContent(string $template): string
