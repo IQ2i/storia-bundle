@@ -10,6 +10,10 @@ PHP      = $(PHP_CONT) php
 COMPOSER = $(PHP_CONT) composer
 YARN     = $(NODE_CONT) yarn
 
+# Same version as .github/workflows/doc.yaml
+CECIL_VERSION = 9.13.0
+CECIL         = php cecil.phar
+
 .DEFAULT_GOAL= help
 
 .PHONY: help
@@ -54,3 +58,14 @@ rector: ## Run rector
 
 test: ## Run tests
 	$(PHP) vendor/bin/phpunit
+
+## —— Documentation ——————————————————————————————————————————————————————————
+cecil.phar:
+	curl -fsSL -o cecil.phar https://github.com/Cecilapp/Cecil/releases/download/$(CECIL_VERSION)/cecil.phar
+
+doc/demo: ## Export the demo linked from the home page of the documentation
+	$(PHP) tests/TestApplication/bin/console storia:export doc/static/demo --env=test
+
+doc/serve: cecil.phar ## Serve the documentation on http://localhost:8000 and rebuild it on change (needs PHP with gd on the host)
+	@test -f doc/static/demo/index.html || $(MAKE) doc/demo
+	$(CECIL) serve doc/ --clear-cache
