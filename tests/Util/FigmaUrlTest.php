@@ -34,6 +34,8 @@ class FigmaUrlTest extends TestCase
         yield 'frame' => ['https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2&t=abc', true];
         yield 'prototype' => ['https://www.figma.com/proto/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', true];
         yield 'board' => ['https://www.figma.com/board/AbCdEfGhIjKlMnOpQrStUv', true];
+        yield 'key followed by the query' => ['https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv?node-id=1-2', true];
+        yield 'legacy file link' => ['https://www.figma.com/file/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', true];
         yield 'bare host' => ['https://figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar', true];
         yield 'embed host' => ['https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar', true];
         yield 'http' => ['http://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar', false];
@@ -52,6 +54,14 @@ class FigmaUrlTest extends TestCase
         $this->assertSame(
             'https://embed.figma.com/proto/AbCdEfGhIjKlMnOpQrStUv/Avatar?embed-host=ui-storia',
             FigmaUrl::toEmbedUrl('https://figma.com/proto/AbCdEfGhIjKlMnOpQrStUv/Avatar')
+        );
+        $this->assertSame(
+            'https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2&embed-host=ui-storia',
+            FigmaUrl::toEmbedUrl('https://www.figma.com/file/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2')
+        );
+        $this->assertSame(
+            'https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv?node-id=1-2&embed-host=ui-storia',
+            FigmaUrl::toEmbedUrl('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv?node-id=1-2')
         );
     }
 

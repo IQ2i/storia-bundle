@@ -18,7 +18,7 @@ namespace IQ2i\StoriaBundle\Util;
  */
 final class FigmaUrl
 {
-    public const string PATTERN = '#^https://(?:[\w.-]+\.)?figma\.com/([\w-]+)/([0-9a-zA-Z]{22,128})(?:/.*)?$#';
+    private const string PATTERN = '#^https://(?:[\w.-]+\.)?figma\.com/([\w-]+)/([0-9a-zA-Z]{22,128})(?:[/?\#].*)?$#';
 
     private const string EMBED_HOST = 'embed.figma.com';
 
@@ -56,6 +56,9 @@ final class FigmaUrl
 
         $query['embed-host'] = self::EMBED_HOST_NAME;
 
-        return 'https://'.self::EMBED_HOST.($parts['path'] ?? '/').'?'.http_build_query($query, '', '&', \PHP_QUERY_RFC3986);
+        // The embed host only knows the current paths: legacy "/file/" links are served under "/design/"
+        $path = preg_replace('#^/file/#', '/design/', $parts['path'] ?? '/');
+
+        return 'https://'.self::EMBED_HOST.$path.'?'.http_build_query($query, '', '&', \PHP_QUERY_RFC3986);
     }
 }
