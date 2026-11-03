@@ -36,6 +36,20 @@ Every other class of the bundle (builders, resolvers, exporter, renderer, contro
 - Dropping the support of a PHP or Symfony version is done in a minor version, never in a patch version. A PHP version is supported until its end of life, a Symfony version until the end of its bug fixes.
 - A new snapshot format would be a major change: the snapshots written by `storia:test` are plain HTML files, normalized in the same way for the whole major version.
 
+## Upgrade from 0.6 to 0.7
+
+Nothing breaks in this version. Two points deserve a look.
+
+### Color scheme of the preview
+
+The [color scheme](/docs/user-interface/#color-scheme) action forces the light or dark scheme of the preview with a `data-theme` attribute and the `color-scheme` property on the `<html>` element of the iframe. To preview your components in dark mode, make your styles react to the attribute: a `@media (prefers-color-scheme: dark)` media query cannot be forced from a page.
+
+The scheme is applied before the preview renders by a script of `iframe.html.twig`. A project that extends the template with `!` and overrides its blocks gets it for free. A project that replaces the whole template receives the scheme once the preview is loaded, which can cause a flash: extend `@!IQ2iStoria/iframe.html.twig` instead.
+
+### `storia:list --format=json`
+
+The views and the variants get a `figma` key, `null` when no design is linked. It only adds keys, as the [compatibility policy](#compatibility-policy) states.
+
 ## Upgrade from 0.5 to 0.6
 
 ### UI Storia is enabled with `kernel.debug` only
