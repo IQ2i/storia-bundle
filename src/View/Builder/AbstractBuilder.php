@@ -100,6 +100,16 @@ abstract class AbstractBuilder implements BuilderInterface
         ), array_keys($variantConfigs));
     }
 
+    /**
+     * The link of the variant wins over the link of the view.
+     *
+     * @param array<string, mixed> $config
+     */
+    protected function figmaUrl(array $config, ?string $variantPath): ?string
+    {
+        return $config['variants'][$variantPath]['figma'] ?? $config['figma'] ?? null;
+    }
+
     protected function loadMarkdown(string $path): ?string
     {
         $file = $this->defaultPath.'/'.$path.'.md';

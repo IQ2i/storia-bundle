@@ -64,6 +64,10 @@ final class ListCommand extends Command
                 $output->writeln('  <error>'.OutputFormatter::escape($view['error']).'</error>');
             }
 
+            if (null !== $view['figma']) {
+                $output->writeln('  figma: '.OutputFormatter::escape($view['figma']));
+            }
+
             foreach ($view['variants'] as $variant) {
                 $output->writeln('  - '.OutputFormatter::escape($variant['name']).(null !== $variant['error'] ? ' <error>'.OutputFormatter::escape($variant['error']).'</error>' : ''));
             }

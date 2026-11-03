@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace IQ2i\StoriaBundle\Config;
 
+use IQ2i\StoriaBundle\Util\FigmaUrl;
+use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -56,6 +58,7 @@ class ViewConfiguration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->booleanNode('with_errors')->end()
+                            ->append($this->figmaNode('Link to the Figma frame of the variant, instead of the one of the view'))
                         ->end()
                     ->end()
                 ->end()
@@ -66,6 +69,7 @@ class ViewConfiguration implements ConfigurationInterface
                     ->variablePrototype()->end()
                 ->end()
                 ->scalarNode('form_theme')->end()
+                ->append($this->figmaNode('Link to the Figma file, frame or prototype of the view'))
             ->end()
             ->validate()
                 ->ifTrue(static fn ($v) => \count(array_filter([$v['template'] ?? null, $v['component'] ?? null, $v['form'] ?? null])) > 1)
@@ -107,6 +111,21 @@ class ViewConfiguration implements ConfigurationInterface
         ;
 
         return $treeBuilder;
+    }
+
+    private function figmaNode(string $info): ScalarNodeDefinition
+    {
+        $node = new ScalarNodeDefinition('figma');
+        $node
+            ->info($info)
+            ->cannotBeEmpty()
+            ->validate()
+                ->ifTrue(static fn ($v) => !\is_string($v) || !FigmaUrl::isValid($v))
+                ->thenInvalid('"figma" must be a Figma URL such as https://www.figma.com/design/<file-key>/<name>, got %s.')
+            ->end()
+        ;
+
+        return $node;
     }
 
     /**

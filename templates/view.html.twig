@@ -39,8 +39,9 @@
 
             <div class="resizer" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
-            <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %} data-resize-target="panelB">
-                {% set previewable = view is not null and view.currentVariant is not null %}
+            {% set previewable = view is not null and view.currentVariant is not null %}
+            {% set has_figma = previewable and not static and view.figmaUrl is not null %}
+            <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload{% endif %}{% if has_figma %} figma{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %}{% if has_figma %} data-figma-url-value="{{ view.figmaEmbedUrl }}"{% endif %} data-resize-target="panelB">
                 {% if previewable %}
                     {% set iframe_url = urls.iframe(view.path, view.currentVariant.path) %}
                     {% if view.overrides is not empty %}
@@ -85,6 +86,16 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                 <span>Iframe</span>
                             </a>
+                            {% if has_figma %}
+                                <a class="actions_item" href="{{ view.figmaUrl }}" target="_blank" rel="noopener" title="Open in Figma">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M192,96a40,40,0,0,0-24-72H96A40,40,0,0,0,72,96a40,40,0,0,0,1.37,65A44,44,0,1,0,144,196V160a40,40,0,1,0,48-64Zm0-32a24,24,0,0,1-24,24H144V40h24A24,24,0,0,1,192,64ZM72,64A24,24,0,0,1,96,40h32V88H96A24,24,0,0,1,72,64Zm24,88a24,24,0,0,1,0-48h32v48H96Zm32,44a28,28,0,1,1-28-28h28Zm40-44a24,24,0,1,1,24-24A24,24,0,0,1,168,152Z"></path></svg>
+                                    <span>Open in Figma</span>
+                                </a>
+                                <button type="button" class="actions_item" title="Compare with the Figma design" aria-pressed="false" data-action="figma#toggle" data-figma-target="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M200,40H56A16,16,0,0,0,40,56V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40ZM56,56h64V200H56ZM200,200H136V56h64V200Z"></path></svg>
+                                    <span>Figma</span>
+                                </button>
+                            {% endif %}
                             <button class="actions_item" title="Copy link" data-action="controls#copyLink">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path></svg>
                                 <span>Copy</span>
@@ -96,14 +107,18 @@
                 <main class="main__inner resize" data-controller="tab resize" data-resize-orientation-value="vertical" data-resize-size-value="0.50">
                     {% if previewable %}
                         <div class="view resize__panel" data-resize-target="panelA">
-                            <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999">
+                            <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999"{% if has_figma %} data-figma-target="split"{% endif %}>
                                 <div class="resize__panel" data-resize-target="panelA">
                                     <iframe src="{{ iframe_url }}" data-controls-target="iframe"{% if not static %} data-live-reload-target="iframe"{% endif %}></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>
 
-                                <div class="resize__panel" data-resize-target="panelB"></div>
+                                <div class="resize__panel" data-resize-target="panelB">
+                                    {% if has_figma %}
+                                        <iframe class="view__figma" title="Figma design" allowfullscreen data-figma-target="frame"></iframe>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
 

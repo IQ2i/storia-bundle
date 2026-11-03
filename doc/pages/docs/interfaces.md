@@ -311,6 +311,34 @@ Extensions can be chained — a file that uses `extends:` can itself be extended
 Circular references (file A extending file B which extends file A) are detected at runtime and will throw an explicit error.
 :::
 
+## Figma
+
+The `figma` key links a view to its design. Paste the link of the file, of a frame or of a prototype, copied from the **Share** dialog of Figma:
+
+```yaml
+component: Button
+figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Design-system?node-id=12-345
+
+variants:
+    default: ~
+```
+
+A variant can point to its own frame with the same key, the link of the view being used otherwise:
+
+```yaml
+component: Button
+figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Design-system?node-id=12-345
+
+variants:
+    primary: ~
+    secondary:
+        figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Design-system?node-id=12-678
+```
+
+The preview gets two actions: **Open in Figma** opens the design in a new tab, **Figma** shows it next to the rendering. The embed follows the sharing settings of the file, so a private file asks the viewer to sign in to Figma. The static export does not include the design.
+
+![The Figma design of a button shown next to its Twig rendering](/media/figma-compare.webp)
+
 ## Notes
 
 A Markdown file next to the YAML file, with the same name, becomes the **Notes** tab of the view. Use it to document the component: when to use it, accessibility rules, links to the design.

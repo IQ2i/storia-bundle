@@ -33,7 +33,7 @@ final readonly class StoriaTool
     /**
      * @param string|null $filter Only views or variants containing this text, such as components/button or components/button:large
      */
-    #[MateTool(name: 'storia-list', title: 'UI Storia List', description: 'List the views of the UI Storia catalog (templates, Twig Components, form types and pages) with their type, source, YAML file, variants and the resolved arguments of each variant. A view that cannot be loaded carries its error. Use it before writing or changing a story, to follow the conventions of the project.')]
+    #[MateTool(name: 'storia-list', title: 'UI Storia List', description: 'List the views of the UI Storia catalog (templates, Twig Components, form types and pages) with their type, source, YAML file, Figma link, variants and the resolved arguments of each variant. A view that cannot be loaded carries its error. Use it before writing or changing a story, to follow the conventions of the project.')]
     public function list(?string $filter = null): string
     {
         $arguments = ['storia:list', '--format=json'];

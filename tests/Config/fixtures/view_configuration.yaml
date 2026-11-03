@@ -10,6 +10,12 @@ component:
             blocks:               []
             options:              ~
             with_errors:          ~
+
+            # Link to the Figma frame of the variant, instead of the one of the view
+            figma:                ~
     form:                 ~
     options:              []
     form_theme:           ~
+
+    # Link to the Figma file, frame or prototype of the view
+    figma:                ~

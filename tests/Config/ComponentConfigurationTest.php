@@ -44,6 +44,46 @@ class ComponentConfigurationTest extends TestCase
         ], $config);
     }
 
+    public function testFigmaAcceptsAFigmaUrl(): void
+    {
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [[
+            'template' => 'some_template.html.twig',
+            'figma' => 'https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2',
+        ]]);
+
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', $config['figma']);
+    }
+
+    public function testFigmaRejectsAnotherUrl(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('"figma" must be a Figma URL');
+
+        (new Processor())->processConfiguration(new ViewConfiguration(), [['template' => 'some_template.html.twig', 'figma' => 'https://example.com/design']]);
+    }
+
+    public function testFigmaOfAVariant(): void
+    {
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [[
+            'template' => 'some_template.html.twig',
+            'variants' => ['default' => ['figma' => 'https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4']],
+        ]]);
+
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4', $config['variants']['default']['figma']);
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('"figma" must be a Figma URL');
+
+        (new Processor())->processConfiguration(new ViewConfiguration(), [['template' => 'some_template.html.twig', 'variants' => ['default' => ['figma' => 'https://example.com/design']]]]);
+    }
+
+    public function testFigmaCannotBeEmpty(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        (new Processor())->processConfiguration(new ViewConfiguration(), [['template' => 'some_template.html.twig', 'figma' => '']]);
+    }
+
     public function testWithKnownTags(): void
     {
         $yaml = Yaml::parse(<<<EOF

@@ -20,6 +20,7 @@ A view file is a YAML file in `storia/components` or `storia/pages`. The path of
 | `variants` | map | The variations of the view, indexed by name. |
 | `options` | map | Options of the form type. Form views only. |
 | `form_theme` | string | Twig template used as form theme. Form views only. |
+| `figma` | string | Link to the Figma file, frame or prototype of the view, opened and shown next to the preview. |
 | `include` | string or list | Files whose `_definitions` anchors are available in this file. |
 | `extends` | string | View file whose content is merged under this one. |
 | `_definitions` | any | Anchors to share with `include`. Removed from the final configuration. |
@@ -35,6 +36,7 @@ A view file is a YAML file in `storia/components` or `storia/pages`. The path of
 | `blocks` | map | component | HTML content of the blocks of the component, printed as is. |
 | `options` | map | form | Form options for this variant, merged over the `options` of the view. |
 | `with_errors` | bool | form | Displays a validation error. |
+| `figma` | string | all | Link to the Figma frame of the variant, instead of the one of the view. |
 
 A form view always has the variants `default`, `disabled` and `error`. A variant with the same name replaces the automatic one.
 

@@ -114,6 +114,8 @@ Without a `template` key, Storia looks for `<same-name>.html.twig` next to the Y
 
 **Document the component**: add a `.md` file next to the YAML when the component has usage rules that are not obvious (props, blocks, accessibility). It becomes the Notes tab.
 
+**Link the design**: when the project has a Figma file, add its link (file, frame or prototype) under the `figma` key so the design can be opened and compared with the rendering.
+
 ## 5. Check a rendering
 
 1. Start with `bin/console storia:render <view> <variant>`: it shows the HTML or the exception, with no server.

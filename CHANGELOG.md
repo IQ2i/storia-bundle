@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Added
+
+- **Figma**: the `figma` key of a view, or of a variant, links it to its design, opened from the preview actions or shown next to the rendering.
+
 ## [0.6.0] - 2026-10-17
 
 ### Breaking changes

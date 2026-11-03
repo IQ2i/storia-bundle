@@ -27,6 +27,17 @@ class ViewTest extends TestCase
         $this->assertSame($current, $view->getCurrentVariant());
     }
 
+    public function testFigma(): void
+    {
+        $view = new View('components/badge', figmaUrl: 'https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Badge?node-id=1-2');
+
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Badge?node-id=1-2', $view->getFigmaUrl());
+        $this->assertSame('https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Badge?node-id=1-2&embed-host=ui-storia', $view->getFigmaEmbedUrl());
+
+        $this->assertNull((new View('components/badge'))->getFigmaUrl());
+        $this->assertNull((new View('components/badge'))->getFigmaEmbedUrl());
+    }
+
     public function testNoCurrentVariant(): void
     {
         $this->assertNull((new View('components/badge', variants: [new Variant('default', 'Default')]))->getCurrentVariant());
