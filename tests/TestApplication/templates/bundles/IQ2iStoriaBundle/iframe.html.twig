@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>tailwind.config = { darkMode: ['selector', '[data-theme="dark"]'] };</script>
     <link rel="stylesheet" href="{{ asset('/css/test.css') }}">
     <link rel="stylesheet" href="{{ path('dynamic_asset') }}">
 {% endblock %}
