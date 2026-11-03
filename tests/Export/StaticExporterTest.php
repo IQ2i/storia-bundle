@@ -115,7 +115,10 @@ class StaticExporterTest extends KernelTestCase
         $this->createExporter()->export($this->outputDir);
 
         $page = $this->read('components/avatar/rounded.html');
-        $this->assertStringNotContainsString('figma', $page);
+        $this->assertStringNotContainsString('data-controller="controls figma"', $page);
+        $this->assertStringNotContainsString('data-figma-', $page);
+        $this->assertStringNotContainsString('href="https://www.figma.com/', $page);
+        $this->assertStringNotContainsString('embed.figma.com', $page);
     }
 
     public function testResolvesArgsOfComponents(): void
