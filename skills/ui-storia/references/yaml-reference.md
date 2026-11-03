@@ -20,6 +20,7 @@
 | `variants` | Map `key → { name?, args?, blocks? }`, or `{ options?, with_errors? }` for a form | |
 | `options` | Options of the form type | Form views only |
 | `form_theme` | Twig template used as form theme | Form views only |
+| `figma` | Link to the Figma file, frame or prototype of the view, shown next to the preview | Figma URL (`https://www.figma.com/design/<key>/...`) |
 | `include` | File or list of files holding shared anchors | |
 | `extends` | Parent view to inherit from | Path relative to `storia/`, no extension |
 

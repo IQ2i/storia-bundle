@@ -31,9 +31,13 @@ The actions on the right of the variants act on the preview:
 | Zoom out   | Shrinks the preview                                                                   |
 | Zoom 100%  | Resets the zoom                                                                       |
 | Iframe     | Opens the preview alone in a new tab, without the interface                           |
+| Open in Figma | Opens the Figma design of the view in a new tab (views with a `figma` key)         |
+| Figma      | Shows the Figma design next to the preview, to compare it with the rendering          |
 | Copy       | Copies the address of the current page                                                |
 
 The preview is rendered in an iframe, with the styles and scripts of your application: see [Load your styles and scripts](/docs/installation/#load-your-styles-and-scripts). Drag the vertical separator on its right to test your component at another width.
+
+The Figma actions appear on the views declaring a [`figma`](/docs/interfaces/#figma) link. The design is embedded with [Figma embeds](https://www.figma.com/developers/embed) and follows the sharing settings of the file: a private file asks to sign in. It loads when the panel is opened for the first time, and the separator between the preview and the design can be dragged. The static export leaves Figma out.
 
 <video autoplay loop muted playsinline controls preload="metadata" poster="/media/interface-poster.webp" aria-label="Zooming, resizing the preview, browsing the code tabs and switching variant in UI Storia">
     <source src="/media/interface.webm" type="video/webm">
