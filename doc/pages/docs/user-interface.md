@@ -39,6 +39,8 @@ The preview is rendered in an iframe, with the styles and scripts of your applic
 
 The Figma actions appear on the views declaring a [`figma`](/docs/interfaces/#figma) link. The design is embedded with [Figma embeds](https://www.figma.com/developers/embed) and follows the sharing settings of the file: a private file asks to sign in. It loads when the panel is opened for the first time, and the separator between the preview and the design can be dragged. The static export leaves Figma out.
 
+![The Figma design of a button shown next to its Twig rendering](/media/figma-compare.webp)
+
 <video autoplay loop muted playsinline controls preload="metadata" poster="/media/interface-poster.webp" aria-label="Zooming, resizing the preview, browsing the code tabs and switching variant in UI Storia">
     <source src="/media/interface.webm" type="video/webm">
     <source src="/media/interface.mp4" type="video/mp4">

@@ -325,6 +325,8 @@ variants:
 
 The preview gets two actions: **Open in Figma** opens the design in a new tab, **Figma** shows it next to the rendering. The embed follows the sharing settings of the file, so a private file asks the viewer to sign in to Figma. The static export does not include the design.
 
+![The Figma design of a button shown next to its Twig rendering](/media/figma-compare.webp)
+
 ## Notes
 
 A Markdown file next to the YAML file, with the same name, becomes the **Notes** tab of the view. Use it to document the component: when to use it, accessibility rules, links to the design.
