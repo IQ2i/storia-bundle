@@ -6,6 +6,15 @@
         <title>UI Storia</title>
         <link rel="icon" type="image/svg+xml" href="{{ asset('/bundles/iq2istoria/favicon.svg') }}">
         <meta name="theme-color" content="#ffffff">
+        <script>
+            try {
+                var scheme = localStorage.getItem('storia.color-scheme');
+                if (scheme === 'light' || scheme === 'dark') {
+                    document.documentElement.dataset.theme = scheme;
+                    document.documentElement.style.colorScheme = scheme;
+                }
+            } catch (e) {}
+        </script>
 
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}

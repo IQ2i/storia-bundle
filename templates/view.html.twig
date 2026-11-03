@@ -41,7 +41,7 @@
 
             {% set previewable = view is not null and view.currentVariant is not null %}
             {% set has_figma = previewable and not static and view.figmaUrl is not null %}
-            <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload{% endif %}{% if has_figma %} figma{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %}{% if has_figma %} data-figma-url-value="{{ view.figmaEmbedUrl }}"{% endif %} data-resize-target="panelB">
+            <div class="main__content resize__panel" data-controller="controls{% if not static %} live-reload color-scheme{% endif %}{% if has_figma %} figma{% endif %}"{% if not static %} data-live-reload-url-value="{{ path('iq2i_storia_changes') }}"{% endif %}{% if has_figma %} data-figma-url-value="{{ view.figmaEmbedUrl }}"{% endif %} data-resize-target="panelB">
                 {% if previewable %}
                     {% set iframe_url = urls.iframe(view.path, view.currentVariant.path) %}
                     {% if view.overrides is not empty %}
@@ -79,6 +79,14 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#030303" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
                                 <span>Zoom 100%</span>
                             </button>
+                            {% if not static %}
+                                <button type="button" class="actions_item" title="Color scheme: auto" data-action="color-scheme#toggle" data-color-scheme-target="button" data-scheme="auto">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256" data-scheme-icon="auto"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V64a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256" data-scheme-icon="light"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256" data-scheme-icon="dark"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"></path></svg>
+                                    <span data-color-scheme-target="label">Color scheme: auto</span>
+                                </button>
+                            {% endif %}
 
                             <div class="actions_separator"></div>
 
@@ -109,7 +117,7 @@
                         <div class="view resize__panel" data-resize-target="panelA">
                             <div class="view__content resize" data-controller="resize" data-resize-orientation-value="horizontal" data-resize-size-value="1" data-resize-max-value="0.999"{% if has_figma %} data-figma-target="split"{% endif %}>
                                 <div class="resize__panel" data-resize-target="panelA">
-                                    <iframe src="{{ iframe_url }}" data-controls-target="iframe"{% if not static %} data-live-reload-target="iframe"{% endif %}></iframe>
+                                    <iframe src="{{ iframe_url }}" data-controls-target="iframe"{% if not static %} data-live-reload-target="iframe" data-color-scheme-target="iframe" data-action="load->color-scheme#apply"{% endif %}></iframe>
                                 </div>
 
                                 <div class="resizer resizer__large" data-action="pointerdown->resize#resize" data-resize-target="resizer"></div>

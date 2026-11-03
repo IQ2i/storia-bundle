@@ -27,6 +27,25 @@
     color: var(--color-primary);
   }
 
+  &[data-scheme] {
+    color: #030303;
+
+    svg {
+      display: none;
+    }
+  }
+
+  &[data-scheme="auto"] [data-scheme-icon="auto"],
+  &[data-scheme="light"] [data-scheme-icon="light"],
+  &[data-scheme="dark"] [data-scheme-icon="dark"] {
+    display: block;
+  }
+
+  &[data-scheme="light"],
+  &[data-scheme="dark"] {
+    color: var(--color-primary);
+  }
+
   span {
     left: 50%;
     transform: translate(-50%, -20%);
