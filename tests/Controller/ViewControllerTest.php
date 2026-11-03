@@ -69,6 +69,30 @@ class ViewControllerTest extends WebTestCase
         $this->assertSelectorNotExists('.main__sidebar_notice');
     }
 
+    public function testFigmaActionsAndPanel(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/avatar?variant=rounded');
+
+        $this->assertSelectorExists('header .actions a[href="https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2"][target="_blank"]');
+        $this->assertSelectorExists('header .actions button[data-action="figma#toggle"][aria-pressed="false"]');
+        $this->assertSame('https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2&embed-host=ui-storia', $crawler->filter('[data-controller~="figma"]')->attr('data-figma-url-value'));
+        $this->assertSelectorExists('.view__content[data-figma-target="split"] [data-resize-target="panelB"] > iframe.view__figma[allowfullscreen][data-figma-target="frame"]:not([src])');
+        $this->assertCount(2, $crawler->filter('iframe'));
+        $this->assertSame('/storia/iframe/components/avatar?variant=rounded', $crawler->filter('iframe')->attr('src'));
+    }
+
+    public function testViewsWithoutFigmaHaveNoFigmaActions(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/badge?variant=default');
+
+        $this->assertSelectorNotExists('[data-controller~="figma"]');
+        $this->assertSelectorNotExists('button[data-action="figma#toggle"]');
+        $this->assertSelectorNotExists('[data-figma-target]');
+        $this->assertCount(1, $crawler->filter('iframe'));
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();
