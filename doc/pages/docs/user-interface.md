@@ -30,6 +30,7 @@ The actions on the right of the variants act on the preview:
 | Zoom in    | Enlarges the preview                                                                  |
 | Zoom out   | Shrinks the preview                                                                   |
 | Zoom 100%  | Resets the zoom                                                                       |
+| Color scheme | Forces the light or dark scheme of the preview, see [Color scheme](#color-scheme)   |
 | Iframe     | Opens the preview alone in a new tab, without the interface                           |
 | Open in Figma | Opens the Figma design of the view in a new tab (views with a `figma` key)         |
 | Figma      | Shows the Figma design next to the preview, to compare it with the rendering          |
@@ -40,6 +41,35 @@ The preview is rendered in an iframe, with the styles and scripts of your applic
 The Figma actions appear on the views declaring a [`figma`](/docs/interfaces/#figma) link. The design is embedded with [Figma embeds](https://www.figma.com/developers/embed) and follows the sharing settings of the file: a private file asks to sign in. It loads when the panel is opened for the first time, and the separator between the preview and the design can be dragged. The static export leaves Figma out.
 
 ![The Figma design of a button shown next to its Twig rendering](/media/figma-compare.webp)
+
+### Color scheme
+
+The color scheme button cycles between auto, light and dark. In auto, the preview follows the system setting. Light and dark are applied on the `<html>` element of the preview only, so you can check both schemes of a component without changing the setting of your computer:
+
+```html
+<html data-theme="dark" style="color-scheme: dark">
+```
+
+The `color-scheme` property switches the default colors of the browser, the form controls and the CSS `light-dark()` function. The `data-theme` attribute is the hook for your own styles. A `@media (prefers-color-scheme: dark)` media query cannot be forced from a page: if your styles rely on it, make them react to the attribute as well.
+
+```css
+:root {
+    color-scheme: light dark;
+    --surface: light-dark(#fff, #111);
+}
+```
+
+```css
+/* Tailwind 4 */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+```
+
+```js
+// Tailwind 3 (tailwind.config.js)
+darkMode: ['selector', '[data-theme="dark"]'],
+```
+
+The choice is kept in the browser, across views and reloads. It is applied before the preview renders, and in the tab opened by the Iframe action. A view that renders its own full page, or a project that replaces the whole `iframe.html.twig` template instead of extending its blocks, receives the scheme once the preview is loaded.
 
 <video autoplay loop muted playsinline controls preload="metadata" poster="/media/interface-poster.webp" aria-label="Zooming, resizing the preview, browsing the code tabs and switching variant in UI Storia">
     <source src="/media/interface.webm" type="video/webm">
