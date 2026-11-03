@@ -6,10 +6,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-03
+
 ### Added
 
 - **Figma**: the `figma` key of a view, or of a variant, links it to its design, opened from the preview actions or shown next to the rendering.
 - **Color scheme**: a preview action forces the light or dark scheme of the preview, through `data-theme` and `color-scheme` on the `<html>` element of the iframe. The scheme is applied before the preview renders and followed by the Iframe action.
+
+### Changed
+
+- `storia:list --format=json` and the `storia-list` Mate tool expose the `figma` link of the views and variants.
 
 ## [0.6.0] - 2026-10-17
 
@@ -130,7 +136,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 First public version: a sidebar to browse the components and pages described in YAML files, variants, a preview in an iframe, tabs with the Twig code, the HTML and Markdown notes, resizable panels, Twig Component support and the ability to disable the bundle.
 
-[Unreleased]: https://github.com/IQ2i/storia-bundle/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/IQ2i/storia-bundle/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/IQ2i/storia-bundle/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/IQ2i/storia-bundle/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/IQ2i/storia-bundle/compare/0.4.3...0.5.0
 [0.4.3]: https://github.com/IQ2i/storia-bundle/compare/0.4.2...0.4.3
