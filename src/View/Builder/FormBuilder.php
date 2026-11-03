@@ -101,7 +101,7 @@ class FormBuilder extends AbstractBuilder
             null,
             null,
             $variants,
-            figmaUrl: $config['figma'] ?? null,
+            figmaUrl: $this->figmaUrl(['variants' => $variantConfigs] + $config, $variantPath),
         );
     }
 

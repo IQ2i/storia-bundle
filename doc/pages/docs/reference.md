@@ -36,6 +36,7 @@ A view file is a YAML file in `storia/components` or `storia/pages`. The path of
 | `blocks` | map | component | HTML content of the blocks of the component, printed as is. |
 | `options` | map | form | Form options for this variant, merged over the `options` of the view. |
 | `with_errors` | bool | form | Displays a validation error. |
+| `figma` | string | all | Link to the Figma frame of the variant, instead of the one of the view. |
 
 A form view always has the variants `default`, `disabled` and `error`. A variant with the same name replaces the automatic one.
 

@@ -10,5 +10,6 @@ variants:
             class: rounded-full
 
     bordered:
+        figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4
         args:
             class: p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500

@@ -46,6 +46,11 @@ class ListCommandTest extends KernelTestCase
         $this->assertSame('form', $byPath['components/form/choice']['type']);
         $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', $byPath['components/avatar']['figma']);
         $this->assertNull($byPath['components/badge']['figma']);
+
+        $variants = array_column($byPath['components/avatar']['variants'], 'figma', 'name');
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', $variants['rounded']);
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4', $variants['bordered']);
+        $this->assertNull(array_column($byPath['components/badge']['variants'], 'figma', 'name')['default']);
     }
 
     public function testListsTheFigmaLinkAsText(): void
@@ -64,7 +69,7 @@ class ListCommandTest extends KernelTestCase
         $views = json_decode($tester->getDisplay(), true, 512, \JSON_THROW_ON_ERROR);
 
         $this->assertCount(1, $views);
-        $this->assertSame([['name' => 'from_data', 'args' => ['product' => ['name' => 'Chair', 'price' => 999, 'inStock' => true]], 'error' => null]], $views[0]['variants']);
+        $this->assertSame([['name' => 'from_data', 'args' => ['product' => ['name' => 'Chair', 'price' => 999, 'inStock' => true]], 'figma' => null, 'error' => null]], $views[0]['variants']);
     }
 
     public function testFormVariantsExposeTheirOptions(): void

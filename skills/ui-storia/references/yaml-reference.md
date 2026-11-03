@@ -17,10 +17,10 @@
 | `template` | Path of a Twig template of the project (`ui/badge.html.twig`) | Exclusive with `component` and `form` |
 | `component` | Name of a Twig Component (`Button`, `Folder/ButtonGroup`) | Requires `symfony/ux-twig-component` |
 | `form` | Class of a form type | Requires `symfony/form` |
-| `variants` | Map `key → { name?, args?, blocks? }`, or `{ options?, with_errors? }` for a form | |
+| `variants` | Map `key → { name?, args?, blocks?, figma? }`, or `{ options?, with_errors?, figma? }` for a form | |
 | `options` | Options of the form type | Form views only |
 | `form_theme` | Twig template used as form theme | Form views only |
-| `figma` | Link to the Figma file, frame or prototype of the view, shown next to the preview | Figma URL (`https://www.figma.com/design/<key>/...`) |
+| `figma` | Link to the Figma file, frame or prototype of the view, shown next to the preview. A variant can carry its own | Figma URL (`https://www.figma.com/design/<key>/...`) |
 | `include` | File or list of files holding shared anchors | |
 | `extends` | Parent view to inherit from | Path relative to `storia/`, no extension |
 

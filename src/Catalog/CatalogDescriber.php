@@ -36,7 +36,7 @@ readonly class CatalogDescriber
     }
 
     /**
-     * @return list<array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}>
+     * @return list<array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, figma: ?string, error: ?string}>, error: ?string}>
      */
     public function describe(?string $filter = null): array
     {
@@ -51,7 +51,7 @@ readonly class CatalogDescriber
     /**
      * @param list<string>|\Throwable $variants
      *
-     * @return array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}
+     * @return array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, figma: ?string, error: ?string}>, error: ?string}
      */
     private function describeView(string $path, array|\Throwable $variants): array
     {
@@ -100,22 +100,23 @@ readonly class CatalogDescriber
     /**
      * @param array<string, mixed> $config
      *
-     * @return array{name: string, args: array<string, mixed>, error: ?string}
+     * @return array{name: string, args: array<string, mixed>, figma: ?string, error: ?string}
      */
     private function describeVariant(string $name, array $config): array
     {
         $variant = $config['variants'][$name] ?? [];
         $isForm = isset($config['form']);
+        $figma = $variant['figma'] ?? $config['figma'] ?? null;
 
         try {
             $args = $isForm
                 ? $this->dataResolver->resolve(array_replace($config['options'] ?? [], $variant['options'] ?? []))
                 : $this->dataResolver->resolve($variant['args'] ?? []);
         } catch (\Throwable $throwable) {
-            return ['name' => $name, 'args' => [], 'error' => $throwable->getMessage()];
+            return ['name' => $name, 'args' => [], 'figma' => $figma, 'error' => $throwable->getMessage()];
         }
 
-        return ['name' => $name, 'args' => $this->normalize($args), 'error' => null];
+        return ['name' => $name, 'args' => $this->normalize($args), 'figma' => $figma, 'error' => null];
     }
 
     /**

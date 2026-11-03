@@ -62,6 +62,21 @@ class ComponentConfigurationTest extends TestCase
         (new Processor())->processConfiguration(new ViewConfiguration(), [['template' => 'some_template.html.twig', 'figma' => 'https://example.com/design']]);
     }
 
+    public function testFigmaOfAVariant(): void
+    {
+        $config = (new Processor())->processConfiguration(new ViewConfiguration(), [[
+            'template' => 'some_template.html.twig',
+            'variants' => ['default' => ['figma' => 'https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4']],
+        ]]);
+
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4', $config['variants']['default']['figma']);
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('"figma" must be a Figma URL');
+
+        (new Processor())->processConfiguration(new ViewConfiguration(), [['template' => 'some_template.html.twig', 'variants' => ['default' => ['figma' => 'https://example.com/design']]]]);
+    }
+
     public function testFigmaCannotBeEmpty(): void
     {
         $this->expectException(InvalidConfigurationException::class);

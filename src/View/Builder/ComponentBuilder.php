@@ -143,7 +143,7 @@ class ComponentBuilder extends AbstractBuilder
             $variants,
             $controls,
             $appliedOverrides,
-            figmaUrl: $config['figma'] ?? null,
+            figmaUrl: $this->figmaUrl($config, $variantPath),
         );
     }
 

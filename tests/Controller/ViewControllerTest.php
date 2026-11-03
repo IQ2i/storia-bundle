@@ -82,6 +82,15 @@ class ViewControllerTest extends WebTestCase
         $this->assertSame('/storia/iframe/components/avatar?variant=rounded', $crawler->filter('iframe')->attr('src'));
     }
 
+    public function testAVariantOverridesTheFigmaLinkOfTheView(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/storia/components/avatar?variant=bordered');
+
+        $this->assertSelectorExists('header .actions a[href="https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4"]');
+        $this->assertSame('https://embed.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=3-4&embed-host=ui-storia', $crawler->filter('[data-controller~="figma"]')->attr('data-figma-url-value'));
+    }
+
     public function testViewsWithoutFigmaHaveNoFigmaActions(): void
     {
         $client = static::createClient();
