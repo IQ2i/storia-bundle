@@ -138,3 +138,4 @@ The export is not written to `public/`, which is the default publish directory o
 - Browsers block ES modules on `file://` pages: a project that loads its own modules must serve the folder over HTTP, or be opened with Firefox.
 - The static export has no live reload.
 - The static export has no [controls](/docs/controls/).
+- The static export has no [color scheme](/docs/user-interface/#color-scheme) button: the preview follows the system setting.

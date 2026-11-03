@@ -5,6 +5,7 @@ import CopyToClipboardController from './controllers/copy_to_clipboard_controlle
 import HighlightController from './controllers/highlight_controller.js';
 import ControlsController from './controllers/controls_controller.js';
 import FigmaController from './controllers/figma_controller.js';
+import ColorSchemeController from './controllers/color_scheme_controller.js';
 import MenuController from './controllers/menu_controller.js';
 import ResizeController from './controllers/resize_controller.js';
 import LiveReloadController from './controllers/live_reload_controller.js';
@@ -16,6 +17,7 @@ app.register('copy-to-clipboard', CopyToClipboardController);
 app.register('highlight', HighlightController);
 app.register('controls', ControlsController);
 app.register('figma', FigmaController);
+app.register('color-scheme', ColorSchemeController);
 app.register('live-reload', LiveReloadController);
 app.register('menu', MenuController);
 app.register('resize', ResizeController);

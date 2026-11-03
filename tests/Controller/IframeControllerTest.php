@@ -30,6 +30,7 @@ class IframeControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('title', 'UI Storia');
         $this->assertSelectorTextContains('body > span', 'Default');
+        $this->assertSelectorTextContains('head script', 'storia.color-scheme');
     }
 
     public function testPage(): void
@@ -40,6 +41,8 @@ class IframeControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('title', 'My website');
         $this->assertSelectorTextContains('body > p', 'This is the homepage hero');
+        // A full page is served as is: the color scheme is applied once it is loaded
+        $this->assertStringNotContainsString('storia.color-scheme', (string) $client->getResponse()->getContent());
     }
 
     public function testSharedMenuFeedsComponentAndPage(): void

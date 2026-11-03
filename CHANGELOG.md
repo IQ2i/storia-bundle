@@ -9,6 +9,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 
 - **Figma**: the `figma` key of a view, or of a variant, links it to its design, opened from the preview actions or shown next to the rendering.
+- **Color scheme**: a preview action forces the light or dark scheme of the preview, through `data-theme` and `color-scheme` on the `<html>` element of the iframe. The scheme is applied before the preview renders and followed by the Iframe action.
 
 ## [0.6.0] - 2026-10-17
 

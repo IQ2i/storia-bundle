@@ -7,3 +7,8 @@
 .storia-test-relative {
     background: url("../img/relative.svg");
 }
+
+[data-theme="dark"] {
+    background: #111827;
+    color: #f9fafb;
+}

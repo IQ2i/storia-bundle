@@ -114,3 +114,5 @@ To instruct UI Storia to use your styles and scripts, simply override the `ifram
 
 Note the use of `!` in the extended template name to override only the blocks you need rather than the entire template.
 :::
+
+To preview your components in dark mode, make your styles react to the `data-theme` attribute set by the [color scheme](/docs/user-interface/#color-scheme) action.

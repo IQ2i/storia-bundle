@@ -102,6 +102,18 @@ class ViewControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('iframe'));
     }
 
+    public function testColorSchemeToggleActsOnThePreview(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/storia/components/badge?variant=large');
+
+        $this->assertSelectorExists('.main__content[data-controller~="color-scheme"]');
+        $this->assertSelectorExists('header .actions button[data-action="color-scheme#toggle"][data-color-scheme-target="button"][data-scheme="auto"]');
+        $this->assertSelectorExists('iframe[data-color-scheme-target="iframe"][data-action="load->color-scheme#apply"]');
+        $this->assertSelectorCount(3, 'header .actions button[data-scheme] svg[data-scheme-icon]');
+        $this->assertSelectorTextContains('header .actions button[data-scheme] span[data-color-scheme-target="label"]', 'Color scheme: auto');
+    }
+
     public function testUnknownView(): void
     {
         $client = static::createClient();

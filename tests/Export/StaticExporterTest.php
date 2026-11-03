@@ -82,6 +82,7 @@ class StaticExporterTest extends KernelTestCase
         $this->assertStringContainsString('href="../../components/badge/large.html"', $page);
         $this->assertStringContainsString('href="../../components/avatar/rounded.html"', $page);
         $this->assertStringNotContainsString('live-reload', $page);
+        $this->assertStringNotContainsString('color-scheme', $page);
         $this->assertStringNotContainsString('importmap', $page);
         $this->assertStringContainsString('Static export', $page);
         $this->assertMatchesRegularExpression('#class="menu_item active">\s*<a href="../../components/badge/default.html">#', $page);
