@@ -85,7 +85,8 @@ class TemplateBuilder extends AbstractBuilder
             $markdownContent,
             $variants,
             $controls,
-            $appliedOverrides
+            $appliedOverrides,
+            figmaUrl: $config['figma'] ?? null,
         );
     }
 }

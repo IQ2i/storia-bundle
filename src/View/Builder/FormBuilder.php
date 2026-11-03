@@ -100,7 +100,8 @@ class FormBuilder extends AbstractBuilder
             $htmlContent,
             null,
             null,
-            $variants
+            $variants,
+            figmaUrl: $config['figma'] ?? null,
         );
     }
 

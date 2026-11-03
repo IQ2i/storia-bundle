@@ -44,6 +44,16 @@ class ListCommandTest extends KernelTestCase
         $this->assertStringEndsWith('storia/components/badge.yaml', $byPath['components/badge']['file']);
         $this->assertSame('component', $byPath['components/product']['type']);
         $this->assertSame('form', $byPath['components/form/choice']['type']);
+        $this->assertSame('https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2', $byPath['components/avatar']['figma']);
+        $this->assertNull($byPath['components/badge']['figma']);
+    }
+
+    public function testListsTheFigmaLinkAsText(): void
+    {
+        $tester = $this->createTester();
+        $tester->execute(['--filter' => 'components/avatar']);
+
+        $this->assertStringContainsString("components/avatar (template)\n  figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2\n", $tester->getDisplay());
     }
 
     public function testResolvesTheArgumentsOfAVariant(): void

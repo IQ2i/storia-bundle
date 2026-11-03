@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace IQ2i\StoriaBundle\View\Dto;
 
 use IQ2i\StoriaBundle\Controls\Control;
+use IQ2i\StoriaBundle\Util\FigmaUrl;
 
 /**
  * @internal
@@ -34,6 +35,7 @@ readonly class View
         private array $variants = [],
         private array $controls = [],
         private array $overrides = [],
+        private ?string $figmaUrl = null,
     ) {
     }
 
@@ -84,6 +86,16 @@ readonly class View
     public function getOverrides(): array
     {
         return $this->overrides;
+    }
+
+    public function getFigmaUrl(): ?string
+    {
+        return $this->figmaUrl;
+    }
+
+    public function getFigmaEmbedUrl(): ?string
+    {
+        return null === $this->figmaUrl ? null : FigmaUrl::toEmbedUrl($this->figmaUrl);
     }
 
     public function getCurrentVariant(): ?Variant

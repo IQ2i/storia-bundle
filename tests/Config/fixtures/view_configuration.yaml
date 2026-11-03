@@ -13,3 +13,6 @@ component:
     form:                 ~
     options:              []
     form_theme:           ~
+
+    # Link to the Figma file, frame or prototype of the view
+    figma:                ~

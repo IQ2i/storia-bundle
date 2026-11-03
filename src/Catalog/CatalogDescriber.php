@@ -36,7 +36,7 @@ readonly class CatalogDescriber
     }
 
     /**
-     * @return list<array{path: string, type: ?string, source: ?string, file: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}>
+     * @return list<array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}>
      */
     public function describe(?string $filter = null): array
     {
@@ -51,12 +51,12 @@ readonly class CatalogDescriber
     /**
      * @param list<string>|\Throwable $variants
      *
-     * @return array{path: string, type: ?string, source: ?string, file: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}
+     * @return array{path: string, type: ?string, source: ?string, file: ?string, figma: ?string, variants: list<array{name: string, args: array<string, mixed>, error: ?string}>, error: ?string}
      */
     private function describeView(string $path, array|\Throwable $variants): array
     {
         $file = $this->yamlPreProcessor->resolveFilePath($this->defaultPath, $path);
-        $description = ['path' => $path, 'type' => null, 'source' => null, 'file' => null !== $file ? realpath($file) ?: $file : null, 'variants' => [], 'error' => null];
+        $description = ['path' => $path, 'type' => null, 'source' => null, 'file' => null !== $file ? realpath($file) ?: $file : null, 'figma' => null, 'variants' => [], 'error' => null];
 
         if ($variants instanceof \Throwable) {
             $description['error'] = $variants->getMessage();
@@ -73,6 +73,7 @@ readonly class CatalogDescriber
         }
 
         [$description['type'], $description['source']] = $this->typeAndSource($path, $config);
+        $description['figma'] = $config['figma'] ?? null;
 
         foreach ($variants as $name) {
             $description['variants'][] = $this->describeVariant($name, $config);

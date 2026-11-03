@@ -1,4 +1,5 @@
 template: ui/avatar.html.twig
+figma: https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Avatar?node-id=1-2
 variants:
     rounded:
         args:
