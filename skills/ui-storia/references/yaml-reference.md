@@ -52,7 +52,7 @@ options:
         'Sold out': false
 ```
 
-Three variants exist automatically: `default`, `disabled` (option `disabled: true`) and `error` (the error "Error message" is added and the form is submitted empty).
+Three variants exist automatically: `default`, `disabled` (option `disabled: true`) and `error` (the form is submitted empty, then the error "Error message" is added).
 
 **Custom variants (1.0)** are added after the three automatic ones. A variant with the same name replaces the automatic one. A variant of a form takes `options` and `with_errors`, never `args` or `blocks`:
 
