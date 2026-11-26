@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Fixed
+
+- The `error` variant of a form view, and a variant with `with_errors: true`, show the "Error message" error again. The error was added before the form was submitted, and the submission cleared it.
+
 ## [0.7.0] - 2026-11-03
 
 ### Added

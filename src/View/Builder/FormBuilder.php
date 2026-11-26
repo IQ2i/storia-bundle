@@ -81,8 +81,9 @@ class FormBuilder extends AbstractBuilder
             ], $this->csrfOptions($config['form']), $this->dataResolver->resolve($config['options'] ?? []), $this->dataResolver->resolve($variantConfig['options'] ?? [])));
 
             if ($variantConfig['with_errors'] ?? false) {
-                $form->addError(new FormError('Error message'));
+                // Form::submit() clears the errors: the error is added after it.
                 $form->submit([]);
+                $form->addError(new FormError('Error message'));
             }
 
             $twigContent = $this->getTwigContent('@IQ2iStoria/components/form.html.twig');

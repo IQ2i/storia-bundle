@@ -31,6 +31,11 @@ class FormBuilderTest extends KernelTestCase
         $this->assertSame($this->render('expanded'), $this->render('expanded'));
     }
 
+    public function testErrorVariantShowsTheError(): void
+    {
+        $this->assertStringContainsString('Error message', $this->render('error'));
+    }
+
     private function render(string $variant): string
     {
         $viewBuilder = self::getContainer()->get(ViewBuilder::class);
